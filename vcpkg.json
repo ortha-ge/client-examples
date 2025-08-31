@@ -1,0 +1,13 @@
+{
+  "dependencies": [
+    "catch2",
+    "entt",
+    "glfw3",
+    "imgui",
+    "kangaru",
+    "rapidjson",
+    "rxcpp",
+    "quickjs",
+    "sdl2"
+  ]
+}

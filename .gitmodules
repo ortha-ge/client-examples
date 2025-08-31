@@ -1,0 +1,24 @@
+[submodule "deps/vcpkg"]
+	path = deps/vcpkg
+	url = https://github.com/microsoft/vcpkg.git
+[submodule "deps/bgfx"]
+	path = deps/bgfx
+	url = https://github.com/bkaradzic/bgfx.cmake.git
+[submodule "deps/soloud"]
+	path = deps/soloud
+	url = https://github.com/jarikomppa/soloud.git
+[submodule "devtools-lib"]
+	path = devtools-lib
+	url = git@github.com:ortha-ge/devtools-lib.git
+[submodule "input-lib"]
+	path = input-lib
+	url = git@github.com:ortha-ge/input-lib.git
+[submodule "gfx-lib"]
+	path = gfx-lib
+	url = git@github.com:ortha-ge/gfx-lib.git
+[submodule "core-lib"]
+	path = core-lib
+	url = git@github.com:ortha-ge/core-lib.git
+[submodule "audio-lib"]
+	path = audio-lib
+	url = git@github.com:ortha-ge/audio-lib.git

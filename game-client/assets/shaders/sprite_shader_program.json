@@ -1,0 +1,4 @@
+{
+    "vertexShaderFilePath": "assets/shaders/spirv/vs_sprite.sc.bin",
+    "fragmentShaderFilePath": "assets/shaders/spirv/fs_sprite.sc.bin"
+}

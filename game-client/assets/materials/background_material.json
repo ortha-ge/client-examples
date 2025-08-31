@@ -1,0 +1,14 @@
+{
+    "shaderProgramFilePath": "assets/shaders/sprite_shader_program.json",
+    "textureImageFilePath": "assets/textures/cloud_background.png",
+    "spriteFrames": [
+        {
+            "x0": 0.0,
+            "y0": 0.0,
+            "x1": 2000,
+            "y1": 1500
+        }
+    ],
+    "width": 2000,
+    "height": 1500
+}
