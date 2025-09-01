@@ -46,7 +46,7 @@ target_sources(game-client PUBLIC FILE_SET modules TYPE CXX_MODULES FILES
 )
 
 target_compile_features(game-client PRIVATE cxx_std_23)
-target_link_libraries(game-client PRIVATE core-lib gfx-lib input-lib audio-lib devtools-lib)
+target_link_libraries(game-client PRIVATE core-lib gfx-lib input-lib audio-lib devtools-lib scripting-js-lib scripting-lua-lib)
 target_include_directories(game-client PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 if (EMSCRIPTEN_PRESET)

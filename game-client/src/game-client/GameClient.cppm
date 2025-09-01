@@ -12,6 +12,8 @@ import Core.Scheduler;
 import DevTools.Systems;
 import Gfx.Systems;
 import Input.Systems;
+import ScriptingJS.Systems;
+import ScriptingLua.Systems;
 
 export namespace Game {
 
@@ -24,6 +26,8 @@ export namespace Game {
 			Audio::AudioSystems&,
 			Gfx::GfxSystems&,
 			Input::InputSystems&,
+			ScriptingJS::ScriptingJSSystems&,
+			ScriptingLua::ScriptingLuaSystems&,
 			DevTools::DevToolsSystems&
 		);
 		~Client();

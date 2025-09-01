@@ -29,6 +29,8 @@ namespace Game {
 		Audio::AudioSystems&,
 		Gfx::GfxSystems&,
 		Input::InputSystems&,
+		ScriptingJS::ScriptingJSSystems&,
+		ScriptingLua::ScriptingLuaSystems&,
 		DevTools::DevToolsSystems&
 		)
 		: mRegistry(registry)

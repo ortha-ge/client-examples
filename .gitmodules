@@ -22,3 +22,9 @@
 [submodule "audio-lib"]
 	path = audio-lib
 	url = git@github.com:ortha-ge/audio-lib.git
+[submodule "scripting-js-lib"]
+	path = scripting-js-lib
+	url = git@github.com:ortha-ge/scripting-js-lib.git
+[submodule "scripting-lua-lib"]
+	path = scripting-lua-lib
+	url = git@github.com:ortha-ge/scripting-lua-lib.git

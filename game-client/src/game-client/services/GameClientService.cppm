@@ -9,6 +9,8 @@ import Core.SystemsService;
 import DevTools.SystemsService;
 import Gfx.SystemsService;
 import Input.SystemsService;
+import ScriptingJS.SystemsService;
+import ScriptingLua.SystemsService;
 
 export import Game.Client;
 
@@ -21,6 +23,8 @@ export namespace Game {
 		Audio::AudioSystemsService,
 		Gfx::GfxSystemsService,
 		Input::InputSystemsService,
+		ScriptingJS::ScriptingJSSystemsService,
+		ScriptingLua::ScriptingLuaSystemsService,
 		DevTools::DevToolsSystemsService
 	>>{};
 

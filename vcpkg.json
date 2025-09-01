@@ -7,7 +7,7 @@
     "kangaru",
     "rapidjson",
     "rxcpp",
-    "quickjs",
+    "quickjs-ng",
     "sdl2"
   ]
 }
