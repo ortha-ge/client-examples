@@ -1,13 +1,15 @@
 {
-  "dependencies": [
-    "catch2",
-    "entt",
-    "glfw3",
-    "imgui",
-    "kangaru",
-    "rapidjson",
-    "rxcpp",
-    "quickjs-ng",
-    "sdl2"
-  ]
+    "dependencies": [
+        "catch2",
+        "entt",
+        "glfw3",
+        "imgui",
+        "kangaru",
+        "lua",
+        "rapidjson",
+        "rxcpp",
+        "quickjs-ng",
+        "sol2",
+        "sdl2"
+    ]
 }
