@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/audio-lib" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/core-lib" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/deps/bgfx" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/deps/bgfx/bgfx" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/deps/bgfx/bimg" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/deps/bgfx/bx" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/deps/soloud" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/deps/vcpkg" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/devtools-lib" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/devtools-lib/deps/IconFontCppHeaders" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/gfx-lib" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/input-lib" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/scripting-js-lib" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/scripting-lua-lib" vcs="Git" />
+  </component>
+</project>
