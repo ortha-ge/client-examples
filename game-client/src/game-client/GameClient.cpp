@@ -20,6 +20,7 @@ import Core.TypeLoader;
 import Core.Window;
 import Gfx.MaterialDescriptor;
 import Gfx.RenderObject;
+import Gfx.Reflection.MaterialDescriptor;
 import Input.KeyboardState;
 import Input.MouseState;
 
