@@ -28,16 +28,10 @@ import Input.MouseState;
 
 namespace Game {
 
-	Client::Client(Core::EnTTRegistry& registry,
-		Core::Scheduler& scheduler,
-		Core::CoreSystems&,
-		Audio::AudioSystems&,
-		Gfx::GfxSystems&,
-		Input::InputSystems&,
-		ScriptingJS::ScriptingJSSystems&,
-		ScriptingLua::ScriptingLuaSystems&,
-		DevTools::DevToolsSystems&
-		)
+	Client::Client(
+		Core::EnTTRegistry& registry, Core::Scheduler& scheduler, Core::CoreSystems&, Audio::AudioSystems&,
+		Gfx::GfxSystems&, Input::InputSystems&, ScriptingJS::ScriptingJSSystems&, ScriptingLua::ScriptingLuaSystems&,
+		DevTools::DevToolsSystems&)
 		: mRegistry(registry)
 		, mScheduler{ scheduler } {
 
@@ -49,27 +43,18 @@ namespace Game {
 		mRegistry.emplace<Core::Spatial>(mCameraEntity, 0.0f, 0.0f, 0.0f);
 
 		mViewportEntity = mRegistry.create();
-		mRegistry.emplace<Gfx::Viewport>(
-			mViewportEntity,
-			mCameraEntity,
-			0.1f,
-			0.1f,
-			0.9f,
-			0.9f
-		);
+		mRegistry.emplace<Gfx::Viewport>(mViewportEntity, mCameraEntity, 0.1f, 0.1f, 0.9f, 0.9f);
 
 		const auto backgroundMaterial = mRegistry.create();
-		mRegistry.emplace<Core::ResourceLoadRequest>(backgroundMaterial,
-			Core::ResourceLoadRequest::create<Core::TypeLoader>(
-				std::string{ "assets/materials/background_material.json" },
-				std::make_shared<Core::JsonTypeLoaderAdapter<Gfx::MaterialDescriptor>>()
-			)
-		);
+		mRegistry.emplace<Core::ResourceLoadRequest>(
+			backgroundMaterial, Core::ResourceLoadRequest::create<Core::TypeLoader>(
+									std::string{ "assets/materials/background_material.json" },
+									std::make_shared<Core::JsonTypeLoaderAdapter<Gfx::MaterialDescriptor>>()));
 
 		const auto backgroundSoundResource = mRegistry.create();
-		mRegistry.emplace<Core::ResourceLoadRequest>(backgroundSoundResource,
-			Core::ResourceLoadRequest::create<Audio::SoundDescriptor>("./assets/sounds/background_crickets.ogg")
-		);
+		mRegistry.emplace<Core::ResourceLoadRequest>(
+			backgroundSoundResource,
+			Core::ResourceLoadRequest::create<Audio::SoundDescriptor>("./assets/sounds/background_crickets.ogg"));
 
 		const auto backgroundRenderObject = mRegistry.create();
 		mRegistry.emplace<Core::Spatial>(backgroundRenderObject, 1000.0f, 750.0f, 1.0f, 2.0f, 2.0f, 2.0f);
@@ -82,36 +67,30 @@ namespace Game {
 		mSpawnedRenderObjects.reserve(100);
 
 		const auto catMaterialResource = mRegistry.create();
-		mRegistry.emplace<Core::ResourceLoadRequest>(catMaterialResource,
-			Core::ResourceLoadRequest::create<Core::TypeLoader>("assets/materials/cat.json",
-				std::make_shared<Core::JsonTypeLoaderAdapter<Gfx::MaterialDescriptor>>()
-			)
-		);
+		mRegistry.emplace<Core::ResourceLoadRequest>(
+			catMaterialResource,
+			Core::ResourceLoadRequest::create<Core::TypeLoader>(
+				"assets/materials/cat.json", std::make_shared<Core::JsonTypeLoaderAdapter<Gfx::MaterialDescriptor>>()));
 
 		const auto frogMaterialResource = mRegistry.create();
-		mRegistry.emplace<Core::ResourceLoadRequest>(frogMaterialResource,
-			Core::ResourceLoadRequest::create<Core::TypeLoader>("assets/materials/frog.json",
-				std::make_shared<Core::JsonTypeLoaderAdapter<Gfx::MaterialDescriptor>>()
-			)
-		);
+		mRegistry.emplace<Core::ResourceLoadRequest>(
+			frogMaterialResource, Core::ResourceLoadRequest::create<Core::TypeLoader>(
+									  "assets/materials/frog.json",
+									  std::make_shared<Core::JsonTypeLoaderAdapter<Gfx::MaterialDescriptor>>()));
 
 		const auto catSoundResource = mRegistry.create();
-		mRegistry.emplace<Core::ResourceLoadRequest>(catSoundResource,
-			Core::ResourceLoadRequest::create<Audio::SoundDescriptor>("./assets/sounds/cat_meow.wav")
-		);
+		mRegistry.emplace<Core::ResourceLoadRequest>(
+			catSoundResource,
+			Core::ResourceLoadRequest::create<Audio::SoundDescriptor>("./assets/sounds/cat_meow.wav"));
 
 		const auto frogSoundResource = mRegistry.create();
-		mRegistry.emplace<Core::ResourceLoadRequest>(frogSoundResource,
-			Core::ResourceLoadRequest::create<Audio::SoundDescriptor>("./assets/sounds/frog_ribbit.ogg")
-		);
+		mRegistry.emplace<Core::ResourceLoadRequest>(
+			frogSoundResource,
+			Core::ResourceLoadRequest::create<Audio::SoundDescriptor>("./assets/sounds/frog_ribbit.ogg"));
 
-		mTickHandle = scheduler.schedule([this,
-			catMaterialResource, catSoundResource,
-			frogMaterialResource, frogSoundResource,
-			lastSpawn = std::chrono::steady_clock::time_point{},
-			lastTick = std::chrono::steady_clock::now(),
-			tickTock = false] mutable {
-
+		mTickHandle = scheduler.schedule([this, catMaterialResource, catSoundResource, frogMaterialResource,
+										  frogSoundResource, lastSpawn = std::chrono::steady_clock::time_point{},
+										  lastTick = std::chrono::steady_clock::now(), tickTock = false] mutable {
 			using DeltaTimeCast = std::chrono::duration<float>;
 			auto clockNow = std::chrono::steady_clock::now();
 			auto deltaT = std::chrono::duration_cast<DeltaTimeCast>(clockNow - lastTick).count();
@@ -142,8 +121,10 @@ namespace Game {
 
 				const auto renderObjectEntity = mRegistry.create();
 				mRegistry.emplace<Core::Spatial>(renderObjectEntity, mouseState.x, mouseState.y, 0.0f, 8.0f, 8.0f);
-				mRegistry.emplace<Gfx::RenderObject>(renderObjectEntity, spawnCat ? catMaterialResource : frogMaterialResource);
-				mRegistry.emplace<Audio::AudioSource>(renderObjectEntity, spawnCat ? catSoundResource : frogSoundResource);
+				mRegistry.emplace<Gfx::RenderObject>(
+					renderObjectEntity, spawnCat ? catMaterialResource : frogMaterialResource);
+				mRegistry.emplace<Audio::AudioSource>(
+					renderObjectEntity, spawnCat ? catSoundResource : frogSoundResource);
 				mRegistry.emplace<Audio::PlaySoundSourceRequest>(renderObjectEntity, false, spawnCat ? 3.0f : 1.0f);
 
 				mSpawnedRenderObjects.push_back(renderObjectEntity);
@@ -183,7 +164,7 @@ namespace Game {
 					}
 				}
 
-				if(spatial.y > groundY) {
+				if (spatial.y > groundY) {
 					spatial.y = groundY;
 				}
 			}
@@ -192,7 +173,8 @@ namespace Game {
 			for (auto&& spawnedObject : mSpawnedRenderObjects) {
 				auto& renderObject = mRegistry.get<Gfx::RenderObject>(spawnedObject);
 
-				const bool canTickAnimation = (clockNow - renderObject.lastAnimUpdateTime) > std::chrono::milliseconds(500);
+				const bool canTickAnimation =
+					(clockNow - renderObject.lastAnimUpdateTime) > std::chrono::milliseconds(500);
 				if (canTickAnimation) {
 					renderObject.currentSpriteFrame++;
 					if (renderObject.currentSpriteFrame > 1) {
@@ -215,4 +197,4 @@ namespace Game {
 		mRegistry.destroy(mWindowEntity);
 	}
 
-} // Game
+} // namespace Game

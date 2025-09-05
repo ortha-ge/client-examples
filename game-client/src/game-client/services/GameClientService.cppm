@@ -16,16 +16,12 @@ export import Game.Client;
 
 export namespace Game {
 
-	class ClientService : public kgr::single_service<Client, kgr::dependency<
-		Core::EnTTRegistryService,
-		Core::SchedulerService,
-		Core::CoreSystemsService,
-		Audio::AudioSystemsService,
-		Gfx::GfxSystemsService,
-		Input::InputSystemsService,
-		ScriptingJS::ScriptingJSSystemsService,
-		ScriptingLua::ScriptingLuaSystemsService,
-		DevTools::DevToolsSystemsService
-	>>{};
+	class ClientService : public kgr::single_service<
+							  Client, kgr::dependency<
+										  Core::EnTTRegistryService, Core::SchedulerService, Core::CoreSystemsService,
+										  Audio::AudioSystemsService, Gfx::GfxSystemsService,
+										  Input::InputSystemsService, ScriptingJS::ScriptingJSSystemsService,
+										  ScriptingLua::ScriptingLuaSystemsService, DevTools::DevToolsSystemsService>> {
+	};
 
-} // Game
+} // namespace Game

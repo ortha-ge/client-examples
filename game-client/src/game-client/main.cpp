@@ -24,11 +24,11 @@ int main(int argc, char* argv[]) {
 	container.service<Game::ClientService>();
 
 	auto quitAppRequests = registry.view<const Core::QuitAppRequest>();
-	while(quitAppRequests.empty()) {
+	while (quitAppRequests.empty()) {
 		scheduler.tick();
 	}
 
 	quitAppRequests.each([&registry](entt::entity entity, const Core::QuitAppRequest&) { registry.destroy(entity); });
 
 	return 0;
-} 
+}
