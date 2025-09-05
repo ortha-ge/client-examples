@@ -72,7 +72,7 @@ namespace Game {
 		);
 
 		const auto backgroundRenderObject = mRegistry.create();
-		mRegistry.emplace<Core::Spatial>(backgroundRenderObject, 0.0f, 0.0f, 1.0f);
+		mRegistry.emplace<Core::Spatial>(backgroundRenderObject, 1000.0f, 750.0f, 1.0f, 2.0f, 2.0f, 2.0f);
 		mRegistry.emplace<Gfx::RenderObject>(backgroundRenderObject, backgroundMaterial);
 		mRegistry.emplace<Audio::AudioSource>(backgroundRenderObject, backgroundSoundResource);
 		mRegistry.emplace<Audio::PlaySoundSourceRequest>(backgroundRenderObject, true);
@@ -81,19 +81,33 @@ namespace Game {
 
 		mSpawnedRenderObjects.reserve(100);
 
-		const auto materialResource = mRegistry.create();
-		mRegistry.emplace<Core::ResourceLoadRequest>(materialResource,
-			Core::ResourceLoadRequest::create<Core::TypeLoader>("assets/materials/frog_material.json",
+		const auto catMaterialResource = mRegistry.create();
+		mRegistry.emplace<Core::ResourceLoadRequest>(catMaterialResource,
+			Core::ResourceLoadRequest::create<Core::TypeLoader>("assets/materials/cat.json",
 				std::make_shared<Core::JsonTypeLoaderAdapter<Gfx::MaterialDescriptor>>()
 			)
 		);
 
-		const auto soundResource = mRegistry.create();
-		mRegistry.emplace<Core::ResourceLoadRequest>(soundResource,
+		const auto frogMaterialResource = mRegistry.create();
+		mRegistry.emplace<Core::ResourceLoadRequest>(frogMaterialResource,
+			Core::ResourceLoadRequest::create<Core::TypeLoader>("assets/materials/frog.json",
+				std::make_shared<Core::JsonTypeLoaderAdapter<Gfx::MaterialDescriptor>>()
+			)
+		);
+
+		const auto catSoundResource = mRegistry.create();
+		mRegistry.emplace<Core::ResourceLoadRequest>(catSoundResource,
+			Core::ResourceLoadRequest::create<Audio::SoundDescriptor>("./assets/sounds/cat_meow.wav")
+		);
+
+		const auto frogSoundResource = mRegistry.create();
+		mRegistry.emplace<Core::ResourceLoadRequest>(frogSoundResource,
 			Core::ResourceLoadRequest::create<Audio::SoundDescriptor>("./assets/sounds/frog_ribbit.ogg")
 		);
 
-		mTickHandle = scheduler.schedule([this, materialResource, soundResource,
+		mTickHandle = scheduler.schedule([this,
+			catMaterialResource, catSoundResource,
+			frogMaterialResource, frogSoundResource,
 			lastSpawn = std::chrono::steady_clock::time_point{},
 			lastTick = std::chrono::steady_clock::now(),
 			tickTock = false] mutable {
@@ -115,7 +129,6 @@ namespace Game {
 					tickTock = true;
 				}
 			}
-			printf("Camera X: %f.\n", cameraSpatial.x);
 
 			if (!mRegistry.all_of<Input::KeyboardState, Input::MouseState>(mWindowEntity)) {
 				return;
@@ -124,13 +137,14 @@ namespace Game {
 			const auto& mouseState = mRegistry.get<Input::MouseState>(mWindowEntity);
 			const bool canSpawn = (std::chrono::steady_clock::now() - lastSpawn) > std::chrono::milliseconds(150);
 			if (canSpawn && Input::isMouseButtonPressed(mouseState, Input::MouseButton::Left)) {
+				const bool spawnCat = mouseState.x < (1360.0f * 0.5f);
 				lastSpawn = std::chrono::steady_clock::now();
 
 				const auto renderObjectEntity = mRegistry.create();
-				mRegistry.emplace<Core::Spatial>(renderObjectEntity, mouseState.x, mouseState.y, 0.0f);
-				mRegistry.emplace<Gfx::RenderObject>(renderObjectEntity, materialResource);
-				mRegistry.emplace<Audio::AudioSource>(renderObjectEntity, soundResource);
-				mRegistry.emplace<Audio::PlaySoundSourceRequest>(renderObjectEntity);
+				mRegistry.emplace<Core::Spatial>(renderObjectEntity, mouseState.x, mouseState.y, 0.0f, 8.0f, 8.0f);
+				mRegistry.emplace<Gfx::RenderObject>(renderObjectEntity, spawnCat ? catMaterialResource : frogMaterialResource);
+				mRegistry.emplace<Audio::AudioSource>(renderObjectEntity, spawnCat ? catSoundResource : frogSoundResource);
+				mRegistry.emplace<Audio::PlaySoundSourceRequest>(renderObjectEntity, false, spawnCat ? 3.0f : 1.0f);
 
 				mSpawnedRenderObjects.push_back(renderObjectEntity);
 			}
@@ -154,7 +168,7 @@ namespace Game {
 			}
 
 			const float groundY = 500.0f;
-			const float gravity = -200.0f * deltaT;
+			const float gravity = -600.0f * deltaT;
 
 			for (auto&& spawnedObject : mSpawnedRenderObjects) {
 				auto& spatial = mRegistry.get<Core::Spatial>(spawnedObject);
