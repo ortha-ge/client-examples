@@ -37,7 +37,10 @@ export namespace Game {
 		entt::registry& mRegistry;
 		Core::Scheduler& mScheduler;
 
-		entt::entity mWindowEntity{};
+		entt::entity mWindowEntity{ entt::null };
+		entt::entity mCameraEntity{ entt::null };
+		entt::entity mViewportEntity{ entt::null };
+
 		std::vector<entt::entity> mSpawnedRenderObjects;
 		entt::entity mBackgroundRenderObject{ entt::null };
 

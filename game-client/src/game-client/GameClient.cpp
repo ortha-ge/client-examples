@@ -18,8 +18,10 @@ import Core.ResourceLoadRequest;
 import Core.Spatial;
 import Core.TypeLoader;
 import Core.Window;
+import Gfx.Camera;
 import Gfx.MaterialDescriptor;
 import Gfx.RenderObject;
+import Gfx.Viewport;
 import Gfx.Reflection.MaterialDescriptor;
 import Input.KeyboardState;
 import Input.MouseState;
@@ -41,6 +43,20 @@ namespace Game {
 
 		mWindowEntity = mRegistry.create();
 		mRegistry.emplace<Core::Window>(mWindowEntity, "Riastradh", 1360, 768);
+
+		mCameraEntity = mRegistry.create();
+		mRegistry.emplace<Gfx::Camera>(mCameraEntity, 60.0);
+		mRegistry.emplace<Core::Spatial>(mCameraEntity, 0.0f, 0.0f, 0.0f);
+
+		mViewportEntity = mRegistry.create();
+		mRegistry.emplace<Gfx::Viewport>(
+			mViewportEntity,
+			mCameraEntity,
+			0.1f,
+			0.1f,
+			0.9f,
+			0.9f
+		);
 
 		const auto backgroundMaterial = mRegistry.create();
 		mRegistry.emplace<Core::ResourceLoadRequest>(backgroundMaterial,
@@ -77,7 +93,30 @@ namespace Game {
 			Core::ResourceLoadRequest::create<Audio::SoundDescriptor>("./assets/sounds/frog_ribbit.ogg")
 		);
 
-		mTickHandle = scheduler.schedule([this, materialResource, soundResource, lastSpawn = std::chrono::steady_clock::time_point{}] mutable {
+		mTickHandle = scheduler.schedule([this, materialResource, soundResource,
+			lastSpawn = std::chrono::steady_clock::time_point{},
+			lastTick = std::chrono::steady_clock::now(),
+			tickTock = false] mutable {
+
+			using DeltaTimeCast = std::chrono::duration<float>;
+			auto clockNow = std::chrono::steady_clock::now();
+			auto deltaT = std::chrono::duration_cast<DeltaTimeCast>(clockNow - lastTick).count();
+			lastTick = clockNow;
+
+			auto& cameraSpatial = mRegistry.get<Core::Spatial>(mCameraEntity);
+			if (tickTock) {
+				cameraSpatial.x -= deltaT * 25.0f;
+				if (cameraSpatial.x < -50.0f) {
+					tickTock = false;
+				}
+			} else {
+				cameraSpatial.x += deltaT * 25.0f;
+				if (cameraSpatial.x > 50.0f) {
+					tickTock = true;
+				}
+			}
+			printf("Camera X: %f.\n", cameraSpatial.x);
+
 			if (!mRegistry.all_of<Input::KeyboardState, Input::MouseState>(mWindowEntity)) {
 				return;
 			}
@@ -100,28 +139,42 @@ namespace Game {
 
 			float inputX = 0.0f;
 			float inputY = 0.0f;
+			const float moveSpeed = 200.0f * deltaT;
 
 			if (Input::isKeyPressed(keyboardState, Input::Key::Left)) {
-				inputX -= 0.1f;
+				inputX -= moveSpeed;
 			} else if (Input::isKeyPressed(keyboardState, Input::Key::Right)) {
-				inputX += 0.1f;
+				inputX += moveSpeed;
 			}
 
 			if (Input::isKeyPressed(keyboardState, Input::Key::Up)) {
-				inputY -= 0.1f;
+				inputY -= moveSpeed;
 			} else if (Input::isKeyPressed(keyboardState, Input::Key::Down)) {
-				inputY += 0.1f;
+				inputY += moveSpeed;
 			}
 
-			if (inputX != 0.0f || inputY != 0.0f) {
-				for (auto&& spawnedObject : mSpawnedRenderObjects) {
-					auto& spatial = mRegistry.get<Core::Spatial>(spawnedObject);
-					spatial.x += inputX;
-					spatial.y += inputY;
+			const float groundY = 500.0f;
+			const float gravity = -200.0f * deltaT;
+
+			for (auto&& spawnedObject : mSpawnedRenderObjects) {
+				auto& spatial = mRegistry.get<Core::Spatial>(spawnedObject);
+
+				const bool isOnGround = spatial.y >= groundY;
+				if (!isOnGround) {
+					spatial.y -= gravity;
+				} else {
+					if (inputX != 0.0f || inputY != 0.0f) {
+						spatial.x += inputX;
+						spatial.y += inputY;
+					}
+				}
+
+				if(spatial.y > groundY) {
+					spatial.y = groundY;
 				}
 			}
 
-			const auto clockNow = std::chrono::steady_clock::now();
+
 			for (auto&& spawnedObject : mSpawnedRenderObjects) {
 				auto& renderObject = mRegistry.get<Gfx::RenderObject>(spawnedObject);
 
