@@ -58,7 +58,7 @@ namespace Game {
 			Core::ResourceLoadRequest::create<Audio::SoundDescriptor>("./assets/sounds/background_crickets.ogg"));
 
 		const auto backgroundRenderObject = mRegistry.create();
-		mRegistry.emplace<Core::Spatial>(backgroundRenderObject, 1000.0f, 750.0f, 1.0f, 2.0f, 2.0f, 2.0f);
+		mRegistry.emplace<Core::Spatial>(backgroundRenderObject, 1000.0f, 750.0f, 0.0f, 2.0f, 2.0f, 2.0f);
 		mRegistry.emplace<Gfx::Sprite>(backgroundRenderObject);
 		mRegistry.emplace<Gfx::RenderObject>(backgroundRenderObject, backgroundMaterial);
 		mRegistry.emplace<Audio::AudioSource>(backgroundRenderObject, backgroundSoundResource);
@@ -122,7 +122,7 @@ namespace Game {
 				lastSpawn = std::chrono::steady_clock::now();
 
 				const auto renderObjectEntity = mRegistry.create();
-				mRegistry.emplace<Core::Spatial>(renderObjectEntity, mouseState.x, mouseState.y, 0.0f, 8.0f, 8.0f);
+				mRegistry.emplace<Core::Spatial>(renderObjectEntity, mouseState.x, mouseState.y, spawnCat ? 2.0f : 1.0f, 8.0f, 8.0f);
 				mRegistry.emplace<Gfx::RenderObject>(
 					renderObjectEntity, spawnCat ? catMaterialResource : frogMaterialResource);
 				mRegistry.emplace<Gfx::Sprite>(renderObjectEntity);
