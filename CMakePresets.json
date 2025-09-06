@@ -44,5 +44,15 @@
           "EMSCRIPTEN_PRESET": true
         }
       }
+    ],
+    "buildPresets": [
+        {
+            "name": "Debug",
+            "configurePreset": "Debug"
+        },
+        {
+            "name": "Release",
+            "configurePreset": "Release"
+        }
     ]
   }
