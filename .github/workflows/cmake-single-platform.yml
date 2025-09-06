@@ -8,24 +8,28 @@ on:
   pull_request:
     branches: [ "main" ]
 
-env:
-  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
-  BUILD_TYPE: Release
-
 permissions:
   contents: read
   actions: write
 
 jobs:
   build:
+    runs-on: ${{ matrix.os }}
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        build_type: [Release]
+        c_compiler: [clang]
+        include:
+          - os: ubuntu-latest
+            c_compiler: clang
+            cpp_compiler: clang++
+      
     concurrency:
       group: build_${{ github.ref }}_${{ matrix.os }}
       
-    # The CMake configure and build commands are platform agnostic and should work equally well on Windows or Mac.
-    # You can convert this to a matrix build if you need cross-platform coverage.
-    # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
-    runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v4
       with:
@@ -43,16 +47,16 @@ jobs:
         max-size: 150M
 
     - name: Configure CMake
-      run: cmake --preset "${{env.BUILD_TYPE}}" -D CMAKE_C_COMPILER_LAUNCHER=ccache -D CMAKE_CXX_COMPILER_LAUNCHER=ccache
+      run: cmake --preset "${{ matrix.build_type }}" -D CMAKE_C_COMPILER_LAUNCHER=ccache -D CMAKE_CXX_COMPILER_LAUNCHER=ccache
 
     - name: Build Tests
-      run: cmake --build --preset "${{env.BUILD_TYPE}}" --target core-lib-tests
+      run: cmake --build --preset "${{ matrix.build_type }}" --target core-lib-tests
 
     - name: Test
       run: ctest --preset ${{env.BUILD_TYPE}}
 
     - name: Build Game Client
-      run: cmake --build --preset "${{env.BUILD_TYPE}}" --target game-client
+      run: cmake --build --preset "${{ matrix.build_type }}" --target game-client
 
     - name: Archive
       uses: actions/upload-artifact@v4
