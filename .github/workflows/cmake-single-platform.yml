@@ -25,7 +25,7 @@ jobs:
         submodules: 'recursive'
 
     - name: Cache build folder
-      uses: actions/cache@v2
+      uses: actions/cache@v4
       with:
           path: ~/build/
 
