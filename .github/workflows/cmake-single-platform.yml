@@ -43,9 +43,9 @@ jobs:
       run: echo "PATH=$PATH:C:\msys64\mingw64\bin" >> $GITHUB_ENV
 
     - name: Install Dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev xorg-dev libglu1-mesa-dev pkg-config libsdl2-dev
+      uses: amitie10g/install-package@v1
+      with:
+        apt: libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev xorg-dev libglu1-mesa-dev pkg-config libsdl2-dev
 
     - name: Vcpkg
       uses: lukka/run-vcpkg@v11
