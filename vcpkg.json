@@ -9,6 +9,7 @@
         "rapidjson",
         "rxcpp",
         "quickjs-ng",
-        "sol2"
+        "sol2",
+        "sdl2"
     ]
 }
