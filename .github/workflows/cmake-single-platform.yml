@@ -24,6 +24,11 @@ jobs:
       with:
         submodules: 'recursive'
 
+    - name: Cache build folder
+      uses: actions/cache@v2
+      with:
+          path: ~/build/
+
     - name: Install Dependencies
       run: |
         sudo apt-get update
