@@ -53,7 +53,7 @@ jobs:
       run: cmake --build --preset "${{ matrix.build_type }}" --target core-lib-tests
 
     - name: Test
-      run: ctest --preset ${{env.BUILD_TYPE}}
+      run: ctest --preset ${{ matrix.build_type }}
 
     - name: Build Game Client
       run: cmake --build --preset "${{ matrix.build_type }}" --target game-client
