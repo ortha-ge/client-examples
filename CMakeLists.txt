@@ -8,6 +8,10 @@ project(riastradh LANGUAGES CXX)
 
 set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
 
+find_package(Catch2 3 REQUIRED)
+
+enable_testing()
+
 set(BGFX_BUILD_EXAMPLES OFF CACHE "" INTERNAL FORCE)
 add_subdirectory("${PROJECT_SOURCE_DIR}/deps/bgfx")
 
