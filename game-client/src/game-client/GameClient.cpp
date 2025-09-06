@@ -21,6 +21,7 @@ import Core.Window;
 import Gfx.Camera;
 import Gfx.MaterialDescriptor;
 import Gfx.RenderObject;
+import Gfx.Sprite;
 import Gfx.Viewport;
 import Gfx.Reflection.MaterialDescriptor;
 import Input.KeyboardState;
@@ -58,6 +59,7 @@ namespace Game {
 
 		const auto backgroundRenderObject = mRegistry.create();
 		mRegistry.emplace<Core::Spatial>(backgroundRenderObject, 1000.0f, 750.0f, 1.0f, 2.0f, 2.0f, 2.0f);
+		mRegistry.emplace<Gfx::Sprite>(backgroundRenderObject);
 		mRegistry.emplace<Gfx::RenderObject>(backgroundRenderObject, backgroundMaterial);
 		mRegistry.emplace<Audio::AudioSource>(backgroundRenderObject, backgroundSoundResource);
 		mRegistry.emplace<Audio::PlaySoundSourceRequest>(backgroundRenderObject, true);
@@ -123,6 +125,7 @@ namespace Game {
 				mRegistry.emplace<Core::Spatial>(renderObjectEntity, mouseState.x, mouseState.y, 0.0f, 8.0f, 8.0f);
 				mRegistry.emplace<Gfx::RenderObject>(
 					renderObjectEntity, spawnCat ? catMaterialResource : frogMaterialResource);
+				mRegistry.emplace<Gfx::Sprite>(renderObjectEntity);
 				mRegistry.emplace<Audio::AudioSource>(
 					renderObjectEntity, spawnCat ? catSoundResource : frogSoundResource);
 				mRegistry.emplace<Audio::PlaySoundSourceRequest>(renderObjectEntity, false, spawnCat ? 3.0f : 1.0f);
