@@ -6,11 +6,11 @@ set(CMAKE_CXX_EXTENSIONS ON)
 
 project(riastradh LANGUAGES CXX)
 
-set(BGFX_BUILD_EXAMPLES OFF)
-
 set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
 
+set(BGFX_BUILD_EXAMPLES OFF CACHE "" INTERNAL FORCE)
 add_subdirectory("${PROJECT_SOURCE_DIR}/deps/bgfx")
+
 add_subdirectory("${PROJECT_SOURCE_DIR}/deps/soloud/contrib")
 target_include_directories(soloud PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/deps/soloud/include>
