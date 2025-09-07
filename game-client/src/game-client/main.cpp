@@ -13,9 +13,7 @@ import Game.ClientService;
 
 int main(int argc, char* argv[]) {
 	std::filesystem::path exePath = argv[0];
-
 	std::filesystem::current_path(exePath.parent_path());
-	printf("CWD: %s\n", std::filesystem::current_path().c_str());
 
 	kgr::container container;
 	Core::Scheduler& scheduler = container.service<Core::SchedulerService>();
