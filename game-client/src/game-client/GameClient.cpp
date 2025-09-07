@@ -14,6 +14,7 @@ import Audio.PlaySoundSourceRequest;
 import Core.FileDescriptor;
 import Core.FileLoadRequest;
 import Core.JsonTypeLoaderAdapter;
+import Core.Log;
 import Core.ResourceLoadRequest;
 import Core.Spatial;
 import Core.TypeLoader;
@@ -32,9 +33,10 @@ namespace Game {
 	Client::Client(
 		Core::EnTTRegistry& registry, Core::Scheduler& scheduler, Core::CoreSystems&, Audio::AudioSystems&,
 		Gfx::GfxSystems&, Input::InputSystems&, ScriptingJS::ScriptingJSSystems&, ScriptingLua::ScriptingLuaSystems&,
-		DevTools::DevToolsSystems&)
+		DevTools::DevToolsSystems&, Core::Timer& timer)
 		: mRegistry(registry)
-		, mScheduler{ scheduler } {
+		, mScheduler{ scheduler }
+		, mTimer{ timer } {
 
 		mWindowEntity = mRegistry.create();
 		mRegistry.emplace<Core::Window>(mWindowEntity, "Riastradh", 1360, 768);
@@ -91,21 +93,18 @@ namespace Game {
 			Core::ResourceLoadRequest::create<Audio::SoundDescriptor>("./assets/sounds/frog_ribbit.ogg"));
 
 		mTickHandle = scheduler.schedule([this, catMaterialResource, catSoundResource, frogMaterialResource,
-										  frogSoundResource, lastSpawn = std::chrono::steady_clock::time_point{},
-										  lastTick = std::chrono::steady_clock::now(), tickTock = false] mutable {
-			using DeltaTimeCast = std::chrono::duration<float>;
-			auto clockNow = std::chrono::steady_clock::now();
-			auto deltaT = std::chrono::duration_cast<DeltaTimeCast>(clockNow - lastTick).count();
-			lastTick = clockNow;
+										  frogSoundResource, lastSpawn = std::chrono::steady_clock::time_point{}, tickTock = false] mutable {
+
+			Core::logEntry(mRegistry, "DeltaT: {}", mTimer.getDeltaT());
 
 			auto& cameraSpatial = mRegistry.get<Core::Spatial>(mCameraEntity);
 			if (tickTock) {
-				cameraSpatial.x -= deltaT * 25.0f;
+				cameraSpatial.x -= mTimer.getDeltaT() * 25.0f;
 				if (cameraSpatial.x < -50.0f) {
 					tickTock = false;
 				}
 			} else {
-				cameraSpatial.x += deltaT * 25.0f;
+				cameraSpatial.x += mTimer.getDeltaT() * 25.0f;
 				if (cameraSpatial.x > 50.0f) {
 					tickTock = true;
 				}
@@ -137,7 +136,7 @@ namespace Game {
 
 			float inputX = 0.0f;
 			float inputY = 0.0f;
-			const float moveSpeed = 200.0f * deltaT;
+			const float moveSpeed = 200.0f * mTimer.getDeltaT();
 
 			if (Input::isKeyPressed(keyboardState, Input::Key::Left)) {
 				inputX -= moveSpeed;
@@ -152,7 +151,7 @@ namespace Game {
 			}
 
 			const float groundY = 500.0f;
-			const float gravity = -600.0f * deltaT;
+			const float gravity = -600.0f * mTimer.getDeltaT();
 
 			for (auto&& spawnedObject : mSpawnedRenderObjects) {
 				auto& spatial = mRegistry.get<Core::Spatial>(spawnedObject);
@@ -172,7 +171,7 @@ namespace Game {
 				}
 			}
 
-
+			auto clockNow = std::chrono::steady_clock::now();
 			for (auto&& spawnedObject : mSpawnedRenderObjects) {
 				auto& renderObject = mRegistry.get<Gfx::RenderObject>(spawnedObject);
 

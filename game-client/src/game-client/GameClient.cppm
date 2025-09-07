@@ -9,6 +9,7 @@ import Audio.Systems;
 import Core.Systems;
 import Core.EnTTRegistry;
 import Core.Scheduler;
+import Core.Timer;
 import DevTools.Systems;
 import Gfx.Systems;
 import Input.Systems;
@@ -22,12 +23,13 @@ export namespace Game {
 		Client(
 			Core::EnTTRegistry&, Core::Scheduler&, Core::CoreSystems&, Audio::AudioSystems&, Gfx::GfxSystems&,
 			Input::InputSystems&, ScriptingJS::ScriptingJSSystems&, ScriptingLua::ScriptingLuaSystems&,
-			DevTools::DevToolsSystems&);
+			DevTools::DevToolsSystems&, Core::Timer&);
 		~Client();
 
 	private:
 		entt::registry& mRegistry;
 		Core::Scheduler& mScheduler;
+		Core::Timer& mTimer;
 
 		entt::entity mWindowEntity{ entt::null };
 		entt::entity mCameraEntity{ entt::null };
