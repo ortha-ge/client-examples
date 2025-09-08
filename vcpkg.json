@@ -1,5 +1,6 @@
 {
     "dependencies": [
+        "box2d",
         "catch2",
         "entt",
         "glfw3",

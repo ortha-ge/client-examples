@@ -13,6 +13,7 @@ import Core.Timer;
 import DevTools.Systems;
 import Gfx.Systems;
 import Input.Systems;
+import Physics2d.Systems;
 import ScriptingJS.Systems;
 import ScriptingLua.Systems;
 
@@ -22,8 +23,8 @@ export namespace Game {
 	public:
 		Client(
 			Core::EnTTRegistry&, Core::Scheduler&, Core::CoreSystems&, Audio::AudioSystems&, Gfx::GfxSystems&,
-			Input::InputSystems&, ScriptingJS::ScriptingJSSystems&, ScriptingLua::ScriptingLuaSystems&,
-			DevTools::DevToolsSystems&, Core::Timer&);
+			Input::InputSystems&, Physics2d::Physics2dSystems&, ScriptingJS::ScriptingJSSystems&,
+			ScriptingLua::ScriptingLuaSystems&, DevTools::DevToolsSystems&, Core::Timer&);
 		~Client();
 
 	private:

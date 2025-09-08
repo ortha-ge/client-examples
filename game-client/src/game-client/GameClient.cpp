@@ -27,13 +27,74 @@ import Gfx.Viewport;
 import Gfx.Reflection.MaterialDescriptor;
 import Input.KeyboardState;
 import Input.MouseState;
+import Physics2d.CollisionShape;
+import Physics2d.Rigidbody2d;
+
+namespace GameClientInternal {
+
+	struct Vec2 {
+		float x{};
+		float y{};
+	};
+
+	struct Vec3 {
+		float x{};
+		float y{};
+		float z{};
+	};
+
+	entt::entity createCharacter(
+		entt::registry& registry, Vec3 pos, Vec3 scale, Vec2 collisionBox, std::string materialPath, std::string soundPath,
+		float soundRequestVolume) {
+
+		const auto materialResource = registry.create();
+		registry.emplace<Core::ResourceLoadRequest>(
+			materialResource,
+			Core::ResourceLoadRequest::create<Core::TypeLoader>(
+				std::move(materialPath), std::make_shared<Core::JsonTypeLoaderAdapter<Gfx::MaterialDescriptor>>()));
+
+		const auto soundResource = registry.create();
+		registry.emplace<Core::ResourceLoadRequest>(
+			soundResource, Core::ResourceLoadRequest::create<Audio::SoundDescriptor>(std::move(soundPath)));
+
+		const auto renderObjectEntity = registry.create();
+		registry.emplace<Core::Spatial>(renderObjectEntity, pos.x, pos.y, pos.z, scale.x, scale.y, scale.z);
+
+		registry.emplace<Gfx::RenderObject>(renderObjectEntity, materialResource);
+		registry.emplace<Gfx::Sprite>(renderObjectEntity);
+
+		Physics2d::BoxCollisionShapeDescriptor boxCollisionDescriptor{
+			collisionBox.x,
+			collisionBox.y,
+		};
+		registry.emplace<Physics2d::CollisionShape>(renderObjectEntity, boxCollisionDescriptor);
+		registry.emplace<Physics2d::Rigidbody>(renderObjectEntity, false);
+
+		registry.emplace<Audio::AudioSource>(renderObjectEntity, soundResource);
+		registry.emplace<Audio::PlaySoundSourceRequest>(renderObjectEntity, false, soundRequestVolume);
+		return renderObjectEntity;
+	}
+
+	entt::entity createCat(entt::registry& registry, Vec2 pos) {
+		return createCharacter(
+			registry, { pos.x, pos.y, 2.0f }, { 8.0f, 8.0f, 1.0f }, { 10.0f, 10.0f }, "assets/materials/cat.json",
+			"assets/sounds/cat_meow.wav", 3.0f);
+	}
+
+	entt::entity createFrog(entt::registry& registry, Vec2 pos) {
+		return createCharacter(
+			registry, { pos.x, pos.y, 1.0f }, { 2.0f, 2.0f, 1.0f }, { 30.0f, 25.0f }, "assets/materials/frog.json",
+			"assets/sounds/frog_ribbit.ogg", 1.0f);
+	}
+
+} // namespace GameClientInternal
 
 namespace Game {
 
 	Client::Client(
 		Core::EnTTRegistry& registry, Core::Scheduler& scheduler, Core::CoreSystems&, Audio::AudioSystems&,
-		Gfx::GfxSystems&, Input::InputSystems&, ScriptingJS::ScriptingJSSystems&, ScriptingLua::ScriptingLuaSystems&,
-		DevTools::DevToolsSystems&, Core::Timer& timer)
+		Gfx::GfxSystems&, Input::InputSystems&, Physics2d::Physics2dSystems&, ScriptingJS::ScriptingJSSystems&,
+		ScriptingLua::ScriptingLuaSystems&, DevTools::DevToolsSystems&, Core::Timer& timer)
 		: mRegistry(registry)
 		, mScheduler{ scheduler }
 		, mTimer{ timer } {
@@ -70,32 +131,30 @@ namespace Game {
 
 		mSpawnedRenderObjects.reserve(100);
 
-		const auto catMaterialResource = mRegistry.create();
+		const auto tilesMaterialResourceHandle = mRegistry.create();
 		mRegistry.emplace<Core::ResourceLoadRequest>(
-			catMaterialResource,
+			tilesMaterialResourceHandle,
 			Core::ResourceLoadRequest::create<Core::TypeLoader>(
-				"assets/materials/cat.json", std::make_shared<Core::JsonTypeLoaderAdapter<Gfx::MaterialDescriptor>>()));
+				"assets/materials/tiles.json", std::make_shared<Core::JsonTypeLoaderAdapter<Gfx::MaterialDescriptor>>()
+			)
+		);
 
-		const auto frogMaterialResource = mRegistry.create();
-		mRegistry.emplace<Core::ResourceLoadRequest>(
-			frogMaterialResource, Core::ResourceLoadRequest::create<Core::TypeLoader>(
-									  "assets/materials/frog.json",
-									  std::make_shared<Core::JsonTypeLoaderAdapter<Gfx::MaterialDescriptor>>()));
+		const auto floorEntity = mRegistry.create();
+		mRegistry.emplace<Core::Spatial>(floorEntity, 650.0f, 450.0f, 1.0f, 10.0f, 1.0f, 1.0f);
 
-		const auto catSoundResource = mRegistry.create();
-		mRegistry.emplace<Core::ResourceLoadRequest>(
-			catSoundResource,
-			Core::ResourceLoadRequest::create<Audio::SoundDescriptor>("./assets/sounds/cat_meow.wav"));
+		mRegistry.emplace<Gfx::RenderObject>(floorEntity, tilesMaterialResourceHandle);
+		mRegistry.emplace<Gfx::Sprite>(floorEntity);
 
-		const auto frogSoundResource = mRegistry.create();
-		mRegistry.emplace<Core::ResourceLoadRequest>(
-			frogSoundResource,
-			Core::ResourceLoadRequest::create<Audio::SoundDescriptor>("./assets/sounds/frog_ribbit.ogg"));
+		Physics2d::BoxCollisionShapeDescriptor boxCollisionDescriptor{
+			69.0f,
+			70.0f,
+		};
+		mRegistry.emplace<Physics2d::CollisionShape>(floorEntity, boxCollisionDescriptor);
+		mRegistry.emplace<Physics2d::Rigidbody>(floorEntity);
 
-		mTickHandle = scheduler.schedule([this, catMaterialResource, catSoundResource, frogMaterialResource,
-										  frogSoundResource, lastSpawn = std::chrono::steady_clock::time_point{}, tickTock = false] mutable {
+		mTickHandle = scheduler.schedule([this, lastSpawn = std::chrono::steady_clock::time_point{}, tickTock = false] mutable {
 
-			Core::logEntry(mRegistry, "DeltaT: {}", mTimer.getDeltaT());
+			//Core::logEntry(mRegistry, "DeltaT: {}", mTimer.getDeltaT());
 
 			auto& cameraSpatial = mRegistry.get<Core::Spatial>(mCameraEntity);
 			if (tickTock) {
@@ -120,14 +179,9 @@ namespace Game {
 				const bool spawnCat = mouseState.x < (1360.0f * 0.5f);
 				lastSpawn = std::chrono::steady_clock::now();
 
-				const auto renderObjectEntity = mRegistry.create();
-				mRegistry.emplace<Core::Spatial>(renderObjectEntity, mouseState.x, mouseState.y, spawnCat ? 2.0f : 1.0f, 8.0f, 8.0f);
-				mRegistry.emplace<Gfx::RenderObject>(
-					renderObjectEntity, spawnCat ? catMaterialResource : frogMaterialResource);
-				mRegistry.emplace<Gfx::Sprite>(renderObjectEntity);
-				mRegistry.emplace<Audio::AudioSource>(
-					renderObjectEntity, spawnCat ? catSoundResource : frogSoundResource);
-				mRegistry.emplace<Audio::PlaySoundSourceRequest>(renderObjectEntity, false, spawnCat ? 3.0f : 1.0f);
+				const auto renderObjectEntity = spawnCat
+					? GameClientInternal::createCat(mRegistry, { mouseState.x, mouseState.y })
+					: GameClientInternal::createFrog(mRegistry, { mouseState.x, mouseState.y });
 
 				mSpawnedRenderObjects.push_back(renderObjectEntity);
 			}
@@ -148,27 +202,6 @@ namespace Game {
 				inputY -= moveSpeed;
 			} else if (Input::isKeyPressed(keyboardState, Input::Key::Down)) {
 				inputY += moveSpeed;
-			}
-
-			const float groundY = 500.0f;
-			const float gravity = -600.0f * mTimer.getDeltaT();
-
-			for (auto&& spawnedObject : mSpawnedRenderObjects) {
-				auto& spatial = mRegistry.get<Core::Spatial>(spawnedObject);
-
-				const bool isOnGround = spatial.y >= groundY;
-				if (!isOnGround) {
-					spatial.y -= gravity;
-				} else {
-					if (inputX != 0.0f || inputY != 0.0f) {
-						spatial.x += inputX;
-						spatial.y += inputY;
-					}
-				}
-
-				if (spatial.y > groundY) {
-					spatial.y = groundY;
-				}
 			}
 
 			auto clockNow = std::chrono::steady_clock::now();

@@ -14,6 +14,7 @@
     <mapping directory="$PROJECT_DIR$/devtools-lib/deps/IconFontCppHeaders" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/gfx-lib" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/input-lib" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/physics2d-lib" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/scripting-js-lib" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/scripting-lua-lib" vcs="Git" />
   </component>

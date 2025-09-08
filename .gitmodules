@@ -28,3 +28,6 @@
 [submodule "scripting-lua-lib"]
 	path = scripting-lua-lib
 	url = git@github.com:ortha-ge/scripting-lua-lib.git
+[submodule "physics2d-lib"]
+	path = physics2d-lib
+	url = git@github.com:ortha-ge/physics2d-lib.git

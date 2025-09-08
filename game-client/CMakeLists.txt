@@ -41,12 +41,21 @@ bgfx_compile_shaders(
 
 add_executable(game-client ${game-client-src} ${game-client-modules} ${game-client-shaders-vs} ${game-client-shaders-fs})
 
-target_sources(game-client PUBLIC FILE_SET modules TYPE CXX_MODULES FILES
-    ${game-client-modules}
+target_sources(game-client PUBLIC FILE_SET modules TYPE CXX_MODULES FILES ${game-client-modules})
+
+set(game-client-libs
+        core-lib
+        gfx-lib
+        input-lib
+        audio-lib
+        devtools-lib
+        physics2d-lib
+        scripting-js-lib
+        scripting-lua-lib
 )
 
 target_compile_features(game-client PRIVATE cxx_std_23)
-target_link_libraries(game-client PRIVATE core-lib gfx-lib input-lib audio-lib devtools-lib scripting-js-lib scripting-lua-lib)
+target_link_libraries(game-client PRIVATE ${game-client-libs})
 target_include_directories(game-client PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 if (EMSCRIPTEN_PRESET)
