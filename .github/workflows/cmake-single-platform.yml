@@ -86,7 +86,7 @@ jobs:
     - name: Archive
       uses: actions/upload-artifact@v4
       with:
-        name: game-client
+        name: game-client-${{ matrix.build_type }}
         path: |
           build/release/game-client/game-client
           build/release/game-client/assets/
