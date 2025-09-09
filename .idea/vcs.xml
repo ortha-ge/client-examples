@@ -5,9 +5,6 @@
     <mapping directory="$PROJECT_DIR$/audio-lib" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/core-lib" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/deps/bgfx" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/deps/bgfx/bgfx" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/deps/bgfx/bimg" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/deps/bgfx/bx" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/deps/soloud" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/deps/vcpkg" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/devtools-lib" vcs="Git" />

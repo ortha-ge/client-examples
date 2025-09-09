@@ -1,5 +1,9 @@
 {
     "dependencies": [
+        {
+            "name": "bgfx",
+            "features": [ "tools" ]
+        },
         "box2d",
         "catch2",
         "entt",

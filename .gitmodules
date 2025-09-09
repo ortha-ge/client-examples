@@ -1,9 +1,6 @@
 [submodule "deps/vcpkg"]
 	path = deps/vcpkg
 	url = https://github.com/microsoft/vcpkg.git
-[submodule "deps/bgfx"]
-	path = deps/bgfx
-	url = https://github.com/bkaradzic/bgfx.cmake.git
 [submodule "deps/soloud"]
 	path = deps/soloud
 	url = https://github.com/jarikomppa/soloud.git
