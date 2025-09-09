@@ -57,6 +57,9 @@ jobs:
       with:
         apt: libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev xorg-dev libltdl-dev libglu1-mesa-dev pkg-config libsdl2-dev
 
+    - name: Install Python Dependencies
+      run: pip install requests PyYAML
+
     - name: Vcpkg
       uses: lukka/run-vcpkg@v11
       with:
