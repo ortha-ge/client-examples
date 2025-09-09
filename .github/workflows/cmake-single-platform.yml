@@ -48,9 +48,9 @@ jobs:
         submodules: 'recursive'
         lfs: 'true'
 
-    - name: Add clang path to $PATH env
+    - name: Setup MSVC dev tools
       if: runner.os == 'Windows'
-      run: echo "PATH=$PATH:C:\msys64\mingw64\bin" >> $GITHUB_ENV
+      uses: ilammy/msvc-dev-cmd@v1
 
     - name: Install Dependencies
       uses: amitie10g/install-package@v1
