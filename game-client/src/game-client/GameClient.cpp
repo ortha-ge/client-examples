@@ -5,6 +5,7 @@ module;
 #include <random>
 
 #include <entt/entt.hpp>
+#include <glm/glm.hpp>
 
 module Game.Client;
 
@@ -27,24 +28,14 @@ import Gfx.Viewport;
 import Gfx.Reflection.MaterialDescriptor;
 import Input.KeyboardState;
 import Input.MouseState;
+import Physics2d.CollisionEvent;
 import Physics2d.CollisionShape;
 import Physics2d.Rigidbody2d;
 
 namespace GameClientInternal {
 
-	struct Vec2 {
-		float x{};
-		float y{};
-	};
-
-	struct Vec3 {
-		float x{};
-		float y{};
-		float z{};
-	};
-
 	entt::entity createCharacter(
-		entt::registry& registry, Vec3 pos, Vec3 scale, Vec2 collisionBox, std::string materialPath, std::string soundPath,
+		entt::registry& registry, glm::vec3 pos, glm::vec3 scale, glm::vec2 collisionBox, std::string materialPath, std::string soundPath,
 		float soundRequestVolume) {
 
 		const auto materialResource = registry.create();
@@ -58,30 +49,29 @@ namespace GameClientInternal {
 			soundResource, Core::ResourceLoadRequest::create<Audio::SoundDescriptor>(std::move(soundPath)));
 
 		const auto renderObjectEntity = registry.create();
-		registry.emplace<Core::Spatial>(renderObjectEntity, pos.x, pos.y, pos.z, scale.x, scale.y, scale.z);
+		registry.emplace<Core::Spatial>(renderObjectEntity, pos, scale);
 
 		registry.emplace<Gfx::RenderObject>(renderObjectEntity, materialResource);
 		registry.emplace<Gfx::Sprite>(renderObjectEntity);
 
-		Physics2d::BoxCollisionShapeDescriptor boxCollisionDescriptor{
-			collisionBox.x,
-			collisionBox.y,
+		Physics2d::CircleCollisionShapeDescriptor boxCollisionDescriptor{
+			collisionBox.x * 0.5f * scale.x
 		};
 		registry.emplace<Physics2d::CollisionShape>(renderObjectEntity, boxCollisionDescriptor);
 		registry.emplace<Physics2d::Rigidbody>(renderObjectEntity, false);
 
 		registry.emplace<Audio::AudioSource>(renderObjectEntity, soundResource);
-		registry.emplace<Audio::PlaySoundSourceRequest>(renderObjectEntity, false, soundRequestVolume);
+		registry.emplace<Audio::PlaySoundSourceRequest>(renderObjectEntity, soundRequestVolume);
 		return renderObjectEntity;
 	}
 
-	entt::entity createCat(entt::registry& registry, Vec2 pos) {
+	entt::entity createCat(entt::registry& registry, glm::vec2 pos) {
 		return createCharacter(
 			registry, { pos.x, pos.y, 2.0f }, { 8.0f, 8.0f, 1.0f }, { 10.0f, 10.0f }, "assets/materials/cat.json",
 			"assets/sounds/cat_meow.wav", 3.0f);
 	}
 
-	entt::entity createFrog(entt::registry& registry, Vec2 pos) {
+	entt::entity createFrog(entt::registry& registry, glm::vec2 pos) {
 		return createCharacter(
 			registry, { pos.x, pos.y, 1.0f }, { 2.0f, 2.0f, 1.0f }, { 30.0f, 25.0f }, "assets/materials/frog.json",
 			"assets/sounds/frog_ribbit.ogg", 1.0f);
@@ -104,7 +94,7 @@ namespace Game {
 
 		mCameraEntity = mRegistry.create();
 		mRegistry.emplace<Gfx::Camera>(mCameraEntity, 60.0);
-		mRegistry.emplace<Core::Spatial>(mCameraEntity, 0.0f, 0.0f, 0.0f);
+		mRegistry.emplace<Core::Spatial>(mCameraEntity, glm::vec3{ 0.0f, 0.0f, 0.0f });
 
 		mViewportEntity = mRegistry.create();
 		mRegistry.emplace<Gfx::Viewport>(mViewportEntity, mCameraEntity, 0.1f, 0.1f, 0.9f, 0.9f);
@@ -121,11 +111,14 @@ namespace Game {
 			Core::ResourceLoadRequest::create<Audio::SoundDescriptor>("./assets/sounds/background_crickets.ogg"));
 
 		const auto backgroundRenderObject = mRegistry.create();
-		mRegistry.emplace<Core::Spatial>(backgroundRenderObject, 1000.0f, 750.0f, 0.0f, 2.0f, 2.0f, 2.0f);
+		mRegistry.emplace<Core::Spatial>(backgroundRenderObject, glm::vec3{ 1000.0f, 750.0f, 0.0f }, glm::vec3{ 2.0f, 2.0f, 1.0f });
 		mRegistry.emplace<Gfx::Sprite>(backgroundRenderObject);
 		mRegistry.emplace<Gfx::RenderObject>(backgroundRenderObject, backgroundMaterial);
 		mRegistry.emplace<Audio::AudioSource>(backgroundRenderObject, backgroundSoundResource);
-		mRegistry.emplace<Audio::PlaySoundSourceRequest>(backgroundRenderObject, true);
+
+		Audio::PlaySoundSourceRequest playSoundRequest;
+		playSoundRequest.looping = true;
+		mRegistry.emplace<Audio::PlaySoundSourceRequest>(backgroundRenderObject, playSoundRequest);
 
 		mBackgroundRenderObject = backgroundRenderObject;
 
@@ -140,7 +133,7 @@ namespace Game {
 		);
 
 		const auto floorEntity = mRegistry.create();
-		mRegistry.emplace<Core::Spatial>(floorEntity, 650.0f, 450.0f, 1.0f, 10.0f, 1.0f, 1.0f);
+		mRegistry.emplace<Core::Spatial>(floorEntity, glm::vec3{ 650.0f, 450.0f, 1.0f }, glm::vec3{ 10.0f, 1.0f, 1.0f });
 
 		mRegistry.emplace<Gfx::RenderObject>(floorEntity, tilesMaterialResourceHandle);
 		mRegistry.emplace<Gfx::Sprite>(floorEntity);
@@ -158,13 +151,13 @@ namespace Game {
 
 			auto& cameraSpatial = mRegistry.get<Core::Spatial>(mCameraEntity);
 			if (tickTock) {
-				cameraSpatial.x -= mTimer.getDeltaT() * 25.0f;
-				if (cameraSpatial.x < -50.0f) {
+				cameraSpatial.position.x -= mTimer.getDeltaT() * 25.0f;
+				if (cameraSpatial.position.x < -50.0f) {
 					tickTock = false;
 				}
 			} else {
-				cameraSpatial.x += mTimer.getDeltaT() * 25.0f;
-				if (cameraSpatial.x > 50.0f) {
+				cameraSpatial.position.x += mTimer.getDeltaT() * 25.0f;
+				if (cameraSpatial.position.x > 50.0f) {
 					tickTock = true;
 				}
 			}
@@ -219,6 +212,11 @@ namespace Game {
 					renderObject.lastAnimUpdateTime = clockNow;
 				}
 			}
+
+			mRegistry.view<Physics2d::CollisionEvent>()
+				.each([this](const entt::entity entity, const Physics2d::CollisionEvent& collisionEvent) {
+
+				});
 		});
 	}
 
