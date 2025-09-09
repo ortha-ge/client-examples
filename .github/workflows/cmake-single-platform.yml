@@ -32,8 +32,12 @@ jobs:
         exclude:
           - os: ubuntu-latest
             build_type: ReleaseMSVC
+          - os: ubuntu-latest
+            c_compiler: cl
           - os: windows-latest
             build_type: Release
+          - os: windows-latest
+            c_compiler: clang
       
     concurrency:
       group: build_${{ github.ref }}_${{ matrix.os }}
