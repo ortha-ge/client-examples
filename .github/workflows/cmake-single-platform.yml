@@ -54,7 +54,7 @@ jobs:
     - name: Install Dependencies
       uses: amitie10g/install-package@v1
       with:
-        apt: libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev xorg-dev libglu1-mesa-dev pkg-config libsdl2-dev
+        apt: libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev xorg-dev libltdl-dev libglu1-mesa-dev pkg-config libsdl2-dev
 
     - name: Vcpkg
       uses: lukka/run-vcpkg@v11
