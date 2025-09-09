@@ -77,6 +77,14 @@
         {
             "name": "Release",
             "configurePreset": "Release"
+        },
+        {
+            "name": "DebugMSVC",
+            "configurePreset": "DebugMSVC"
+        },
+        {
+            "name": "ReleaseMSVC",
+            "configurePreset": "ReleaseMSVC"
         }
     ],
     "testPresets": [
@@ -87,6 +95,14 @@
         {
             "name": "Release",
             "configurePreset": "Release"
+        },
+        {
+            "name": "DebugMSVC",
+            "configurePreset": "DebugMSVC"
+        },
+        {
+            "name": "ReleaseMSVC",
+            "configurePreset": "ReleaseMSVC"
         }
     ]
   }
