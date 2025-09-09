@@ -93,7 +93,7 @@ namespace Game {
 		mRegistry.emplace<Core::Window>(mWindowEntity, "Riastradh", 1360, 768);
 
 		mCameraEntity = mRegistry.create();
-		mRegistry.emplace<Gfx::Camera>(mCameraEntity, 60.0);
+		mRegistry.emplace<Gfx::Camera>(mCameraEntity, 60.0f);
 		mRegistry.emplace<Core::Spatial>(mCameraEntity, glm::vec3{ 0.0f, 0.0f, 0.0f });
 
 		mViewportEntity = mRegistry.create();
