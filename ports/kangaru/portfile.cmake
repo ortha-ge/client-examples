@@ -3,7 +3,7 @@ set(VCPKG_USE_HEAD_VERSION ON)
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO sweet-niamhy/kangaru
-    REF 19895dac60f6afcc51791e704dbfd8f142f3fd04
+    REF a52ffb9e3ed5910fdd119f513d05a3a5b7c2f62c
     SHA512 0
     HEAD_REF master
 )
