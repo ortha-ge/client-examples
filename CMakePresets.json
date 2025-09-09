@@ -43,6 +43,30 @@
           "BGFX_CONFIG_MULTITHREADED": false,
           "EMSCRIPTEN_PRESET": true
         }
+      },
+      {
+        "name": "DebugMSVC",
+        "generator": "Ninja",
+        "binaryDir": "${sourceDir}/build/debug",
+        "cacheVariables": {
+          "CMAKE_C_COMPILER": "cl.exe",
+          "CMAKE_CXX_COMPILER": "cl.exe",
+          "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/deps/vcpkg/scripts/buildsystems/vcpkg.cmake",
+          "CMAKE_BUILD_TYPE": "Debug",
+          "CMAKE_MAKE_PROGRAM": "ninja"
+        }
+      },
+      {
+        "name": "ReleaseMSVC",
+        "generator": "Ninja",
+        "binaryDir": "${sourceDir}/build/release",
+        "cacheVariables": {
+          "CMAKE_C_COMPILER": "cl.exe",
+          "CMAKE_CXX_COMPILER": "cl.exe",
+          "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/deps/vcpkg/scripts/buildsystems/vcpkg.cmake",
+          "CMAKE_BUILD_TYPE": "Release",
+          "CMAKE_MAKE_PROGRAM": "ninja"
+        }
       }
     ],
     "buildPresets": [
