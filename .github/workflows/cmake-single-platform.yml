@@ -83,10 +83,20 @@ jobs:
     - name: Build Game Client
       run: cmake --build --preset "${{ matrix.build_type }}" --target game-client
 
-    - name: Archive
+    - name: Archive - Linux
+      if: runner.os != 'Windows'
       uses: actions/upload-artifact@v4
       with:
         name: game-client-${{ matrix.build_type }}
         path: |
           build/release/game-client/game-client
+          build/release/game-client/assets/
+
+    - name: Archive - Windows
+      if: runner.os == 'Windows'
+      uses: actions/upload-artifact@v4
+      with:
+        name: game-client-${{ matrix.build_type }}
+        path: |
+          build/release/game-client/game-client.exe
           build/release/game-client/assets/
