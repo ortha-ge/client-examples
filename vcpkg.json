@@ -4,6 +4,7 @@
         "catch2",
         "entt",
         "glfw3",
+        "glm",
         "imgui",
         "kangaru",
         "lua",
