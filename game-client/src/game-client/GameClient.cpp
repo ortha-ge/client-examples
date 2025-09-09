@@ -23,9 +23,11 @@ import Core.Window;
 import Gfx.Camera;
 import Gfx.MaterialDescriptor;
 import Gfx.RenderObject;
-import Gfx.Sprite;
+import Gfx.SpriteDescriptor;
+import Gfx.SpriteObject;
 import Gfx.Viewport;
 import Gfx.Reflection.MaterialDescriptor;
+import Gfx.Reflection.Sprite;
 import Input.KeyboardState;
 import Input.MouseState;
 import Physics2d.CollisionEvent;
@@ -35,14 +37,19 @@ import Physics2d.Rigidbody2d;
 namespace GameClientInternal {
 
 	entt::entity createCharacter(
-		entt::registry& registry, glm::vec3 pos, glm::vec3 scale, glm::vec2 collisionBox, std::string materialPath, std::string soundPath,
-		float soundRequestVolume) {
+		entt::registry& registry, glm::vec3 pos, glm::vec3 scale, glm::vec2 collisionBox, std::string materialPath,
+		std::string spritePath, std::string soundPath, float soundRequestVolume) {
 
 		const auto materialResource = registry.create();
 		registry.emplace<Core::ResourceLoadRequest>(
 			materialResource,
 			Core::ResourceLoadRequest::create<Core::TypeLoader>(
 				std::move(materialPath), std::make_shared<Core::JsonTypeLoaderAdapter<Gfx::MaterialDescriptor>>()));
+
+		const auto spriteResource = registry.create();
+		registry.emplace<Core::ResourceLoadRequest>(
+			spriteResource, Core::ResourceLoadRequest::create<Core::TypeLoader>(
+								std::move(spritePath), std::make_shared<Core::JsonTypeLoaderAdapter<Gfx::SpriteDescriptor>>()));
 
 		const auto soundResource = registry.create();
 		registry.emplace<Core::ResourceLoadRequest>(
@@ -52,11 +59,9 @@ namespace GameClientInternal {
 		registry.emplace<Core::Spatial>(renderObjectEntity, pos, scale);
 
 		registry.emplace<Gfx::RenderObject>(renderObjectEntity, materialResource);
-		registry.emplace<Gfx::Sprite>(renderObjectEntity);
+		registry.emplace<Gfx::SpriteObject>(renderObjectEntity, spriteResource);
 
-		Physics2d::CircleCollisionShapeDescriptor boxCollisionDescriptor{
-			collisionBox.x * 0.5f * scale.x
-		};
+		Physics2d::CircleCollisionShapeDescriptor boxCollisionDescriptor{ collisionBox.x * 0.5f * scale.x };
 		registry.emplace<Physics2d::CollisionShape>(renderObjectEntity, boxCollisionDescriptor);
 		registry.emplace<Physics2d::Rigidbody>(renderObjectEntity, false);
 
@@ -68,13 +73,13 @@ namespace GameClientInternal {
 	entt::entity createCat(entt::registry& registry, glm::vec2 pos) {
 		return createCharacter(
 			registry, { pos.x, pos.y, 2.0f }, { 8.0f, 8.0f, 1.0f }, { 10.0f, 10.0f }, "assets/materials/cat.json",
-			"assets/sounds/cat_meow.wav", 3.0f);
+			"assets/sprites/cat.json", "assets/sounds/cat_meow.wav", 3.0f);
 	}
 
 	entt::entity createFrog(entt::registry& registry, glm::vec2 pos) {
 		return createCharacter(
 			registry, { pos.x, pos.y, 1.0f }, { 2.0f, 2.0f, 1.0f }, { 30.0f, 25.0f }, "assets/materials/frog.json",
-			"assets/sounds/frog_ribbit.ogg", 1.0f);
+			"assets/sprites/frog.json", "assets/sounds/frog_ribbit.ogg", 1.0f);
 	}
 
 } // namespace GameClientInternal
@@ -102,8 +107,14 @@ namespace Game {
 		const auto backgroundMaterial = mRegistry.create();
 		mRegistry.emplace<Core::ResourceLoadRequest>(
 			backgroundMaterial, Core::ResourceLoadRequest::create<Core::TypeLoader>(
-									std::string{ "assets/materials/background_material.json" },
+									std::string{ "assets/materials/background.json" },
 									std::make_shared<Core::JsonTypeLoaderAdapter<Gfx::MaterialDescriptor>>()));
+
+		const auto backgroundSprite = mRegistry.create();
+		mRegistry.emplace<Core::ResourceLoadRequest>(
+			backgroundSprite, Core::ResourceLoadRequest::create<Core::TypeLoader>(
+								  std::string{ "assets/sprites/background.json" },
+								  std::make_shared<Core::JsonTypeLoaderAdapter<Gfx::SpriteDescriptor>>()));
 
 		const auto backgroundSoundResource = mRegistry.create();
 		mRegistry.emplace<Core::ResourceLoadRequest>(
@@ -112,7 +123,7 @@ namespace Game {
 
 		const auto backgroundRenderObject = mRegistry.create();
 		mRegistry.emplace<Core::Spatial>(backgroundRenderObject, glm::vec3{ 1000.0f, 750.0f, 0.0f }, glm::vec3{ 2.0f, 2.0f, 1.0f });
-		mRegistry.emplace<Gfx::Sprite>(backgroundRenderObject);
+		mRegistry.emplace<Gfx::SpriteObject>(backgroundRenderObject, backgroundSprite);
 		mRegistry.emplace<Gfx::RenderObject>(backgroundRenderObject, backgroundMaterial);
 		mRegistry.emplace<Audio::AudioSource>(backgroundRenderObject, backgroundSoundResource);
 
@@ -132,11 +143,17 @@ namespace Game {
 			)
 		);
 
+		const auto floorSprite = mRegistry.create();
+		mRegistry.emplace<Core::ResourceLoadRequest>(
+			floorSprite, Core::ResourceLoadRequest::create<Core::TypeLoader>(
+								  std::string{ "assets/sprites/floor.json" },
+								  std::make_shared<Core::JsonTypeLoaderAdapter<Gfx::SpriteDescriptor>>()));
+
 		const auto floorEntity = mRegistry.create();
 		mRegistry.emplace<Core::Spatial>(floorEntity, glm::vec3{ 650.0f, 450.0f, 1.0f }, glm::vec3{ 10.0f, 1.0f, 1.0f });
 
 		mRegistry.emplace<Gfx::RenderObject>(floorEntity, tilesMaterialResourceHandle);
-		mRegistry.emplace<Gfx::Sprite>(floorEntity);
+		mRegistry.emplace<Gfx::SpriteObject>(floorEntity, floorSprite);
 
 		Physics2d::BoxCollisionShapeDescriptor boxCollisionDescriptor{
 			69.0f,
@@ -195,22 +212,6 @@ namespace Game {
 				inputY -= moveSpeed;
 			} else if (Input::isKeyPressed(keyboardState, Input::Key::Down)) {
 				inputY += moveSpeed;
-			}
-
-			auto clockNow = std::chrono::steady_clock::now();
-			for (auto&& spawnedObject : mSpawnedRenderObjects) {
-				auto& renderObject = mRegistry.get<Gfx::RenderObject>(spawnedObject);
-
-				const bool canTickAnimation =
-					(clockNow - renderObject.lastAnimUpdateTime) > std::chrono::milliseconds(500);
-				if (canTickAnimation) {
-					renderObject.currentSpriteFrame++;
-					if (renderObject.currentSpriteFrame > 1) {
-						renderObject.currentSpriteFrame = 0;
-					}
-
-					renderObject.lastAnimUpdateTime = clockNow;
-				}
 			}
 
 			mRegistry.view<Physics2d::CollisionEvent>()
