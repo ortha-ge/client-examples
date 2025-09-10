@@ -16,6 +16,7 @@ import Core.FileDescriptor;
 import Core.FileLoadRequest;
 import Core.JsonTypeLoaderAdapter;
 import Core.Log;
+import Core.ResourceHandle;
 import Core.ResourceLoadRequest;
 import Core.Spatial;
 import Core.TypeLoader;
@@ -40,20 +41,20 @@ namespace GameClientInternal {
 		entt::registry& registry, glm::vec3 pos, glm::vec3 scale, glm::vec2 collisionBox, std::string materialPath,
 		std::string spritePath, std::string soundPath, float soundRequestVolume) {
 
-		const auto materialResource = registry.create();
-		registry.emplace<Core::ResourceLoadRequest>(
-			materialResource,
-			Core::ResourceLoadRequest::create<Core::TypeLoader>(
-				std::move(materialPath), std::make_shared<Core::JsonTypeLoaderAdapter<Gfx::MaterialDescriptor>>()));
+		const auto materialResource = Core::ResourceHandle::create<Core::TypeLoader>(
+				std::move(materialPath), std::make_shared<Core::JsonTypeLoaderAdapter<Gfx::MaterialDescriptor>>());
 
-		const auto spriteResource = registry.create();
-		registry.emplace<Core::ResourceLoadRequest>(
-			spriteResource, Core::ResourceLoadRequest::create<Core::TypeLoader>(
-								std::move(spritePath), std::make_shared<Core::JsonTypeLoaderAdapter<Gfx::SpriteDescriptor>>()));
+		auto loadRequest = registry.create();
+		registry.emplace<Core::ResourceLoadRequest>(loadRequest, materialResource);
 
-		const auto soundResource = registry.create();
-		registry.emplace<Core::ResourceLoadRequest>(
-			soundResource, Core::ResourceLoadRequest::create<Audio::SoundDescriptor>(std::move(soundPath)));
+		const auto spriteResource = Core::ResourceHandle::create<Core::TypeLoader>(
+								std::move(spritePath), std::make_shared<Core::JsonTypeLoaderAdapter<Gfx::SpriteDescriptor>>());
+		loadRequest = registry.create();
+		registry.emplace<Core::ResourceLoadRequest>(loadRequest, spriteResource);
+
+		const auto soundResource = Core::ResourceHandle::create<Audio::SoundDescriptor>(std::move(soundPath));
+		loadRequest = registry.create();
+		registry.emplace<Core::ResourceLoadRequest>(loadRequest, soundResource);
 
 		const auto renderObjectEntity = registry.create();
 		registry.emplace<Core::Spatial>(renderObjectEntity, pos, scale);
@@ -104,22 +105,22 @@ namespace Game {
 		mViewportEntity = mRegistry.create();
 		mRegistry.emplace<Gfx::Viewport>(mViewportEntity, mCameraEntity, 0.1f, 0.1f, 0.9f, 0.9f);
 
-		const auto backgroundMaterial = mRegistry.create();
-		mRegistry.emplace<Core::ResourceLoadRequest>(
-			backgroundMaterial, Core::ResourceLoadRequest::create<Core::TypeLoader>(
+		const auto backgroundMaterial = Core::ResourceHandle::create<Core::TypeLoader>(
 									std::string{ "assets/materials/background.json" },
-									std::make_shared<Core::JsonTypeLoaderAdapter<Gfx::MaterialDescriptor>>()));
+									std::make_shared<Core::JsonTypeLoaderAdapter<Gfx::MaterialDescriptor>>());
 
-		const auto backgroundSprite = mRegistry.create();
-		mRegistry.emplace<Core::ResourceLoadRequest>(
-			backgroundSprite, Core::ResourceLoadRequest::create<Core::TypeLoader>(
+		auto loadRequest = mRegistry.create();
+		mRegistry.emplace<Core::ResourceLoadRequest>(loadRequest, backgroundMaterial);
+
+		const auto backgroundSprite = Core::ResourceHandle::create<Core::TypeLoader>(
 								  std::string{ "assets/sprites/background.json" },
-								  std::make_shared<Core::JsonTypeLoaderAdapter<Gfx::SpriteDescriptor>>()));
+								  std::make_shared<Core::JsonTypeLoaderAdapter<Gfx::SpriteDescriptor>>());
+		loadRequest = mRegistry.create();
+		mRegistry.emplace<Core::ResourceLoadRequest>(loadRequest, backgroundSprite);
 
-		const auto backgroundSoundResource = mRegistry.create();
-		mRegistry.emplace<Core::ResourceLoadRequest>(
-			backgroundSoundResource,
-			Core::ResourceLoadRequest::create<Audio::SoundDescriptor>("./assets/sounds/background_crickets.ogg"));
+		const auto backgroundSoundResource = Core::ResourceHandle::create<Audio::SoundDescriptor>("./assets/sounds/background_crickets.ogg");
+		loadRequest = mRegistry.create();
+		mRegistry.emplace<Core::ResourceLoadRequest>(loadRequest, backgroundSoundResource);
 
 		const auto backgroundRenderObject = mRegistry.create();
 		mRegistry.emplace<Core::Spatial>(backgroundRenderObject, glm::vec3{ 1000.0f, 750.0f, 0.0f }, glm::vec3{ 2.0f, 2.0f, 1.0f });
@@ -135,19 +136,17 @@ namespace Game {
 
 		mSpawnedRenderObjects.reserve(100);
 
-		const auto tilesMaterialResourceHandle = mRegistry.create();
-		mRegistry.emplace<Core::ResourceLoadRequest>(
-			tilesMaterialResourceHandle,
-			Core::ResourceLoadRequest::create<Core::TypeLoader>(
+		const auto tilesMaterialResourceHandle = Core::ResourceHandle::create<Core::TypeLoader>(
 				"assets/materials/tiles.json", std::make_shared<Core::JsonTypeLoaderAdapter<Gfx::MaterialDescriptor>>()
-			)
-		);
+			);
+		loadRequest = mRegistry.create();
+		mRegistry.emplace<Core::ResourceLoadRequest>(loadRequest, tilesMaterialResourceHandle);
 
-		const auto floorSprite = mRegistry.create();
-		mRegistry.emplace<Core::ResourceLoadRequest>(
-			floorSprite, Core::ResourceLoadRequest::create<Core::TypeLoader>(
+		const auto floorSprite = Core::ResourceHandle::create<Core::TypeLoader>(
 								  std::string{ "assets/sprites/floor.json" },
-								  std::make_shared<Core::JsonTypeLoaderAdapter<Gfx::SpriteDescriptor>>()));
+								  std::make_shared<Core::JsonTypeLoaderAdapter<Gfx::SpriteDescriptor>>());
+		loadRequest = mRegistry.create();
+		mRegistry.emplace<Core::ResourceLoadRequest>(loadRequest, floorSprite);
 
 		const auto floorEntity = mRegistry.create();
 		mRegistry.emplace<Core::Spatial>(floorEntity, glm::vec3{ 650.0f, 450.0f, 1.0f }, glm::vec3{ 10.0f, 1.0f, 1.0f });
