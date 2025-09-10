@@ -40,8 +40,8 @@ import Physics2d.Reflection.CircleCollisionShape;
 namespace GameClientInternal {
 
 	entt::entity createCharacter(
-		entt::registry& registry, glm::vec3 pos, glm::vec3 scale, glm::vec2 collisionBox, std::string materialPath,
-		std::string spritePath, std::string soundPath, float soundRequestVolume) {
+		entt::registry& registry, glm::vec3 pos, glm::vec3 scale, std::string materialPath,
+		std::string spritePath, std::string collisionShapePath, std::string soundPath, float soundRequestVolume) {
 
 		const auto materialResource = Core::ResourceLoadRequest::create<Core::TypeLoader>(
 			registry, std::move(materialPath),
@@ -60,7 +60,7 @@ namespace GameClientInternal {
 		registry.emplace<Gfx::SpriteObject>(renderObjectEntity, spriteResource);
 
 		const auto collisionShapeResource = Core::ResourceLoadRequest::create<Core::TypeLoader>(registry,
-			"assets/collision_shapes/circle.json",
+			std::move(collisionShapePath),
 			std::make_shared<Core::JsonTypeLoaderAdapter<Physics2d::CollisionShapeDescriptor>>()
 		);
 
@@ -74,14 +74,14 @@ namespace GameClientInternal {
 
 	entt::entity createCat(entt::registry& registry, glm::vec2 pos) {
 		return createCharacter(
-			registry, { pos.x, pos.y, 2.0f }, { 8.0f, 8.0f, 1.0f }, { 10.0f, 10.0f }, "assets/materials/cat.json",
-			"assets/sprites/cat.json", "assets/sounds/cat_meow.wav", 3.0f);
+			registry, { pos.x, pos.y, 2.0f }, { 8.0f, 8.0f, 1.0f }, "assets/materials/cat.json",
+			"assets/sprites/cat.json", "assets/collision_shapes/cat.json", "assets/sounds/cat_meow.wav", 3.0f);
 	}
 
 	entt::entity createFrog(entt::registry& registry, glm::vec2 pos) {
 		return createCharacter(
-			registry, { pos.x, pos.y, 1.0f }, { 2.0f, 2.0f, 1.0f }, { 30.0f, 25.0f }, "assets/materials/frog.json",
-			"assets/sprites/frog.json", "assets/sounds/frog_ribbit.ogg", 1.0f);
+			registry, { pos.x, pos.y, 1.0f }, { 2.0f, 2.0f, 1.0f }, "assets/materials/frog.json",
+			"assets/sprites/frog.json", "assets/collision_shapes/frog.json", "assets/sounds/frog_ribbit.ogg", 1.0f);
 	}
 
 } // namespace GameClientInternal
