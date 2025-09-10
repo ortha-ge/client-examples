@@ -34,6 +34,8 @@ import Input.MouseState;
 import Physics2d.CollisionEvent;
 import Physics2d.CollisionShape;
 import Physics2d.Rigidbody2d;
+import Physics2d.Reflection.BoxCollisionShape;
+import Physics2d.Reflection.CircleCollisionShape;
 
 namespace GameClientInternal {
 
@@ -57,8 +59,12 @@ namespace GameClientInternal {
 		registry.emplace<Gfx::RenderObject>(renderObjectEntity, materialResource);
 		registry.emplace<Gfx::SpriteObject>(renderObjectEntity, spriteResource);
 
-		Physics2d::CircleCollisionShapeDescriptor boxCollisionDescriptor{ collisionBox.x * 0.5f * scale.x };
-		registry.emplace<Physics2d::CollisionShape>(renderObjectEntity, boxCollisionDescriptor);
+		const auto collisionShapeResource = Core::ResourceLoadRequest::create<Core::TypeLoader>(registry,
+			"assets/collision_shapes/circle.json",
+			std::make_shared<Core::JsonTypeLoaderAdapter<Physics2d::CollisionShapeDescriptor>>()
+		);
+
+		registry.emplace<Physics2d::CollisionShape>(renderObjectEntity, collisionShapeResource);
 		registry.emplace<Physics2d::Rigidbody>(renderObjectEntity, false);
 
 		registry.emplace<Audio::AudioSource>(renderObjectEntity, soundResource);
@@ -139,7 +145,7 @@ namespace Game {
 		mRegistry.emplace<Gfx::RenderObject>(floorEntity, tilesMaterialResourceHandle);
 		mRegistry.emplace<Gfx::SpriteObject>(floorEntity, floorSprite);
 
-		Physics2d::BoxCollisionShapeDescriptor boxCollisionDescriptor{
+		Physics2d::BoxCollisionShape boxCollisionDescriptor{
 			69.0f,
 			70.0f,
 		};
