@@ -99,4 +99,5 @@ jobs:
         name: game-client-${{ matrix.build_type }}
         path: |
           build/release/game-client/game-client.exe
+          build/release/game-client/*.dll
           build/release/game-client/assets/
