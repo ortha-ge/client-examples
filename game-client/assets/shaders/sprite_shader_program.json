@@ -1,7 +1,7 @@
 {
     "ShaderProgram": {
-        "vertexShaderFilePath": "assets/shaders/spirv/vs_sprite.sc.bin",
-        "fragmentShaderFilePath": "assets/shaders/spirv/fs_sprite.sc.bin",
+        "vertexShaderFilePath": "assets/shaders/vs_sprite.sc",
+        "fragmentShaderFilePath": "assets/shaders/fs_sprite.sc",
         "uniforms": [
             {
                 "name": "s_texColour",

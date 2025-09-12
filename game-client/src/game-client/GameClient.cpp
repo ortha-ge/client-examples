@@ -234,7 +234,7 @@ namespace Game {
 			}
 
 			mRegistry.view<Physics2d::CollisionEvent>()
-				.each([this, tryClearLeaves](const entt::entity entity, const Physics2d::CollisionEvent& collisionEvent) {
+				.each([this](const entt::entity entity, const Physics2d::CollisionEvent& collisionEvent) {
 				});
 		});
 	}
