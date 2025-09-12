@@ -1,8 +1,6 @@
 {
     "Material": {
         "shaderProgramFilePath": "assets/shaders/sprite_shader_program.json",
-        "textureImageFilePath": "assets/textures/cloud_background.png",
-        "width": 2000,
-        "height": 1500
+        "textureImageFilePath": "assets/textures/cloud_background.png"
     }
 }

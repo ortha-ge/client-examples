@@ -2,14 +2,6 @@
     "Material": {
         "shaderProgramFilePath": "assets/shaders/sprite_shader_program.json",
         "textureImageFilePath": "assets/textures/cat.png",
-        "textureCoordinates": {
-            "x0": 0.03,
-            "y0": 0.15,
-            "x1": 0.1125,
-            "y1": 0.325
-        },
-        "width": 64,
-        "height": 48,
         "alphaColour": {
             "r": 0.0,
             "g": 0.0,

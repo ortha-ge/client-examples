@@ -1,8 +1,6 @@
 {
     "Material": {
         "shaderProgramFilePath": "assets/shaders/sprite_shader_program.json",
-        "textureImageFilePath": "assets/textures/tiles.png",
-        "width": 1450,
-        "height": 1100
+        "textureImageFilePath": "assets/textures/tiles.png"
     }
 }

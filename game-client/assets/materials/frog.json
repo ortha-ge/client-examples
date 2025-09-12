@@ -2,14 +2,6 @@
     "Material": {
         "shaderProgramFilePath": "assets/shaders/sprite_shader_program.json",
         "textureImageFilePath": "assets/textures/frog.png",
-        "textureCoordinates": {
-            "x0": 0.03,
-            "y0": 0.15,
-            "x1": 0.1125,
-            "y1": 0.325
-        },
-        "width": 448,
-        "height": 160,
         "alphaColour": {
             "r": 0.607843137255,
             "g": 0.678431372549,
