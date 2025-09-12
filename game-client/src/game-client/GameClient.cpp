@@ -12,10 +12,12 @@ module Game.Client;
 import Audio.AudioSource;
 import Audio.SoundDescriptor;
 import Audio.PlaySoundSourceRequest;
+import Core.EnTTNode;
 import Core.FileDescriptor;
 import Core.FileLoadRequest;
 import Core.JsonTypeLoaderAdapter;
 import Core.Log;
+import Core.Node;
 import Core.ResourceHandle;
 import Core.ResourceLoadRequest;
 import Core.Spatial;
@@ -39,9 +41,13 @@ import Physics2d.Reflection.CircleCollisionShape;
 
 namespace GameClientInternal {
 
+	static size_t characterCounter = 0;
+
 	entt::entity createCharacter(
 		entt::registry& registry, glm::vec3 pos, glm::vec3 scale, std::string materialPath,
 		std::string spritePath, std::string collisionShapePath, std::string soundPath, float soundRequestVolume) {
+
+		++characterCounter;
 
 		const auto materialResource = Core::ResourceLoadRequest::create<Core::TypeLoader>(
 			registry, std::move(materialPath),
@@ -52,6 +58,9 @@ namespace GameClientInternal {
 
 		const auto soundResource =
 			Core::ResourceLoadRequest::create<Audio::SoundDescriptor>(registry, std::move(soundPath));
+
+		const auto characterRootNodeEntity = registry.create();
+		Core::NodeHandle& characterRootNode{ registry.emplace<Core::NodeHandle>(characterRootNodeEntity, Core::NodeHandle::create<Core::EnTTNode>(std::format("RootNode_{}", characterCounter), entt::handle(registry, characterRootNodeEntity))) };
 
 		const auto renderObjectEntity = registry.create();
 		registry.emplace<Core::Spatial>(renderObjectEntity, pos, scale);
@@ -69,7 +78,11 @@ namespace GameClientInternal {
 
 		registry.emplace<Audio::AudioSource>(renderObjectEntity, soundResource);
 		registry.emplace<Audio::PlaySoundSourceRequest>(renderObjectEntity, soundRequestVolume);
-		return renderObjectEntity;
+
+		auto& childNodeHandle = registry.emplace<Core::NodeHandle>(renderObjectEntity, Core::NodeHandle::create<Core::EnTTNode>(std::format("LeafNode_{}", characterCounter), entt::handle(registry, renderObjectEntity)));
+		characterRootNode.getNode()->addChild(childNodeHandle.getNode());
+
+		return characterRootNodeEntity;
 	}
 
 	entt::entity createCat(entt::registry& registry, glm::vec2 pos) {
@@ -204,9 +217,24 @@ namespace Game {
 				inputY += moveSpeed;
 			}
 
-			mRegistry.view<Physics2d::CollisionEvent>()
-				.each([this](const entt::entity entity, const Physics2d::CollisionEvent& collisionEvent) {
+			auto tryDestroyRootNode = [](entt::registry& registry, const entt::entity entity) {
+				if (!registry.all_of<Core::NodeHandle>(entity)) {
+					return;
+				}
 
+				auto& node = registry.get<Core::NodeHandle>(entity);
+				node.getNode()->destroy();
+			};
+
+			if (Input::isKeyPressed(keyboardState, Input::Key::Space)) {
+				for (auto&& spawnedObject : mSpawnedRenderObjects) {
+					tryDestroyRootNode(mRegistry, spawnedObject);
+				}
+				mSpawnedRenderObjects.clear();
+			}
+
+			mRegistry.view<Physics2d::CollisionEvent>()
+				.each([this, tryClearLeaves](const entt::entity entity, const Physics2d::CollisionEvent& collisionEvent) {
 				});
 		});
 	}
