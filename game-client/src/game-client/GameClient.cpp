@@ -117,7 +117,7 @@ namespace Game {
 		mRegistry.emplace<Core::Spatial>(mCameraEntity, glm::vec3{ 0.0f, 0.0f, 0.0f });
 
 		mViewportEntity = mRegistry.create();
-		mRegistry.emplace<Gfx::Viewport>(mViewportEntity, mCameraEntity, glm::vec2{ 0.1f, 0.1f}, glm::vec2{ 0.9f, 0.9f });
+		mRegistry.emplace<Gfx::Viewport>(mViewportEntity, mCameraEntity, glm::vec2{ 0.0f, 0.0f}, glm::vec2{ 1.0f, 1.0f });
 
 		const auto backgroundMaterial = Core::ResourceLoadRequest::create<Core::TypeLoader>(
 			registry, std::string{ "assets/materials/background.json" },

@@ -28,6 +28,3 @@
 [submodule "physics2d-lib"]
 	path = physics2d-lib
 	url = git@github.com:ortha-ge/physics2d-lib.git
-[submodule "deps/RxCpp"]
-	path = deps/RxCpp
-	url = https://github.com/ReactiveX/RxCpp.git

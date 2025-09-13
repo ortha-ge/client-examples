@@ -8,6 +8,10 @@
             {
                 "bottomLeft": { "x": 17, "y": 4 },
                 "topRight": { "x": 31, "y": 17 }
+            },
+            {
+                "bottomLeft": { "x": 34, "y": 4 },
+                "topRight": { "x": 48, "y": 17 }
             }
         ]
     }
