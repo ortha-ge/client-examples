@@ -17,6 +17,8 @@ target_include_directories(soloud PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/deps/soloud/include>
         $<INSTALL_INTERFACE:include>  # <prefix>/include/mylib
 )
+add_subdirectory("${PROJECT_SOURCE_DIR}/deps/RxCpp")
+
 add_subdirectory("${PROJECT_SOURCE_DIR}/core-lib")
 add_subdirectory("${PROJECT_SOURCE_DIR}/audio-lib")
 add_subdirectory("${PROJECT_SOURCE_DIR}/gfx-lib")
