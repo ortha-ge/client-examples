@@ -21,6 +21,7 @@ import Core.Node;
 import Core.ResourceHandle;
 import Core.ResourceLoadRequest;
 import Core.Spatial;
+import Core.TypeId;
 import Core.TypeLoader;
 import Core.Window;
 import Gfx.Camera;
@@ -41,6 +42,77 @@ import Physics2d.Reflection.BoxCollisionShape;
 import Physics2d.Reflection.CircleCollisionShape;
 
 namespace GameClientInternal {
+
+	entt::entity createWindow(entt::registry& registry) {
+		const entt::entity windowEntity = registry.create();
+		registry.emplace<Core::Window>(windowEntity, "Riastradh", 1360, 768);
+		return windowEntity;
+	}
+
+	entt::entity createCamera(entt::registry& registry) {
+		const entt::entity cameraEntity = registry.create();
+		registry.emplace<Core::NodeHandle>(cameraEntity, Core::NodeHandle::create<Core::EnTTNode>(std::format("CameraNode"), entt::handle(registry, cameraEntity)));
+		registry.emplace<Gfx::Camera>(cameraEntity, 60.0f);
+		registry.emplace<Core::Spatial>(cameraEntity);
+		registry.emplace<Gfx::Viewport>(cameraEntity, cameraEntity, glm::vec2{ 0.0f, 0.0f}, glm::vec2{ 1.0f, 1.0f });
+		return cameraEntity;
+	}
+
+	entt::entity createBackground(entt::registry& registry) {
+		const auto backgroundMaterial = Core::ResourceLoadRequest::create<Core::TypeLoader>(
+			registry, std::string{ "assets/materials/background.json" },
+			std::make_shared<Core::JsonTypeLoaderAdapter<Gfx::MaterialDescriptor>>());
+
+		const auto backgroundSprite = Core::ResourceLoadRequest::create<Core::TypeLoader>(
+			registry, std::string{ "assets/sprites/background.json" },
+			std::make_shared<Core::JsonTypeLoaderAdapter<Gfx::SpriteDescriptor>>());
+
+		const auto backgroundSoundResource = Core::ResourceLoadRequest::create<Audio::SoundDescriptor>(
+			registry, "./assets/sounds/background_crickets.ogg");
+
+		const auto backgroundEntity = registry.create();
+		registry.emplace<Core::NodeHandle>(backgroundEntity, Core::NodeHandle::create<Core::EnTTNode>(std::format("BackgroundNode"), entt::handle(registry, backgroundEntity)));
+		registry.emplace<Core::Spatial>(backgroundEntity, glm::vec3{ 1000.0f, 750.0f, 0.0f }, glm::vec3{ 2.0f, 2.0f, 1.0f });
+		registry.emplace<Gfx::SpriteObject>(backgroundEntity, backgroundSprite);
+		registry.emplace<Gfx::RenderObject>(backgroundEntity, backgroundMaterial);
+		registry.emplace<Audio::AudioSource>(backgroundEntity, backgroundSoundResource);
+
+		Audio::PlaySoundSourceRequest playSoundRequest;
+		playSoundRequest.looping = true;
+		registry.emplace<Audio::PlaySoundSourceRequest>(backgroundEntity, playSoundRequest);
+		return backgroundEntity;
+	}
+
+	entt::entity createSceneRoot(entt::registry& registry) {
+		const entt::entity sceneRootEntity = registry.create();
+		registry.emplace<Core::NodeHandle>(sceneRootEntity, Core::NodeHandle::create<Core::EnTTNode>(std::format("Scene"), entt::handle(registry, sceneRootEntity)));
+		return sceneRootEntity;
+	}
+
+	entt::entity createFloor(entt::registry& registry) {
+		const auto tilesMaterialResourceHandle = Core::ResourceLoadRequest::create<Core::TypeLoader>(
+			registry, "assets/materials/tiles.json",
+			std::make_shared<Core::JsonTypeLoaderAdapter<Gfx::MaterialDescriptor>>());
+
+		const auto floorSprite = Core::ResourceLoadRequest::create<Core::TypeLoader>(
+			registry, std::string{ "assets/sprites/floor.json" },
+			std::make_shared<Core::JsonTypeLoaderAdapter<Gfx::SpriteDescriptor>>());
+
+		const auto floorEntity = registry.create();
+		registry.emplace<Core::NodeHandle>(floorEntity, Core::NodeHandle::create<Core::EnTTNode>(std::format("Floor"), entt::handle(registry, floorEntity)));
+		registry.emplace<Core::Spatial>(floorEntity, glm::vec3{ 650.0f, 450.0f, 1.0f }, glm::vec3{ 10.0f, 1.0f, 1.0f });
+
+		registry.emplace<Gfx::RenderObject>(floorEntity, tilesMaterialResourceHandle);
+		registry.emplace<Gfx::SpriteObject>(floorEntity, floorSprite);
+
+		Physics2d::BoxCollisionShape boxCollisionDescriptor{
+			69.0f,
+			70.0f,
+		};
+		registry.emplace<Physics2d::CollisionShape>(floorEntity, boxCollisionDescriptor);
+		registry.emplace<Physics2d::Rigidbody>(floorEntity);
+		return floorEntity;
+	}
 
 	static size_t characterCounter = 0;
 
@@ -71,7 +143,7 @@ namespace GameClientInternal {
 		registry.emplace<Physics2d::CollisionShape>(characterRootNodeEntity, collisionShapeResource);
 		registry.emplace<Physics2d::Rigidbody>(characterRootNodeEntity, false);
 
-		Core::NodeHandle& characterRootNode{ registry.emplace<Core::NodeHandle>(characterRootNodeEntity, Core::NodeHandle::create<Core::EnTTNode>(std::format("RootNode_{}", characterCounter), entt::handle(registry, characterRootNodeEntity))) };
+		Core::NodeHandle& characterRootNode{ registry.emplace<Core::NodeHandle>(characterRootNodeEntity, Core::NodeHandle::create<Core::EnTTNode>(std::format("Character_{}", characterCounter), entt::handle(registry, characterRootNodeEntity))) };
 
 		const auto renderObjectEntity = registry.create();
 		registry.emplace<Core::Spatial>(renderObjectEntity);
@@ -82,7 +154,7 @@ namespace GameClientInternal {
 		registry.emplace<Audio::AudioSource>(renderObjectEntity, soundResource);
 		registry.emplace<Audio::PlaySoundSourceRequest>(renderObjectEntity, soundRequestVolume);
 
-		auto& childNodeHandle = registry.emplace<Core::NodeHandle>(renderObjectEntity, Core::NodeHandle::create<Core::EnTTNode>(std::format("LeafNode_{}", characterCounter), entt::handle(registry, renderObjectEntity)));
+		auto& childNodeHandle = registry.emplace<Core::NodeHandle>(renderObjectEntity, Core::NodeHandle::create<Core::EnTTNode>("RenderObject", entt::handle(registry, renderObjectEntity)));
 		characterRootNode.getNode()->addChild(childNodeHandle.getNode());
 
 		return characterRootNodeEntity;
@@ -100,6 +172,14 @@ namespace GameClientInternal {
 			"assets/sprites/frog.json", "assets/collision_shapes/frog.json", "assets/sounds/frog_ribbit.ogg", 1.0f);
 	}
 
+	void addChildNode(entt::registry& registry, const entt::entity parent, const entt::entity child) {
+		const auto* parentNodeHandle = registry.try_get<Core::NodeHandle>(parent);
+		const auto* childNodeHandle = registry.try_get<Core::NodeHandle>(child);
+		if (parentNodeHandle && childNodeHandle) {
+			parentNodeHandle->getNode()->addChild(childNodeHandle->getNode());
+		}
+	}
+
 } // namespace GameClientInternal
 
 namespace Game {
@@ -111,67 +191,16 @@ namespace Game {
 		: mRegistry(registry)
 		, mScheduler{ scheduler }
 		, mTimer{ timer } {
+		using namespace GameClientInternal;
 
-		mWindowEntity = mRegistry.create();
-		mRegistry.emplace<Core::Window>(mWindowEntity, "Riastradh", 1360, 768);
+		mWindowEntity = createWindow(registry);
+		mCameraEntity = createCamera(registry);
+		const entt::entity backgroundEntity = createBackground(registry);
+		addChildNode(registry, mCameraEntity, backgroundEntity);
 
-		mCameraEntity = mRegistry.create();
-		mRegistry.emplace<Gfx::Camera>(mCameraEntity, 60.0f);
-		mRegistry.emplace<Core::Spatial>(mCameraEntity, glm::vec3{ 0.0f, 0.0f, 0.0f });
-
-		mViewportEntity = mRegistry.create();
-		mRegistry.emplace<Gfx::Viewport>(mViewportEntity, mCameraEntity, glm::vec2{ 0.0f, 0.0f}, glm::vec2{ 1.0f, 1.0f });
-
-		const auto backgroundMaterial = Core::ResourceLoadRequest::create<Core::TypeLoader>(
-			registry, std::string{ "assets/materials/background.json" },
-			std::make_shared<Core::JsonTypeLoaderAdapter<Gfx::MaterialDescriptor>>());
-
-		const auto backgroundSprite = Core::ResourceLoadRequest::create<Core::TypeLoader>(
-			registry, std::string{ "assets/sprites/background.json" },
-			std::make_shared<Core::JsonTypeLoaderAdapter<Gfx::SpriteDescriptor>>());
-
-		const auto backgroundSoundResource = Core::ResourceLoadRequest::create<Audio::SoundDescriptor>(
-			registry, "./assets/sounds/background_crickets.ogg");
-
-		const auto backgroundRenderObject = mRegistry.create();
-		mRegistry.emplace<Core::Spatial>(backgroundRenderObject, glm::vec3{ 1000.0f, 750.0f, 0.0f }, glm::vec3{ 2.0f, 2.0f, 1.0f });
-		mRegistry.emplace<Gfx::SpriteObject>(backgroundRenderObject, backgroundSprite);
-		mRegistry.emplace<Gfx::RenderObject>(backgroundRenderObject, backgroundMaterial);
-		mRegistry.emplace<Audio::AudioSource>(backgroundRenderObject, backgroundSoundResource);
-
-		Audio::PlaySoundSourceRequest playSoundRequest;
-		playSoundRequest.looping = true;
-		mRegistry.emplace<Audio::PlaySoundSourceRequest>(backgroundRenderObject, playSoundRequest);
-
-		mBackgroundRenderObject = backgroundRenderObject;
-
-		mSpawnedRenderObjects.reserve(100);
-
-		const auto tilesMaterialResourceHandle = Core::ResourceLoadRequest::create<Core::TypeLoader>(
-			registry, "assets/materials/tiles.json",
-			std::make_shared<Core::JsonTypeLoaderAdapter<Gfx::MaterialDescriptor>>());
-
-		const auto floorSprite = Core::ResourceLoadRequest::create<Core::TypeLoader>(
-			registry, std::string{ "assets/sprites/floor.json" },
-			std::make_shared<Core::JsonTypeLoaderAdapter<Gfx::SpriteDescriptor>>());
-
-		const auto floorEntity = mRegistry.create();
-		mRegistry.emplace<Core::Spatial>(floorEntity, glm::vec3{ 650.0f, 450.0f, 1.0f }, glm::vec3{ 10.0f, 1.0f, 1.0f });
-
-		mRegistry.emplace<Gfx::RenderObject>(floorEntity, tilesMaterialResourceHandle);
-		mRegistry.emplace<Gfx::SpriteObject>(floorEntity, floorSprite);
-
-		Physics2d::BoxCollisionShape boxCollisionDescriptor{
-			69.0f,
-			70.0f,
-		};
-		mRegistry.emplace<Physics2d::CollisionShape>(floorEntity, boxCollisionDescriptor);
-		mRegistry.emplace<Physics2d::Rigidbody>(floorEntity);
+		createScene(registry);
 
 		mTickHandle = scheduler.schedule([this, lastSpawn = std::chrono::steady_clock::time_point{}, tickTock = false] mutable {
-
-			//Core::logEntry(mRegistry, "DeltaT: {}", mTimer.getDeltaT());
-
 			auto& cameraSpatial = mRegistry.get<Core::Spatial>(mCameraEntity);
 			if (tickTock) {
 				cameraSpatial.position.x -= mTimer.getDeltaT() * 25.0f;
@@ -196,10 +225,10 @@ namespace Game {
 				lastSpawn = std::chrono::steady_clock::now();
 
 				const auto renderObjectEntity = spawnCat
-					? GameClientInternal::createCat(mRegistry, { mouseState.x, mouseState.y })
-					: GameClientInternal::createFrog(mRegistry, { mouseState.x, mouseState.y });
+					? createCat(mRegistry, { mouseState.x, mouseState.y })
+					: createFrog(mRegistry, { mouseState.x, mouseState.y });
 
-				mSpawnedRenderObjects.push_back(renderObjectEntity);
+				addChildNode(mRegistry, mSceneRootEntity, renderObjectEntity);
 			}
 
 			const auto& keyboardState = mRegistry.get<Input::KeyboardState>(mWindowEntity);
@@ -222,14 +251,26 @@ namespace Game {
 			}
 
 			if (inputX != 0.0f || inputY != 0.0f) {
-				for (auto&& spawnedObject : mSpawnedRenderObjects) {
-					auto& rigidBody{ mRegistry.get<Physics2d::Rigidbody>(spawnedObject) };
+				auto& nodeHandle{ mRegistry.get<Core::NodeHandle>(mSceneRootEntity) };
+				for (auto&& childNode : nodeHandle.getNode()->getChildren()) {
+					if (!childNode->getName().contains("Character")) {
+						continue;
+					}
+
+					if (childNode->getTypeId() != Core::TypeId::get<Core::EnTTNode>()) {
+						continue;
+					}
+
+					auto characterEnttNode = std::static_pointer_cast<Core::EnTTNode>(childNode);
+					const entt::entity characterEntity = characterEnttNode->getEntity();
+
+					auto& rigidBody{ mRegistry.get<Physics2d::Rigidbody>(characterEntity) };
 					if (rigidBody.isOnGround) {
-						auto& applyForceRequest{ mRegistry.get_or_emplace<Physics2d::ApplyForceRequest>(spawnedObject) };
+						auto& applyForceRequest{ mRegistry.get_or_emplace<Physics2d::ApplyForceRequest>(characterEntity) };
 						applyForceRequest.force = glm::vec2(inputX, inputY);
 						applyForceRequest.type = Physics2d::ForceType::Impulse;
 					} else {
-						auto& applyForceRequest{ mRegistry.get_or_emplace<Physics2d::ApplyForceRequest>(spawnedObject) };
+						auto& applyForceRequest{ mRegistry.get_or_emplace<Physics2d::ApplyForceRequest>(characterEntity) };
 						applyForceRequest.force = glm::vec2(inputX, 0.0f);
 						applyForceRequest.type = Physics2d::ForceType::Impulse;
 					}
@@ -246,10 +287,10 @@ namespace Game {
 			};
 
 			if (Input::isKeyPressed(keyboardState, Input::Key::Space)) {
-				for (auto&& spawnedObject : mSpawnedRenderObjects) {
-					tryDestroyRootNode(mRegistry, spawnedObject);
+				if (mSceneRootEntity != entt::null) {
+					tryDestroyRootNode(mRegistry, mSceneRootEntity);
+					createScene(mRegistry);
 				}
-				mSpawnedRenderObjects.clear();
 			}
 
 			mRegistry.view<Physics2d::CollisionEvent>()
@@ -260,12 +301,17 @@ namespace Game {
 
 	Client::~Client() {
 		mScheduler.unschedule(std::move(mTickHandle));
-
-		for (auto&& spawnedRenderObject : mSpawnedRenderObjects) {
-			mRegistry.destroy(spawnedRenderObject);
-		}
-
+		mRegistry.destroy(mSceneRootEntity);
+		mRegistry.destroy(mCameraEntity);
 		mRegistry.destroy(mWindowEntity);
+	}
+
+	void Client::createScene(entt::registry& registry) {
+		using namespace GameClientInternal;
+
+		mSceneRootEntity = createSceneRoot(registry);
+		const entt::entity floorEntity = createFloor(registry);
+		addChildNode(registry, mSceneRootEntity, floorEntity);
 	}
 
 } // namespace Game

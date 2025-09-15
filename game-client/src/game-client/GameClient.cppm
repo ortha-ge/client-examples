@@ -28,16 +28,16 @@ export namespace Game {
 		~Client();
 
 	private:
+
+		void createScene(entt::registry& registry);
+
 		entt::registry& mRegistry;
 		Core::Scheduler& mScheduler;
 		Core::Timer& mTimer;
 
 		entt::entity mWindowEntity{ entt::null };
 		entt::entity mCameraEntity{ entt::null };
-		entt::entity mViewportEntity{ entt::null };
-
-		std::vector<entt::entity> mSpawnedRenderObjects;
-		entt::entity mBackgroundRenderObject{ entt::null };
+		entt::entity mSceneRootEntity{ entt::null };
 
 		Core::TaskHandle mTickHandle{};
 	};
