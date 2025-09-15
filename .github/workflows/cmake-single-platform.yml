@@ -75,7 +75,7 @@ jobs:
       run: cmake --preset "${{ matrix.build_type }}" -D CMAKE_C_COMPILER_LAUNCHER=ccache -D CMAKE_CXX_COMPILER_LAUNCHER=ccache
 
     - name: Build Tests
-      run: cmake --build --preset "${{ matrix.build_type }}" --target core-lib-tests
+      run: cmake --build --preset "${{ matrix.build_type }}" --target all_tests
 
     - name: Test
       run: ctest --preset ${{ matrix.build_type }}

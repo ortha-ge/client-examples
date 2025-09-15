@@ -27,3 +27,6 @@ add_subdirectory("${PROJECT_SOURCE_DIR}/scripting-js-lib")
 add_subdirectory("${PROJECT_SOURCE_DIR}/scripting-lua-lib")
 add_subdirectory("${PROJECT_SOURCE_DIR}/devtools-lib")
 add_subdirectory("${PROJECT_SOURCE_DIR}/game-client")
+
+add_custom_target(all_tests)
+add_dependencies(all_tests core-lib-tests audio-lib-tests)
