@@ -60,21 +60,23 @@ namespace GameClientInternal {
 			Core::ResourceLoadRequest::create<Audio::SoundDescriptor>(registry, std::move(soundPath));
 
 		const auto characterRootNodeEntity = registry.create();
-		Core::NodeHandle& characterRootNode{ registry.emplace<Core::NodeHandle>(characterRootNodeEntity, Core::NodeHandle::create<Core::EnTTNode>(std::format("RootNode_{}", characterCounter), entt::handle(registry, characterRootNodeEntity))) };
-
-		const auto renderObjectEntity = registry.create();
-		registry.emplace<Core::Spatial>(renderObjectEntity, pos, scale);
-
-		registry.emplace<Gfx::RenderObject>(renderObjectEntity, materialResource);
-		registry.emplace<Gfx::SpriteObject>(renderObjectEntity, spriteResource);
+		registry.emplace<Core::Spatial>(characterRootNodeEntity, pos, scale);
 
 		const auto collisionShapeResource = Core::ResourceLoadRequest::create<Core::TypeLoader>(registry,
 			std::move(collisionShapePath),
 			std::make_shared<Core::JsonTypeLoaderAdapter<Physics2d::CollisionShapeDescriptor>>()
 		);
 
-		registry.emplace<Physics2d::CollisionShape>(renderObjectEntity, collisionShapeResource);
-		registry.emplace<Physics2d::Rigidbody>(renderObjectEntity, false);
+		registry.emplace<Physics2d::CollisionShape>(characterRootNodeEntity, collisionShapeResource);
+		registry.emplace<Physics2d::Rigidbody>(characterRootNodeEntity, false);
+
+		Core::NodeHandle& characterRootNode{ registry.emplace<Core::NodeHandle>(characterRootNodeEntity, Core::NodeHandle::create<Core::EnTTNode>(std::format("RootNode_{}", characterCounter), entt::handle(registry, characterRootNodeEntity))) };
+
+		const auto renderObjectEntity = registry.create();
+		registry.emplace<Core::Spatial>(renderObjectEntity);
+
+		registry.emplace<Gfx::RenderObject>(renderObjectEntity, materialResource);
+		registry.emplace<Gfx::SpriteObject>(renderObjectEntity, spriteResource);
 
 		registry.emplace<Audio::AudioSource>(renderObjectEntity, soundResource);
 		registry.emplace<Audio::PlaySoundSourceRequest>(renderObjectEntity, soundRequestVolume);
