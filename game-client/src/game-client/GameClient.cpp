@@ -33,6 +33,7 @@ import Gfx.Reflection.MaterialDescriptor;
 import Gfx.Reflection.Sprite;
 import Input.KeyboardState;
 import Input.MouseState;
+import Physics2d.ApplyForceRequest;
 import Physics2d.CollisionEvent;
 import Physics2d.CollisionShape;
 import Physics2d.Rigidbody2d;
@@ -205,7 +206,8 @@ namespace Game {
 
 			float inputX = 0.0f;
 			float inputY = 0.0f;
-			const float moveSpeed = 200.0f * mTimer.getDeltaT();
+			const float jumpSpeed = 100000.0f;
+			const float moveSpeed = 200.0f;
 
 			if (Input::isKeyPressed(keyboardState, Input::Key::Left)) {
 				inputX -= moveSpeed;
@@ -214,9 +216,24 @@ namespace Game {
 			}
 
 			if (Input::isKeyPressed(keyboardState, Input::Key::Up)) {
-				inputY -= moveSpeed;
+				inputY -= jumpSpeed;
 			} else if (Input::isKeyPressed(keyboardState, Input::Key::Down)) {
-				inputY += moveSpeed;
+				//inputY += moveSpeed;
+			}
+
+			if (inputX != 0.0f || inputY != 0.0f) {
+				for (auto&& spawnedObject : mSpawnedRenderObjects) {
+					auto& rigidBody{ mRegistry.get<Physics2d::Rigidbody>(spawnedObject) };
+					if (rigidBody.isOnGround) {
+						auto& applyForceRequest{ mRegistry.get_or_emplace<Physics2d::ApplyForceRequest>(spawnedObject) };
+						applyForceRequest.force = glm::vec2(inputX, inputY);
+						applyForceRequest.type = Physics2d::ForceType::Impulse;
+					} else {
+						auto& applyForceRequest{ mRegistry.get_or_emplace<Physics2d::ApplyForceRequest>(spawnedObject) };
+						applyForceRequest.force = glm::vec2(inputX, 0.0f);
+						applyForceRequest.type = Physics2d::ForceType::Impulse;
+					}
+				}
 			}
 
 			auto tryDestroyRootNode = [](entt::registry& registry, const entt::entity entity) {
