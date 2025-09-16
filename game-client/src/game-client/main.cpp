@@ -12,6 +12,50 @@ import Core.SystemsService;
 import Core.QuitAppRequest;
 import Game.ClientService;
 
+static kgr::container* sContainer = nullptr;
+
+#ifndef __EMSCRIPTEN__
+static bool sMainLoopCanceled = false;
+#endif
+
+void stopMainLoop() {
+#ifndef __EMSCRIPTEN__
+	sMainLoopCanceled = true;
+#else
+	emscripten_cancel_main_loop();
+#endif
+}
+
+void mainLoop() {
+	if (!sContainer) {
+		stopMainLoop();
+		return;
+	}
+
+	kgr::container& container{ *sContainer };
+
+	Core::Scheduler& scheduler = container.service<Core::SchedulerService>();
+	entt::registry& registry = container.service<Core::EnTTRegistryService>();
+
+	auto quitAppRequests = registry.view<const Core::QuitAppRequest>();
+	if (!quitAppRequests.empty()) {
+		stopMainLoop();
+		return;
+	}
+
+	scheduler.tick();
+}
+
+void startMainLoop() {
+#ifndef __EMSCRIPTEN__
+	while (!sMainLoopCanceled) {
+		mainLoop();
+	}
+#else
+	emscripten_set_main_loop(mainLoop, 60, false);
+#endif
+}
+
 int main(int argc, char* argv[]) {
 	TracyNoop;
 
@@ -19,15 +63,14 @@ int main(int argc, char* argv[]) {
 	std::filesystem::current_path(exePath.parent_path());
 
 	kgr::container container;
-	Core::Scheduler& scheduler = container.service<Core::SchedulerService>();
-	entt::registry& registry = container.service<Core::EnTTRegistryService>();
-
 	container.service<Game::ClientService>();
 
+	entt::registry& registry = container.service<Core::EnTTRegistryService>();
 	auto quitAppRequests = registry.view<const Core::QuitAppRequest>();
-	while (quitAppRequests.empty()) {
-		scheduler.tick();
-	}
+
+	sContainer = &container;
+
+	startMainLoop();
 
 	quitAppRequests.each([&registry](entt::entity entity, const Core::QuitAppRequest&) { registry.destroy(entity); });
 
