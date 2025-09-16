@@ -202,7 +202,8 @@ namespace Game {
 		createScene(registry);
 
 		mTickHandle = scheduler.schedule([this, lastSpawn = std::chrono::steady_clock::time_point{}, tickTock = false] mutable {
-			ZoneScoped;
+			ZoneScopedN("GameClient::tick");
+
 			auto& cameraSpatial = mRegistry.get<Core::Spatial>(mCameraEntity);
 			if (tickTock) {
 				cameraSpatial.position.x -= mTimer.getDeltaT() * 25.0f;
