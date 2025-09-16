@@ -2,6 +2,7 @@
 #include <filesystem>
 
 #include <entt/entt.hpp>
+#include <tracy/Tracy.hpp>
 
 import kangaru;
 import Audio.SystemsService;
@@ -12,6 +13,8 @@ import Core.QuitAppRequest;
 import Game.ClientService;
 
 int main(int argc, char* argv[]) {
+	TracyNoop;
+
 	std::filesystem::path exePath = argv[0];
 	std::filesystem::current_path(exePath.parent_path());
 

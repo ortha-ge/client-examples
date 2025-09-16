@@ -6,6 +6,7 @@ module;
 
 #include <entt/entt.hpp>
 #include <glm/glm.hpp>
+#include <tracy/Tracy.hpp>
 
 module Game.Client;
 
@@ -201,6 +202,7 @@ namespace Game {
 		createScene(registry);
 
 		mTickHandle = scheduler.schedule([this, lastSpawn = std::chrono::steady_clock::time_point{}, tickTock = false] mutable {
+			ZoneScoped;
 			auto& cameraSpatial = mRegistry.get<Core::Spatial>(mCameraEntity);
 			if (tickTock) {
 				cameraSpatial.position.x -= mTimer.getDeltaT() * 25.0f;
