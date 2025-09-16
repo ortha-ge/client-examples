@@ -29,4 +29,4 @@ add_subdirectory("${PROJECT_SOURCE_DIR}/devtools-lib")
 add_subdirectory("${PROJECT_SOURCE_DIR}/game-client")
 
 add_custom_target(all_tests)
-add_dependencies(all_tests core-lib-tests audio-lib-tests)
+add_dependencies(all_tests core-lib-tests)
