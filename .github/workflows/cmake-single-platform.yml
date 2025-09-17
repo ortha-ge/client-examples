@@ -20,12 +20,15 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest]
-        build_type: [Release, ReleaseMSVC]
-        c_compiler: [clang, cl]
+        build_type: [Release, ReleaseMSVC, ReleaseEmscripten]
+        c_compiler: [clang, cl, emcc]
         include:
           - os: ubuntu-latest
             c_compiler: clang
             cpp_compiler: clang++
+          - os: ubuntu-latest
+            c_compiler: emcc
+            cpp_compiler: em++
           - os: windows-latest
             c_compiler: cl
             cpp_compiler: cl
@@ -37,7 +40,11 @@ jobs:
           - os: windows-latest
             build_type: Release
           - os: windows-latest
+            build_type: ReleaseEmscripten
+          - os: windows-latest
             c_compiler: clang
+          - os: windows-latest
+            c_compiler: emcc
       
     concurrency:
       group: build_${{ github.ref }}_${{ matrix.os }}
@@ -49,8 +56,12 @@ jobs:
         lfs: 'true'
 
     - name: Setup MSVC dev tools
-      if: runner.os == 'Windows'
+      if: matrix.os == 'Windows'
       uses: ilammy/msvc-dev-cmd@v1
+
+    - name: Setup Emscripten
+      if: matrix.build_type == 'ReleaseEmscripten'
+      uses: mymindstorm/setup-emsdk@v14
 
     - name: Install Dependencies
       uses: amitie10g/install-package@v1
