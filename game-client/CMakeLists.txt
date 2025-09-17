@@ -41,7 +41,13 @@ bgfx_compile_shaders(
 		# 	[AS_HEADERS]
 )
 
-add_executable(game-client ${game-client-src} ${game-client-modules} ${game-client-shaders-vs} ${game-client-shaders-fs})
+set(game-client-src ${game-client-src} ${game-client-modules})
+
+if (NOT EMSCRIPTEN_BUILD)
+set(game-client-src ${game-client-src} ${game-client-shaders-vs} ${game-client-shaders-fs})
+endif()
+
+add_executable(game-client ${game-client-src})
 
 target_sources(game-client PUBLIC FILE_SET modules TYPE CXX_MODULES FILES ${game-client-modules})
 
@@ -60,8 +66,10 @@ target_compile_features(game-client PRIVATE cxx_std_23)
 target_link_libraries(game-client PRIVATE ${game-client-libs})
 target_include_directories(game-client PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
-if (EMSCRIPTEN_PRESET)
+if (EMSCRIPTEN_BUILD)
 	set_target_properties(game-client PROPERTIES SUFFIX ".html")
+	set_target_properties(game-client PROPERTIES LINK_FLAGS "--preload-file ${CMAKE_CURRENT_SOURCE_DIR}/assets@/assets/")
+	set_target_properties(game-client PROPERTIES LINK_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/assets)
 endif()
 
 add_custom_target(game-client-assets

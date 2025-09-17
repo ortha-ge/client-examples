@@ -69,7 +69,8 @@
                 },
                 "VCPKG_TARGET_TRIPLET": "wasm32-emscripten",
                 "BGFX_CONFIG_MULTITHREADED": false,
-                "EMSCRIPTEN_PRESET": true
+                "EMSCRIPTEN_BUILD": true,
+                "CMAKE_CXX_FLAGS": "-sALLOW_MEMORY_GROWTH=1"
             }
         },
         {

@@ -4,6 +4,10 @@
 #include <entt/entt.hpp>
 #include <tracy/Tracy.hpp>
 
+#ifdef __EMSCRIPTEN__
+#include <emscripten/emscripten.h>
+#endif
+
 import kangaru;
 import Audio.SystemsService;
 import Core.EnTTRegistryService;
@@ -24,6 +28,8 @@ void stopMainLoop() {
 #else
 	emscripten_cancel_main_loop();
 #endif
+	delete sContainer;
+	sContainer = nullptr;
 }
 
 void mainLoop() {
@@ -62,13 +68,12 @@ int main(int argc, char* argv[]) {
 	std::filesystem::path exePath = argv[0];
 	std::filesystem::current_path(exePath.parent_path());
 
-	kgr::container container;
+	sContainer = new kgr::container();
+	kgr::container& container = *sContainer;
 	container.service<Game::ClientService>();
 
 	entt::registry& registry = container.service<Core::EnTTRegistryService>();
 	auto quitAppRequests = registry.view<const Core::QuitAppRequest>();
-
-	sContainer = &container;
 
 	startMainLoop();
 
