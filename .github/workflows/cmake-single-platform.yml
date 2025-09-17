@@ -37,6 +37,12 @@ jobs:
             build_type: ReleaseMSVC
           - os: ubuntu-latest
             c_compiler: cl
+          - os: ubuntu-latest
+            c_compiler: clang
+            build_type: ReleaseEmscripten
+          - os: ubuntu-latest
+            c_compiler: emcc
+            build_type: Release
           - os: windows-latest
             build_type: Release
           - os: windows-latest
