@@ -62,7 +62,7 @@
                 "CMAKE_CXX_COMPILER": "$env{EMSDK}/upstream/emscripten/em++",
                 "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/deps/vcpkg/scripts/buildsystems/vcpkg.cmake",
                 "CMAKE_BUILD_TYPE": "Debug",
-                "CMAKE_MAKE_PROGRAM": "/opt/clion/bin/ninja/linux/x64/ninja",
+                "CMAKE_MAKE_PROGRAM": "ninja",
                 "VCPKG_CHAINLOAD_TOOLCHAIN_FILE": {
                     "type": "FILEPATH",
                     "value": "$env{EMSDK}/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake"
@@ -82,7 +82,7 @@
                 "CMAKE_CXX_COMPILER": "$env{EMSDK}/upstream/emscripten/em++",
                 "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/deps/vcpkg/scripts/buildsystems/vcpkg.cmake",
                 "CMAKE_BUILD_TYPE": "Release",
-                "CMAKE_MAKE_PROGRAM": "/opt/clion/bin/ninja/linux/x64/ninja",
+                "CMAKE_MAKE_PROGRAM": "ninja",
                 "VCPKG_CHAINLOAD_TOOLCHAIN_FILE": {
                     "type": "FILEPATH",
                     "value": "$env{EMSDK}/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake"
