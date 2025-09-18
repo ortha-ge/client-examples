@@ -25,7 +25,7 @@ namespace Game {
 	}
 
 	CharacterController::~CharacterController() {
-
+		mScheduler.unschedule(std::move(mTickHandle));
 	}
 
 	void CharacterController::tick() {
