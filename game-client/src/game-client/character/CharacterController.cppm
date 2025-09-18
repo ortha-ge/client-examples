@@ -10,22 +10,6 @@ import Core.Timer;
 
 export namespace Game {
 
-	class CharacterController {
-	public:
-
-		CharacterController(Core::Scheduler&, Core::Timer&, entt::handle);
-		~CharacterController();
-
-		void tick();
-
-	private:
-
-		Core::Scheduler& mScheduler;
-		Core::Timer& mTimer;
-		Core::TaskHandle mTickHandle;
-
-		entt::handle mCharacterHandle;
-
-	};
+	struct CharacterController {};
 
 } // namespace Game

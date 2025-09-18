@@ -9,23 +9,8 @@ import Core.Timer;
 
 export namespace Game {
 
-	class CameraController {
-	public:
-
-		CameraController(Core::Scheduler&, Core::Timer&, entt::handle);
-		~CameraController();
-
-		void tick();
-
-	private:
-
-		Core::Scheduler& mScheduler;
-		Core::Timer& mTimer;
-		Core::TaskHandle mTickHandle;
-
-		entt::handle mCameraHandle;
-
-		bool mTickTock{ false };
+	struct CameraController {
+		bool tickTock{ false };
 	};
 
 } // namespace Game

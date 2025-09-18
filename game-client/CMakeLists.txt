@@ -6,17 +6,21 @@ find_package(bgfx CONFIG REQUIRED)
 set (game-client-src
         src/game-client/GameClient.cpp
         src/game-client/main.cpp
-        src/game-client/camera/CameraController.cpp
+        src/game-client/camera/systems/CameraControllerSystem.cpp
         src/game-client/character/Character.cpp
-        src/game-client/character/CharacterController.cpp
+        src/game-client/character/systems/CharacterControllerSystem.cpp
         src/game-client/services/GameClientService.cpp
 )
 
 set (game-client-modules
         src/game-client/GameClient.cppm
         src/game-client/camera/CameraController.cppm
+        src/game-client/camera/systems/CameraControllerSystem.cppm
         src/game-client/character/Character.cppm
         src/game-client/character/CharacterController.cppm
+        src/game-client/character/systems/CharacterControllerSystem.cppm
+        src/game-client/services/CameraControllerSystemService.cppm
+        src/game-client/services/CharacterControllerSystemService.cppm
         src/game-client/services/GameClientService.cppm
 )
 

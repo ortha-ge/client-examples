@@ -8,6 +8,8 @@ import Audio.SystemsService;
 
 import Core.SystemsService;
 import DevTools.SystemsService;
+import Game.CameraControllerSystemService;
+import Game.CharacterControllerSystemService;
 import Gfx.SystemsService;
 import Input.SystemsService;
 import Physics2d.SystemsService;
@@ -22,6 +24,9 @@ namespace Game {
 		container.emplace<Input::InputSystemsService>();
 		container.emplace<Physics2d::Physics2dSystemsService>();
 		container.emplace<DevTools::DevToolsSystemsService>();
+
+		container.emplace<CameraControllerSystemService>();
+		container.emplace<CharacterControllerSystemService>();
 	}
 
 } // namespace Game

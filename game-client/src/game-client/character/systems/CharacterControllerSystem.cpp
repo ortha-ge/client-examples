@@ -1,44 +1,39 @@
 module;
 
+#include <utility>
+
 #include <entt/entt.hpp>
-#include <glm/vec2.hpp>
 
-module Game.CharacterController;
+module Game.CharacterControllerSystem;
 
-import Core.EnTTNode;
-import Core.Node;
-import Core.TypeId;
+import Game.CharacterController;
 import Input.KeyboardState;
 import Physics2d.ApplyForceRequest;
 import Physics2d.Rigidbody2d;
 
 namespace Game {
 
-	CharacterController::CharacterController(Core::Scheduler& scheduler, Core::Timer& timer, entt::handle characterHandle)
-		: mScheduler(scheduler)
-		, mTimer(timer)
-		, mCharacterHandle(characterHandle){
+	CharacterControllerSystem::CharacterControllerSystem(Core::EnTTRegistry& registry, Core::Scheduler& scheduler)
+		: mRegistry(registry)
+		, mScheduler(scheduler) {
 
 		mTickHandle = mScheduler.schedule([this] {
-			tick();
+			tickSystem(mRegistry);
 		});
 	}
 
-	CharacterController::~CharacterController() {
+	CharacterControllerSystem::~CharacterControllerSystem() {
 		mScheduler.unschedule(std::move(mTickHandle));
 	}
 
-	void CharacterController::tick() {
-		if (!mCharacterHandle.valid()) {
-			return;
-		}
+	void CharacterControllerSystem::tickSystem(entt::registry& registry) {
+		using namespace Physics2d;
 
 		constexpr float jumpSpeed = 100000.0f;
 		constexpr float moveSpeed = 200.0f;
 		float inputX = 0.0f;
 		float inputY = 0.0f;
 
-		auto& registry{ *mCharacterHandle.registry() };
 		registry.view<Input::KeyboardState>()
 			.each([&inputX, &inputY](const Input::KeyboardState& keyboardState) {
 				if (Input::isKeyPressed(keyboardState, Input::Key::Left)) {
@@ -53,16 +48,18 @@ namespace Game {
 				}
 			});
 
-		Physics2d::ApplyForceRequest applyForceRequest;
-		applyForceRequest.type = Physics2d::ForceType::Impulse;
-		applyForceRequest.force.x = inputX;
+		registry.view<CharacterController, Rigidbody>()
+			.each([&registry, inputX, inputY](const entt::entity entity, Rigidbody& rigidBody) {
+				ApplyForceRequest applyForceRequest;
+				applyForceRequest.type = ForceType::Impulse;
+				applyForceRequest.force.x = inputX;
 
-		auto& rigidBody{ mCharacterHandle.get<Physics2d::Rigidbody>() };
-		if (rigidBody.isOnGround) {
-			applyForceRequest.force.y = inputY;
-		}
+				if (rigidBody.isOnGround) {
+					applyForceRequest.force.y = inputY;
+				}
 
-		mCharacterHandle.get_or_emplace<Physics2d::ApplyForceRequest>() = applyForceRequest;
+				registry.get_or_emplace<ApplyForceRequest>(entity) = std::move(applyForceRequest);
+			});
 	}
 
 } // namespace Game

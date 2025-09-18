@@ -56,10 +56,10 @@ namespace Game::GameClientInternal {
 	entt::entity createCamera(entt::registry& registry, Core::Scheduler& scheduler, Core::Timer& timer) {
 		using namespace Core;
 		const entt::entity cameraEntity = registry.create();
+		registry.emplace<CameraController>(cameraEntity);
+
 		const entt::handle cameraEntityHandle(registry, cameraEntity);
 		auto cameraRootNodeHandle = NodeHandle::create<EnTTNode>(std::format("CameraNode"), cameraEntityHandle);
-		auto cameraControllerNodeHandle = NodeHandle::create<TemplateNode<CameraController>>("CameraController", scheduler, timer, cameraEntityHandle);
-		cameraRootNodeHandle.getNode()->addChild(cameraControllerNodeHandle.getNode());
 
 		registry.emplace<NodeHandle>(cameraEntity, cameraRootNodeHandle);
 		registry.emplace<Gfx::Camera>(cameraEntity, 60.0f);
