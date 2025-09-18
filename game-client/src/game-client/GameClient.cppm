@@ -1,5 +1,7 @@
 module;
 
+#include <chrono>
+
 #include <entt/entity/entity.hpp>
 #include <entt/fwd.hpp>
 
@@ -24,6 +26,8 @@ export namespace Game {
 		Client(Core::EnTTRegistry&, Core::Scheduler&, Core::Timer&);
 		~Client();
 
+		void tickClient(entt::registry&);
+
 	private:
 
 		void createScene(entt::registry& registry);
@@ -37,6 +41,9 @@ export namespace Game {
 		entt::entity mSceneRootEntity{ entt::null };
 
 		Core::TaskHandle mTickHandle{};
+
+		std::chrono::steady_clock::time_point mLastSpawn{};
+
 	};
 
 } // namespace Game
