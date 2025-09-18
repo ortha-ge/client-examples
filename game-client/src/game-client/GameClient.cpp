@@ -185,10 +185,7 @@ namespace GameClientInternal {
 
 namespace Game {
 
-	Client::Client(
-		Core::EnTTRegistry& registry, Core::Scheduler& scheduler, Core::CoreSystems&, Audio::AudioSystems&,
-		Gfx::GfxSystems&, Input::InputSystems&, Physics2d::Physics2dSystems&, ScriptingJS::ScriptingJSSystems&,
-		ScriptingLua::ScriptingLuaSystems&, DevTools::DevToolsSystems&, Core::Timer& timer)
+	Client::Client(Core::EnTTRegistry& registry, Core::Scheduler& scheduler, Core::Timer& timer)
 		: mRegistry(registry)
 		, mScheduler{ scheduler }
 		, mTimer{ timer } {

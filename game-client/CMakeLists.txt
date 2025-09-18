@@ -4,8 +4,9 @@ cmake_minimum_required(VERSION 3.31)
 find_package(bgfx CONFIG REQUIRED)
 
 set (game-client-src
-    src/game-client/GameClient.cpp
-    src/game-client/main.cpp
+        src/game-client/GameClient.cpp
+        src/game-client/main.cpp
+        src/game-client/services/GameClientService.cpp
 )
 
 set (game-client-modules

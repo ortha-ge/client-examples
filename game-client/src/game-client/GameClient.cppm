@@ -14,17 +14,14 @@ import DevTools.Systems;
 import Gfx.Systems;
 import Input.Systems;
 import Physics2d.Systems;
-import ScriptingJS.Systems;
+//import ScriptingJS.Systems;
 import ScriptingLua.Systems;
 
 export namespace Game {
 
 	class Client {
 	public:
-		Client(
-			Core::EnTTRegistry&, Core::Scheduler&, Core::CoreSystems&, Audio::AudioSystems&, Gfx::GfxSystems&,
-			Input::InputSystems&, Physics2d::Physics2dSystems&, ScriptingJS::ScriptingJSSystems&,
-			ScriptingLua::ScriptingLuaSystems&, DevTools::DevToolsSystems&, Core::Timer&);
+		Client(Core::EnTTRegistry&, Core::Scheduler&, Core::Timer&);
 		~Client();
 
 	private:
