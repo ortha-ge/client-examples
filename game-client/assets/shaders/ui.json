@@ -1,0 +1,22 @@
+{
+    "ShaderProgram": {
+        "vertexShaderFilePath": "assets/shaders/vs_ui.sc",
+        "fragmentShaderFilePath": "assets/shaders/fs_ui.sc",
+        "uniforms": [
+        ],
+        "vertexLayout": {
+            "attributes": [
+                {
+                    "id": "Position",
+                    "elementCount": 3,
+                    "elementType": "float"
+                },
+                {
+                    "id": "Colour0",
+                    "elementCount": 3,
+                    "elementType": "float"
+                }
+            ]
+        }
+    }
+}

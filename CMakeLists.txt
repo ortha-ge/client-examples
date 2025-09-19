@@ -21,6 +21,7 @@ target_include_directories(soloud PUBLIC
 add_subdirectory("${PROJECT_SOURCE_DIR}/core-lib")
 add_subdirectory("${PROJECT_SOURCE_DIR}/audio-lib")
 add_subdirectory("${PROJECT_SOURCE_DIR}/gfx-lib")
+add_subdirectory("${PROJECT_SOURCE_DIR}/ui-library")
 add_subdirectory("${PROJECT_SOURCE_DIR}/input-lib")
 add_subdirectory("${PROJECT_SOURCE_DIR}/physics2d-lib")
 add_subdirectory("${PROJECT_SOURCE_DIR}/scripting-js-lib")
