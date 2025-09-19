@@ -36,12 +36,14 @@ set (game-client-modules
 
 set (game-client-shaders-vs
         assets/shaders/vs_sprite.sc
-        assets/shaders/vs_ui.sc
+        assets/shaders/vs_ui_colour.sc
+        assets/shaders/vs_ui_image.sc
 )
 
 set (game-client-shaders-fs
         assets/shaders/fs_sprite.sc
-        assets/shaders/fs_ui.sc
+        assets/shaders/fs_ui_colour.sc
+        assets/shaders/fs_ui_image.sc
 )
 
 bgfx_compile_shaders(

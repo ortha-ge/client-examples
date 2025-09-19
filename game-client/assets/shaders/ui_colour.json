@@ -1,7 +1,7 @@
 {
     "ShaderProgram": {
-        "vertexShaderFilePath": "assets/shaders/vs_ui.sc",
-        "fragmentShaderFilePath": "assets/shaders/fs_ui.sc",
+        "vertexShaderFilePath": "assets/shaders/vs_ui_colour.sc",
+        "fragmentShaderFilePath": "assets/shaders/fs_ui_colour.sc",
         "uniforms": [
         ],
         "vertexLayout": {

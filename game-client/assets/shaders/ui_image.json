@@ -1,0 +1,35 @@
+{
+    "ShaderProgram": {
+        "vertexShaderFilePath": "assets/shaders/vs_ui_image.sc",
+        "fragmentShaderFilePath": "assets/shaders/fs_ui_image.sc",
+        "uniforms": [
+            {
+                "name": "s_texColour",
+                "type": "Sampler"
+            },
+            {
+                "name": "u_alphaColour",
+                "type": "Float4"
+            }
+        ],
+        "vertexLayout": {
+            "attributes": [
+                {
+                    "id": "Position",
+                    "elementCount": 3,
+                    "elementType": "float"
+                },
+                {
+                    "id": "TexCoord0",
+                    "elementCount": 2,
+                    "elementType": "float"
+                },
+                {
+                    "id": "Colour0",
+                    "elementCount": 3,
+                    "elementType": "float"
+                }
+            ]
+        }
+    }
+}

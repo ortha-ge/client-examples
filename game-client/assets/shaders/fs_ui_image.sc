@@ -1,4 +1,4 @@
-$input v_texCoord0
+$input v_colour, v_texCoord0
 
 #include <bgfx_shader.sh>
 
@@ -6,7 +6,7 @@ SAMPLER2D(s_texColour, 0);
 uniform vec4 u_alphaColour;
 
 void main() {
-    vec4 sampledColour = texture2D(s_texColour, v_texCoord0);
+	vec4 sampledColour = texture2D(s_texColour, v_texCoord0);
 
     if (u_alphaColour.a > 0.0) {
         if (abs(sampledColour.x - u_alphaColour.x) + abs(sampledColour.y - u_alphaColour.y) + abs(sampledColour.z - u_alphaColour.z) < 0.1) {
@@ -17,5 +17,5 @@ void main() {
         }
     }
 
-	gl_FragColor = sampledColour;
+    gl_FragColor = sampledColour * vec4(v_colour, 1.0);
 }

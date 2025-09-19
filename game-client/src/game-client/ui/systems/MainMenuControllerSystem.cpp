@@ -13,6 +13,27 @@ import Core.Node;
 import Core.TypeId;
 import Game.MainMenuController;
 import UI.Button;
+import UI.ImageButton;
+
+namespace Game::MainMenuControllerSystemInternal {
+
+	void processMenuButtonState(MainMenuController& mainMenuController, const UI::Button& button) {
+		using namespace UI;
+		if (button.state != ButtonState::Pressed) {
+			return;
+		}
+
+		auto clockNow = std::chrono::steady_clock::now();
+		if (button.text == "Play") {
+			mainMenuController.playCallback();
+			mainMenuController.lastSelectedTime = clockNow;
+		} else if (button.text == "Exit") {
+			mainMenuController.quitCallback();
+			mainMenuController.lastSelectedTime = clockNow;
+		}
+	}
+
+} // namespace Game::MainMenuControllerSystemInternal
 
 namespace Game {
 
@@ -32,6 +53,7 @@ namespace Game {
 	void MainMenuControllerSystem::tickSystem(entt::registry& registry) {
 		using namespace Core;
 		using namespace UI;
+		using namespace MainMenuControllerSystemInternal;
 
 		registry.view<MainMenuController, NodeHandle>()
 			.each([&registry](const entt::entity entity, MainMenuController& mainMenuController, const NodeHandle& nodeHandle) {
@@ -48,21 +70,12 @@ namespace Game {
 
 					auto childEnTTNode = std::static_pointer_cast<EnTTNode>(childNodeHandle);
 					const entt::entity childEntity = childEnTTNode->getEntity();
-					if (!registry.all_of<Button>(childEntity)) {
-						continue;
-					}
-
-					const auto& button{ registry.get<Button>(childEntity) };
-					if (button.state != ButtonState::Pressed) {
-						continue;
-					}
-
-					if (button.text == "Play") {
-						mainMenuController.playCallback();
-						mainMenuController.lastSelectedTime = clockNow;
-					} else if (button.text == "Exit") {
-						mainMenuController.quitCallback();
-						mainMenuController.lastSelectedTime = clockNow;
+					if (registry.all_of<Button>(childEntity)) {
+						const auto& button{ registry.get<Button>(childEntity) };
+						processMenuButtonState(mainMenuController, button);
+					} else if (registry.all_of<ImageButton>(childEntity)) {
+						const auto& button{ registry.get<ImageButton>(childEntity) };
+						processMenuButtonState(mainMenuController, button);
 					}
 				}
 			});

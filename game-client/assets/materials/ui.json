@@ -1,6 +1,0 @@
-{
-    "Material": {
-        "shaderProgramFilePath": "assets/shaders/ui.json",
-        "textureImageFilePath": "assets/textures/tiles.png"
-    }
-}

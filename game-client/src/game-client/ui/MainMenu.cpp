@@ -8,9 +8,12 @@ module Game.MainMenu;
 
 import Core.EnTTNode;
 import Core.Node;
+import Core.ResourceLoadRequest;
 import Core.Spatial;
 import Game.MainMenuController;
+import Gfx.ImageDescriptor;
 import UI.Button;
+import UI.ImageButton;
 
 namespace Game {
 
@@ -38,10 +41,14 @@ namespace Game {
 
 		const entt::entity exitButtonEntity{ registry.create() };
 		registry.emplace<Spatial>(exitButtonEntity, glm::vec3{ 0.0f, 200.0f, 0.0f }, glm::vec3 { 200.0f, 75.0f, 0.0f });
-		registry.emplace<Button>(exitButtonEntity, "Exit",
-			glm::vec3{ 0.6f, 0.6f, 0.6f },
-			glm::vec3{ 0.0f, 0.0f, 1.0f },
-			glm::vec3{ 0.0f, 1.0f, 0.0f});
+		ImageButton imageButton;
+		imageButton.color = glm::vec3{ 0.6f, 0.6f, 0.6f };
+		imageButton.hoverColor = glm::vec3{ 0.0f, 0.0f, 1.0f };
+		imageButton.pressedColor = glm::vec3{ 0.0f, 1.0f, 0.0f};
+		imageButton.text = "Exit";
+		imageButton.image = ResourceLoadRequest::create<Gfx::ImageDescriptor>(registry, "assets/textures/button.png");
+
+		registry.emplace<ImageButton>(exitButtonEntity, std::move(imageButton));
 		registry.emplace<NodeHandle>(exitButtonEntity, NodeHandle::create<EnTTNode>("ExitButton", entt::handle(registry, exitButtonEntity)));
 
 		addChildNode(registry, mainMenuEntity, playButtonEntity);
