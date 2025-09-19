@@ -1,7 +1,5 @@
 module;
 
-#include <chrono>
-
 #include <entt/entity/entity.hpp>
 #include <entt/fwd.hpp>
 
@@ -42,7 +40,6 @@ export namespace Game {
 
 		Core::TaskHandle mTickHandle{};
 
-		std::chrono::steady_clock::time_point mLastSpawn{};
 
 	};
 

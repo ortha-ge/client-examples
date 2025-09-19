@@ -6,6 +6,7 @@ module;
 
 module Game.CharacterControllerSystem;
 
+import Audio.PlaySoundSourceRequest;
 import Game.CharacterController;
 import Input.KeyboardState;
 import Physics2d.ApplyForceRequest;
@@ -48,18 +49,26 @@ namespace Game {
 				}
 			});
 
-		registry.view<CharacterController, Rigidbody>()
-			.each([&registry, inputX, inputY](const entt::entity entity, Rigidbody& rigidBody) {
-				ApplyForceRequest applyForceRequest;
-				applyForceRequest.type = ForceType::Impulse;
-				applyForceRequest.force.x = inputX;
+		if (inputX != 0.0f || inputY != 0.0f) {
+			registry.view<CharacterController, Rigidbody>()
+				.each([&registry, inputX, inputY](const entt::entity entity, Rigidbody& rigidBody) {
+					ApplyForceRequest applyForceRequest;
+					applyForceRequest.type = ForceType::Impulse;
+					applyForceRequest.force.x = inputX;
 
-				if (rigidBody.isOnGround) {
-					applyForceRequest.force.y = inputY;
-				}
+					if (rigidBody.isOnGround && inputY != 0.0f) {
+						applyForceRequest.force.y = inputY;
 
-				registry.get_or_emplace<ApplyForceRequest>(entity) = std::move(applyForceRequest);
-			});
+						if (!registry.all_of<Audio::PlaySoundSourceRequest>(entity)) {
+							Audio::PlaySoundSourceRequest playSoundRequest;
+							playSoundRequest.volumeScale = 3.0f;
+							registry.emplace<Audio::PlaySoundSourceRequest>(entity, playSoundRequest);
+						}
+					}
+
+					registry.get_or_emplace<ApplyForceRequest>(entity) = std::move(applyForceRequest);
+				});
+		}
 	}
 
 } // namespace Game

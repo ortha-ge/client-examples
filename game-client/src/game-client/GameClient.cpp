@@ -27,7 +27,9 @@ import Core.TypeId;
 import Core.TypeLoader;
 import Core.Window;
 import Game.CameraController;
+import Game.CharacterController;
 import Game.Character;
+import Game.CharacterSpawner;
 import Gfx.Camera;
 import Gfx.MaterialDescriptor;
 import Gfx.RenderObject;
@@ -93,9 +95,28 @@ namespace Game::GameClientInternal {
 		return backgroundEntity;
 	}
 
+	entt::entity createSpawner(entt::registry& registry, const entt::entity sceneRootEntity, glm::vec2 spawnerPosition) {
+		using namespace Core;
+
+		const entt::entity spawnerEntity = registry.create();
+		registry.emplace<Spatial>(spawnerEntity, glm::vec3{ spawnerPosition.x, spawnerPosition.y, 1.0f });
+		registry.emplace<CharacterSpawner>(spawnerEntity, sceneRootEntity);
+		registry.emplace<NodeHandle>(spawnerEntity, NodeHandle::create<EnTTNode>("Spawner", entt::handle(registry, spawnerEntity)));
+
+		addChildNode(registry, sceneRootEntity, spawnerEntity);
+		return spawnerEntity;
+	}
+
 	entt::entity createSceneRoot(entt::registry& registry) {
+		using namespace Core;
+
 		const entt::entity sceneRootEntity = registry.create();
-		registry.emplace<Core::NodeHandle>(sceneRootEntity, Core::NodeHandle::create<Core::EnTTNode>(std::format("Scene"), entt::handle(registry, sceneRootEntity)));
+		registry.emplace<NodeHandle>(sceneRootEntity, NodeHandle::create<EnTTNode>("Scene", entt::handle(registry, sceneRootEntity)));
+
+		createSpawner(registry, sceneRootEntity, glm::vec2{ 350.0f, 0.0f });
+		createSpawner(registry, sceneRootEntity, glm::vec2{ 650.0f, 0.0f });
+		createSpawner(registry, sceneRootEntity, glm::vec2{ 950.0f, 0.0f });
+
 		return sceneRootEntity;
 	}
 
@@ -110,7 +131,7 @@ namespace Game::GameClientInternal {
 
 		const auto floorEntity = registry.create();
 		registry.emplace<Core::NodeHandle>(floorEntity, Core::NodeHandle::create<Core::EnTTNode>(std::format("Floor"), entt::handle(registry, floorEntity)));
-		registry.emplace<Core::Spatial>(floorEntity, glm::vec3{ 650.0f, 450.0f, 1.0f }, glm::vec3{ 10.0f, 1.0f, 1.0f });
+		registry.emplace<Core::Spatial>(floorEntity, glm::vec3{ 650.0f, 750.0f, 1.0f }, glm::vec3{ 20.0f, 1.0f, 1.0f });
 
 		registry.emplace<Gfx::RenderObject>(floorEntity, tilesMaterialResourceHandle);
 		registry.emplace<Gfx::SpriteObject>(floorEntity, floorSprite);
@@ -131,19 +152,11 @@ namespace Game::GameClientInternal {
 			"assets/collision_shapes/cat.json",
 			"assets/sounds/cat_meow.wav"
 		};
-		return createCharacter(registry, catResourceConfig, scheduler, timer,
+		const entt::entity catEntity = createCharacter(registry, catResourceConfig, scheduler, timer,
 			{ pos.x, pos.y, 2.0f }, { 8.0f, 8.0f, 1.0f }, 3.0f);
-	}
+		registry.emplace<CharacterController>(catEntity);
 
-	entt::entity createFrog(entt::registry& registry, Core::Scheduler& scheduler, Core::Timer& timer, glm::vec2 pos) {
-		static const CharacterResourceConfig frogResourceConfig {
-			"assets/materials/frog.json",
-			"assets/sprites/frog.json",
-			"assets/collision_shapes/frog.json",
-			"assets/sounds/frog_ribbit.ogg"
-		};
-		return createCharacter(registry, frogResourceConfig, scheduler, timer,
-			{ pos.x, pos.y, 1.0f }, { 2.0f, 2.0f, 1.0f }, 1.0f);
+		return catEntity;
 	}
 
 } // namespace GameClientInternal
@@ -184,19 +197,6 @@ namespace Game {
 			return;
 		}
 
-		const auto& mouseState = mRegistry.get<Input::MouseState>(mWindowEntity);
-		const bool canSpawn = (std::chrono::steady_clock::now() - mLastSpawn) > std::chrono::milliseconds(150);
-		if (canSpawn && Input::isMouseButtonPressed(mouseState, Input::MouseButton::Left)) {
-			const bool spawnCat = mouseState.x < (1360.0f * 0.5f);
-			mLastSpawn = std::chrono::steady_clock::now();
-
-			const auto renderObjectEntity = spawnCat
-				? createCat(mRegistry, mScheduler, mTimer, { mouseState.x, mouseState.y })
-				: createFrog(mRegistry, mScheduler, mTimer, { mouseState.x, mouseState.y });
-
-			addChildNode(mRegistry, mSceneRootEntity, renderObjectEntity);
-		}
-
 		const auto& keyboardState = mRegistry.get<Input::KeyboardState>(mWindowEntity);
 
 		auto tryDestroyRootNode = [](entt::registry& registry, const entt::entity entity) {
@@ -223,6 +223,9 @@ namespace Game {
 		mSceneRootEntity = createSceneRoot(registry);
 		const entt::entity floorEntity = createFloor(registry);
 		addChildNode(registry, mSceneRootEntity, floorEntity);
+
+		const entt::entity catEntity = createCat(registry, mScheduler, mTimer, glm::vec2{ 650.0f, 650.0f });
+		addChildNode(registry, mSceneRootEntity, catEntity);
 	}
 
 } // namespace Game

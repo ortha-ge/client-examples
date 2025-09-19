@@ -55,7 +55,6 @@ namespace Game {
 			ResourceLoadRequest::create<SoundDescriptor>(registry, resourceConfig.spawnSoundFilePath);
 
 		const auto characterRootNodeEntity = registry.create();
-		registry.emplace<CharacterController>(characterRootNodeEntity);
 		registry.emplace<Spatial>(characterRootNodeEntity, pos, scale);
 
 		const auto collisionShapeResource = ResourceLoadRequest::create<TypeLoader>(registry,
@@ -65,6 +64,8 @@ namespace Game {
 
 		registry.emplace<CollisionShape>(characterRootNodeEntity, collisionShapeResource);
 		registry.emplace<Rigidbody>(characterRootNodeEntity, false);
+		registry.emplace<AudioSource>(characterRootNodeEntity, soundResource);
+		registry.emplace<PlaySoundSourceRequest>(characterRootNodeEntity, soundRequestVolume);
 
 		entt::handle characterRootHandle(registry, characterRootNodeEntity);
 		NodeHandle& characterRootNode{ registry.emplace<NodeHandle>(characterRootNodeEntity, NodeHandle::create<EnTTNode>(std::format("Character_{}", characterCounter), characterRootHandle)) };
@@ -74,9 +75,6 @@ namespace Game {
 
 		registry.emplace<RenderObject>(renderObjectEntity, materialResource);
 		registry.emplace<SpriteObject>(renderObjectEntity, spriteResource);
-
-		registry.emplace<AudioSource>(renderObjectEntity, soundResource);
-		registry.emplace<PlaySoundSourceRequest>(renderObjectEntity, soundRequestVolume);
 
 		auto& childNodeHandle = registry.emplace<NodeHandle>(renderObjectEntity, NodeHandle::create<EnTTNode>("RenderObject", entt::handle(registry, renderObjectEntity)));
 		characterRootNode.getNode()->addChild(childNodeHandle.getNode());

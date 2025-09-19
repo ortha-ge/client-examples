@@ -9,6 +9,7 @@ set (game-client-src
         src/game-client/camera/systems/CameraControllerSystem.cpp
         src/game-client/character/Character.cpp
         src/game-client/character/systems/CharacterControllerSystem.cpp
+        src/game-client/character/systems/CharacterSpawnerSystem.cpp
         src/game-client/services/GameClientService.cpp
 )
 
@@ -18,9 +19,12 @@ set (game-client-modules
         src/game-client/camera/systems/CameraControllerSystem.cppm
         src/game-client/character/Character.cppm
         src/game-client/character/CharacterController.cppm
+        src/game-client/character/CharacterSpawner.cppm
         src/game-client/character/systems/CharacterControllerSystem.cppm
+        src/game-client/character/systems/CharacterSpawnerSystem.cppm
         src/game-client/services/CameraControllerSystemService.cppm
         src/game-client/services/CharacterControllerSystemService.cppm
+        src/game-client/services/CharacterSpawnerSystemService.cppm
         src/game-client/services/GameClientService.cppm
 )
 
