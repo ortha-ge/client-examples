@@ -19,6 +19,7 @@ import Core.FileLoadRequest;
 import Core.JsonTypeLoaderAdapter;
 import Core.Log;
 import Core.Node;
+import Core.QuitAppRequest;
 import Core.ResourceHandle;
 import Core.ResourceLoadRequest;
 import Core.Spatial;
@@ -147,11 +148,13 @@ namespace Game::GameClientInternal {
 	}
 
 	entt::entity createCat(entt::registry& registry, Core::Scheduler& scheduler, Core::Timer& timer, glm::vec2 pos) {
-		static const CharacterResourceConfig catResourceConfig {
+		static const CharacterConfig catResourceConfig {
 			"assets/materials/cat.json",
 			"assets/sprites/cat.json",
 			"assets/collision_shapes/cat.json",
-			"assets/sounds/cat_meow.wav"
+			"assets/sounds/cat_meow.wav",
+			10.0f,
+			0.5f
 		};
 		const entt::entity catEntity = createCharacter(registry, catResourceConfig, scheduler, timer,
 			{ pos.x, pos.y, 2.0f }, { 8.0f, 8.0f, 1.0f }, 3.0f);
@@ -175,9 +178,6 @@ namespace Game {
 		const entt::entity backgroundEntity = createBackground(registry);
 		addChildNode(registry, mCameraEntity, backgroundEntity);
 
-		const entt::entity mainMenuEntity = createMainMenu(registry);
-		addChildNode(registry, mCameraEntity, mainMenuEntity);
-
 		createScene(registry);
 
 		mTickHandle = scheduler.schedule([this] {
@@ -197,27 +197,56 @@ namespace Game {
 		using namespace Core;
 		using namespace GameClientInternal;
 
-		if (!mRegistry.all_of<Input::KeyboardState, Input::MouseState>(mWindowEntity)) {
-			return;
-		}
+		registry.view<Input::KeyboardState>()
+			.each([this](const Input::KeyboardState& keyboardState) {
+				entt::registry& registry{ mRegistry };
+				if (Input::isKeyPressed(keyboardState, Input::Key::Escape)) {
+					if (!registry.all_of<NodeHandle>(mCameraEntity)) {
+						return;
+					}
 
-		const auto& keyboardState = mRegistry.get<Input::KeyboardState>(mWindowEntity);
+					const auto& cameraNodeHandle{ registry.get<NodeHandle>(mCameraEntity) };
+					const auto& childNodes{ cameraNodeHandle.getNode()->getChildren() };
+					auto mainMenuIt = std::ranges::find_if(childNodes, [](const auto& childNode) {
+						return childNode->getName() == "MainMenu";
+					});
 
-		auto tryDestroyRootNode = [](entt::registry& registry, const entt::entity entity) {
-			if (!registry.all_of<Core::NodeHandle>(entity)) {
-				return;
-			}
+					const bool hasMainMenu = mainMenuIt != childNodes.end();
+					if (hasMainMenu) {
+						return;
+					}
 
-			auto& node = registry.get<Core::NodeHandle>(entity);
-			node.getNode()->destroy();
-		};
+					auto playCallback = [this] {
+						if (mSceneRootEntity != entt::null) {
+							entt::registry& registry{ mRegistry };
+							if (!registry.all_of<Core::NodeHandle>(mSceneRootEntity)) {
+								return;
+							}
 
-		if (Input::isKeyPressed(keyboardState, Input::Key::Space)) {
-			if (mSceneRootEntity != entt::null) {
-				tryDestroyRootNode(mRegistry, mSceneRootEntity);
-				createScene(mRegistry);
-			}
-		}
+							auto& node = registry.get<Core::NodeHandle>(mSceneRootEntity);
+							node.getNode()->destroy();
+							createScene(mRegistry);
+
+							const auto& cameraNodeHandle{ registry.get<NodeHandle>(mCameraEntity) };
+							const auto& childNodes{ cameraNodeHandle.getNode()->getChildren() };
+							auto mainMenuIt = std::ranges::find_if(childNodes, [](const auto& childNode) {
+								return childNode->getName() == "MainMenu";
+							});
+							cameraNodeHandle.getNode()->removeChild(*mainMenuIt);
+							(*mainMenuIt)->destroy();
+						}
+					};
+
+					auto quitCallback = [this] {
+						entt::registry& registry{ mRegistry };
+						const entt::entity quitAppEntity = registry.create();
+						registry.emplace<Core::QuitAppRequest>(quitAppEntity);
+					};
+					const entt::entity mainMenuEntity = createMainMenu(mRegistry, std::move(playCallback), std::move(quitCallback));
+					addChildNode(mRegistry, mCameraEntity, mainMenuEntity);
+				}
+			});
+
 	}
 
 	void Client::createScene(entt::registry& registry) {

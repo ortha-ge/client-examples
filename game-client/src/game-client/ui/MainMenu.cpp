@@ -1,5 +1,6 @@
 module;
 
+#include <chrono>
 #include <entt/entt.hpp>
 #include <glm/vec3.hpp>
 
@@ -13,12 +14,16 @@ import UI.Button;
 
 namespace Game {
 
-	entt::entity createMainMenu(entt::registry& registry) {
+	entt::entity createMainMenu(entt::registry& registry, std::function<void()> playCallback, std::function<void()> quitCallback) {
 		using namespace Core;
 		using namespace UI;
 
 		const entt::entity mainMenuEntity = registry.create();
-		registry.emplace<MainMenuController>(mainMenuEntity);
+		registry.emplace<MainMenuController>(mainMenuEntity,
+			std::chrono::steady_clock::now(),
+			std::move(playCallback),
+			std::move(quitCallback)
+		);
 		registry.emplace<Spatial>(mainMenuEntity, glm::vec3(500.0f, 200.0f, 0.0f));
 		registry.emplace<NodeHandle>(mainMenuEntity, NodeHandle::create<EnTTNode>("MainMenu", entt::handle(registry, mainMenuEntity)));
 

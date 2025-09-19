@@ -34,7 +34,7 @@ import Physics2d.Reflection.CircleCollisionShape;
 
 namespace Game {
 
-	entt::entity createCharacter(entt::registry& registry, const CharacterResourceConfig& resourceConfig,
+	entt::entity createCharacter(entt::registry& registry, const CharacterConfig& characterConfig,
 		Core::Scheduler& scheduler, Core::Timer& timer, glm::vec3 pos, glm::vec3 scale, float soundRequestVolume) {
 		using namespace Audio;
 		using namespace Core;
@@ -45,20 +45,21 @@ namespace Game {
 		++characterCounter;
 
 		const auto materialResource = ResourceLoadRequest::create<TypeLoader>(
-			registry, resourceConfig.materialFilePath,
+			registry, characterConfig.materialFilePath,
 			std::make_shared<JsonTypeLoaderAdapter<MaterialDescriptor>>());
 
 		const auto spriteResource = ResourceLoadRequest::create<TypeLoader>(
-			registry, resourceConfig.spriteFilePath, std::make_shared<JsonTypeLoaderAdapter<SpriteDescriptor>>());
+			registry, characterConfig.spriteFilePath, std::make_shared<JsonTypeLoaderAdapter<SpriteDescriptor>>());
 
 		const auto soundResource =
-			ResourceLoadRequest::create<SoundDescriptor>(registry, resourceConfig.spawnSoundFilePath);
+			ResourceLoadRequest::create<SoundDescriptor>(registry, characterConfig.spawnSoundFilePath);
 
 		const auto characterRootNodeEntity = registry.create();
+		registry.emplace<Character>(characterRootNodeEntity, characterConfig.jumpImpulse, characterConfig.moveImpulse);
 		registry.emplace<Spatial>(characterRootNodeEntity, pos, scale);
 
 		const auto collisionShapeResource = ResourceLoadRequest::create<TypeLoader>(registry,
-			resourceConfig.collisionShapeFilePath,
+			characterConfig.collisionShapeFilePath,
 			std::make_shared<JsonTypeLoaderAdapter<CollisionShapeDescriptor>>()
 		);
 

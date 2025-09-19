@@ -12,14 +12,21 @@ import Core.Timer;
 
 export namespace Game {
 
-	struct CharacterResourceConfig {
+	struct CharacterConfig {
 		std::string materialFilePath;
 		std::string spriteFilePath;
 		std::string collisionShapeFilePath;
 		std::string spawnSoundFilePath;
+		float jumpImpulse{ 100000.0f };
+		float moveImpulse{ 1000.0f };
 	};
 
-	entt::entity createCharacter(entt::registry&, const CharacterResourceConfig&,
+	struct Character {
+		float jumpImpulse{};
+		float moveImpulse{};
+	};
+
+	entt::entity createCharacter(entt::registry&, const CharacterConfig&,
 		Core::Scheduler&, Core::Timer&, glm::vec3, glm::vec3, float);
 
 } // namespace Game

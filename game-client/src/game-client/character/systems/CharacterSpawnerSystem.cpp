@@ -20,7 +20,7 @@ import Input.MouseState;
 namespace Game::CharacterSpawnerSystemInternal {
 
 	entt::entity createFrog(entt::registry& registry, Core::Scheduler& scheduler, Core::Timer& timer, glm::vec2 pos) {
-		static const CharacterResourceConfig frogResourceConfig {
+		static const CharacterConfig frogResourceConfig {
 			"assets/materials/frog.json",
 			"assets/sprites/frog.json",
 			"assets/collision_shapes/frog.json",

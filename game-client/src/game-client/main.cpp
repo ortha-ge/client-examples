@@ -28,6 +28,10 @@ void stopMainLoop() {
 #else
 	emscripten_cancel_main_loop();
 #endif
+	entt::registry& registry = sContainer->service<Core::EnTTRegistryService>();
+	auto quitAppRequests = registry.view<const Core::QuitAppRequest>();
+	quitAppRequests.each([&registry](entt::entity entity, const Core::QuitAppRequest&) { registry.destroy(entity); });
+
 	delete sContainer;
 	sContainer = nullptr;
 }
@@ -72,12 +76,7 @@ int main(int argc, char* argv[]) {
 	kgr::container& container = *sContainer;
 	container.service<Game::ClientService>();
 
-	entt::registry& registry = container.service<Core::EnTTRegistryService>();
-	auto quitAppRequests = registry.view<const Core::QuitAppRequest>();
-
 	startMainLoop();
-
-	quitAppRequests.each([&registry](entt::entity entity, const Core::QuitAppRequest&) { registry.destroy(entity); });
 
 	return 0;
 }

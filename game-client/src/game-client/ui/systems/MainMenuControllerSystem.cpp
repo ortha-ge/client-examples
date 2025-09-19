@@ -1,5 +1,6 @@
 module;
 
+#include <chrono>
 #include <utility>
 
 #include <entt/entt.hpp>
@@ -33,7 +34,13 @@ namespace Game {
 		using namespace UI;
 
 		registry.view<MainMenuController, NodeHandle>()
-			.each([&registry](const entt::entity entity, const NodeHandle& nodeHandle) {
+			.each([&registry](const entt::entity entity, MainMenuController& mainMenuController, const NodeHandle& nodeHandle) {
+				auto clockNow = std::chrono::steady_clock::now();
+				auto nextValidSelectTime = mainMenuController.lastSelectedTime + std::chrono::milliseconds(750);
+				if (clockNow < nextValidSelectTime) {
+					return;
+				}
+
 				for (auto&& childNodeHandle : nodeHandle.getNode()->getChildren()) {
 					if (childNodeHandle->getTypeId() != TypeId::get<EnTTNode>()) {
 						continue;
@@ -51,9 +58,11 @@ namespace Game {
 					}
 
 					if (button.text == "Play") {
-						logEntry(registry, entity, "Play button pressed!");
+						mainMenuController.playCallback();
+						mainMenuController.lastSelectedTime = clockNow;
 					} else if (button.text == "Exit") {
-						logEntry(registry, entity, "Exit button pressed!");
+						mainMenuController.quitCallback();
+						mainMenuController.lastSelectedTime = clockNow;
 					}
 				}
 			});
