@@ -11,6 +11,8 @@ import Core.Node;
 import Core.ResourceLoadRequest;
 import Core.Spatial;
 import Game.MainMenuController;
+import Gfx.FontDescriptor;
+import Gfx.FontObject;
 import Gfx.ImageDescriptor;
 import UI.Button;
 import UI.ImageButton;
@@ -51,8 +53,22 @@ namespace Game {
 		registry.emplace<ImageButton>(exitButtonEntity, std::move(imageButton));
 		registry.emplace<NodeHandle>(exitButtonEntity, NodeHandle::create<EnTTNode>("ExitButton", entt::handle(registry, exitButtonEntity)));
 
+		auto fontResource = ResourceLoadRequest::create<Gfx::FontDescriptor>(registry, "assets/fonts/roboto_regular.ttf");
+		const entt::entity playTextEntity{ registry.create() };
+		registry.emplace<Spatial>(playTextEntity, glm::vec3{ -50.0f, 25.0f, 0.0f });
+		registry.emplace<Gfx::FontObject>(playTextEntity, "Play", fontResource);
+		registry.emplace<NodeHandle>(playTextEntity, NodeHandle::create<EnTTNode>("PlayText", entt::handle(registry, playTextEntity)));
+
+		const entt::entity exitTextEntity{ registry.create() };
+		registry.emplace<Spatial>(exitTextEntity, glm::vec3{ -50.0f, 25.0f, 0.0f });
+		registry.emplace<Gfx::FontObject>(exitTextEntity, "Exit", fontResource);
+		registry.emplace<NodeHandle>(exitTextEntity, NodeHandle::create<EnTTNode>("ExitText", entt::handle(registry, exitTextEntity)));
+
 		addChildNode(registry, mainMenuEntity, playButtonEntity);
+		addChildNode(registry, playButtonEntity, playTextEntity);
+
 		addChildNode(registry, mainMenuEntity, exitButtonEntity);
+		addChildNode(registry, exitButtonEntity, exitTextEntity);
 
 		return mainMenuEntity;
 	}
