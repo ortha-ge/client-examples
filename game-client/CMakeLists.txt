@@ -11,7 +11,9 @@ set (game-client-src
         src/game-client/character/systems/CharacterControllerSystem.cpp
         src/game-client/character/systems/CharacterSpawnerSystem.cpp
         src/game-client/services/GameClientService.cpp
+        src/game-client/ui/HUD.cpp
         src/game-client/ui/MainMenu.cpp
+        src/game-client/ui/systems/HUDControllerSystem.cpp
         src/game-client/ui/systems/MainMenuControllerSystem.cpp
 )
 
@@ -28,9 +30,12 @@ set (game-client-modules
         src/game-client/services/CharacterControllerSystemService.cppm
         src/game-client/services/CharacterSpawnerSystemService.cppm
         src/game-client/services/GameClientService.cppm
+        src/game-client/ui/HUD.cppm
         src/game-client/ui/MainMenu.cppm
         src/game-client/ui/MainMenuController.cppm
+        src/game-client/ui/services/HUDControllerSystemService.cppm
         src/game-client/ui/services/MainMenuControllerSystemService.cppm
+        src/game-client/ui/systems/HUDControllerSystem.cppm
         src/game-client/ui/systems/MainMenuControllerSystem.cppm
 )
 

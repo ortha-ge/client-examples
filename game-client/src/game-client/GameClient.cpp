@@ -31,6 +31,7 @@ import Game.CameraController;
 import Game.CharacterController;
 import Game.Character;
 import Game.CharacterSpawner;
+import Game.HUD;
 import Game.MainMenu;
 import Gfx.Camera;
 import Gfx.MaterialDescriptor;
@@ -177,6 +178,9 @@ namespace Game {
 		mCameraEntity = createCamera(registry, scheduler, timer);
 		const entt::entity backgroundEntity = createBackground(registry);
 		addChildNode(registry, mCameraEntity, backgroundEntity);
+
+		const entt::entity hudEntity = createHUD(registry);
+		addChildNode(registry, mCameraEntity, hudEntity);
 
 		createScene(registry);
 

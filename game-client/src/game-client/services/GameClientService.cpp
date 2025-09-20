@@ -10,6 +10,7 @@ import DevTools.SystemsService;
 import Game.CameraControllerSystemService;
 import Game.CharacterControllerSystemService;
 import Game.CharacterSpawnerSystemService;
+import Game.HUDControllerSystemService;
 import Game.MainMenuControllerSystemService;
 import Gfx.SystemsService;
 import Input.SystemsService;
@@ -33,6 +34,7 @@ namespace Game {
 		container.emplace<CharacterControllerSystemService>();
 		container.emplace<CharacterSpawnerSystemService>();
 
+		container.emplace<HUDControllerSystemService>();
 		container.emplace<MainMenuControllerSystemService>();
 	}
 
