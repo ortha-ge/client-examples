@@ -154,8 +154,8 @@ namespace Game::GameClientInternal {
 			"assets/sprites/cat.json",
 			"assets/collision_shapes/cat.json",
 			"assets/sounds/cat_meow.wav",
-			10.0f,
-			0.5f
+			300.0f,
+			7.5f
 		};
 		const entt::entity catEntity = createCharacter(registry, catResourceConfig, scheduler, timer,
 			{ pos.x, pos.y, 2.0f }, { 8.0f, 8.0f, 1.0f }, 3.0f);
