@@ -61,7 +61,7 @@ namespace Game::GameClientInternal {
 	entt::entity createCamera(entt::registry& registry, Core::Scheduler& scheduler, Core::Timer& timer) {
 		using namespace Core;
 		const entt::entity cameraEntity = registry.create();
-		registry.emplace<CameraController>(cameraEntity);
+		registry.emplace<CameraController>(cameraEntity, std::nullopt, glm::vec3{ 0.0f, -100.0f, 0.0f });
 
 		const entt::handle cameraEntityHandle(registry, cameraEntity);
 		auto cameraRootNodeHandle = NodeHandle::create<EnTTNode>(std::format("CameraNode"), cameraEntityHandle);
@@ -217,6 +217,8 @@ namespace Game {
 
 					const bool hasMainMenu = mainMenuIt != childNodes.end();
 					if (hasMainMenu) {
+						cameraNodeHandle.getNode()->removeChild(*mainMenuIt);
+						(*mainMenuIt)->destroy();
 						return;
 					}
 
@@ -263,6 +265,8 @@ namespace Game {
 
 		const entt::entity catEntity = createCat(registry, mScheduler, mTimer, glm::vec2{ 650.0f, 650.0f });
 		addChildNode(registry, mSceneRootEntity, catEntity);
+
+		registry.get<CameraController>(mCameraEntity).followEntity = catEntity;
 	}
 
 } // namespace Game

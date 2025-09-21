@@ -3,11 +3,16 @@ module;
 #include <utility>
 
 #include <entt/entt.hpp>
+#include <glm/ext/quaternion_common.hpp>
+#include <glm/glm.hpp>
 
 module Game.CameraControllerSystem;
 
+import Core.GlobalSpatial;
 import Core.Spatial;
 import Game.CameraController;
+import Gfx.Camera;
+import Gfx.Viewport;
 
 namespace Game {
 
@@ -29,18 +34,25 @@ namespace Game {
 		using namespace Core;
 
 		registry.view<CameraController, Spatial>()
-			.each([this](CameraController& controller, Spatial& spatial) {
-				if (controller.tickTock) {
-					spatial.position.x -= mTimer.getDeltaT() * 25.0f;
-					if (spatial.position.x < -50.0f) {
-						controller.tickTock = false;
-					}
-				} else {
-					spatial.position.x += mTimer.getDeltaT() * 25.0f;
-					if (spatial.position.x > 50.0f) {
-						controller.tickTock = true;
-					}
+			.each([this, &registry](CameraController& controller, Spatial& spatial) {
+				if (!controller.followEntity) {
+					return;
 				}
+
+				if (!registry.all_of<GlobalSpatial>(*controller.followEntity)) {
+					return;
+				}
+
+
+
+				const auto& followSpatial{ registry.get<GlobalSpatial>(*controller.followEntity) };
+				glm::vec3 lookAt = followSpatial.position + controller.followOffset - glm::vec3(680, 384, 0.0f);
+
+				const float distance = glm::distance(spatial.position, lookAt);
+				const float lerpFactor = (distance / 10.0f) * mTimer.getDeltaT();
+
+				spatial.position.x = std::lerp(spatial.position.x, lookAt.x, lerpFactor);
+				spatial.position.y = std::lerp(spatial.position.y, lookAt.y, lerpFactor);;
 			});
 	}
 

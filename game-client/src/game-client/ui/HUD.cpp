@@ -29,7 +29,11 @@ namespace Game {
 
 		const entt::entity scoreTextEntity{ registry.create() };
 		registry.emplace<Spatial>(scoreTextEntity, glm::vec3{ 200.0f, 100.0f, 0.0f });
-		registry.emplace<Gfx::FontObject>(scoreTextEntity, "Score ---", fontResource);
+		registry.emplace<Gfx::FontObject>(scoreTextEntity,
+			R"(She said, "Hey y'all!"__  __  __gap
+Some text on a new line...
+uVvWwXxYyZz1234567890!.,/\
+"'[]{}-+()*&^%$#@)", fontResource);
 		registry.emplace<NodeHandle>(scoreTextEntity, NodeHandle::create<EnTTNode>("ScoreText", entt::handle(registry, scoreTextEntity)));
 
 		addChildNode(registry, hudEntity, scoreTextEntity);
