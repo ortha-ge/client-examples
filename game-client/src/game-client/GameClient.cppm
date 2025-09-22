@@ -28,7 +28,8 @@ export namespace Game {
 
 	private:
 
-		void createScene(entt::registry& registry);
+		void createScene(entt::registry&);
+		void toggleMainMenu(entt::registry&);
 
 		entt::registry& mRegistry;
 		Core::Scheduler& mScheduler;

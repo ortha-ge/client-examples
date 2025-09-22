@@ -45,6 +45,7 @@ import Gfx.Reflection.MaterialDescriptor;
 import Gfx.Reflection.ShaderProgramDescriptor;
 import Gfx.Reflection.Sprite;
 import Gfx.Reflection.Tilemap;
+import Input.KeyboardEvent;
 import Input.KeyboardState;
 import Input.MouseState;
 import Physics2d.ApplyForceRequest;
@@ -213,55 +214,12 @@ namespace Game {
 		using namespace Core;
 		using namespace GameClientInternal;
 
-		registry.view<Input::KeyboardState>()
-			.each([this](const Input::KeyboardState& keyboardState) {
+		registry.view<Input::KeyboardEvent>()
+			.each([this](const Input::KeyboardEvent& keyboardEvent) {
 				entt::registry& registry{ mRegistry };
-				if (Input::isKeyPressed(keyboardState, Input::Key::Escape)) {
-					if (!registry.all_of<NodeHandle>(mCameraEntity)) {
-						return;
-					}
-
-					const auto& cameraNodeHandle{ registry.get<NodeHandle>(mCameraEntity) };
-					const auto& childNodes{ cameraNodeHandle.getNode()->getChildren() };
-					auto mainMenuIt = std::ranges::find_if(childNodes, [](const auto& childNode) {
-						return childNode->getName() == "MainMenu";
-					});
-
-					const bool hasMainMenu = mainMenuIt != childNodes.end();
-					if (hasMainMenu) {
-						cameraNodeHandle.getNode()->removeChild(*mainMenuIt);
-						(*mainMenuIt)->destroy();
-						return;
-					}
-
-					auto playCallback = [this] {
-						if (mSceneRootEntity != entt::null) {
-							entt::registry& registry{ mRegistry };
-							if (!registry.all_of<Core::NodeHandle>(mSceneRootEntity)) {
-								return;
-							}
-
-							auto& node = registry.get<Core::NodeHandle>(mSceneRootEntity);
-							node.getNode()->destroy();
-							createScene(mRegistry);
-
-							const auto& cameraNodeHandle{ registry.get<NodeHandle>(mCameraEntity) };
-							const auto& childNodes{ cameraNodeHandle.getNode()->getChildren() };
-							auto mainMenuIt = std::ranges::find_if(childNodes, [](const auto& childNode) {
-								return childNode->getName() == "MainMenu";
-							});
-							cameraNodeHandle.getNode()->removeChild(*mainMenuIt);
-							(*mainMenuIt)->destroy();
-						}
-					};
-
-					auto quitCallback = [this] {
-						entt::registry& registry{ mRegistry };
-						const entt::entity quitAppEntity = registry.create();
-						registry.emplace<QuitAppRequest>(quitAppEntity);
-					};
-					const entt::entity mainMenuEntity = createMainMenu(mRegistry, std::move(playCallback), std::move(quitCallback));
-					addChildNode(mRegistry, mCameraEntity, mainMenuEntity);
+				if (keyboardEvent.key == Input::Key::Escape &&
+					keyboardEvent.eventType == Input::InputEventType::Pressed) {
+					toggleMainMenu(registry);
 				}
 			});
 
@@ -279,6 +237,55 @@ namespace Game {
 		addChildNode(registry, mSceneRootEntity, catEntity);
 
 		registry.get<CameraController>(mCameraEntity).followEntity = catEntity;
+	}
+
+	void Client::toggleMainMenu(entt::registry& registry) {
+		using namespace Core;
+		if (!registry.all_of<NodeHandle>(mCameraEntity)) {
+			return;
+		}
+
+		const auto& cameraNodeHandle{ registry.get<NodeHandle>(mCameraEntity) };
+		const auto& childNodes{ cameraNodeHandle.getNode()->getChildren() };
+		auto mainMenuIt = std::ranges::find_if(childNodes, [](const auto& childNode) {
+			return childNode->getName() == "MainMenu";
+		});
+
+		const bool hasMainMenu = mainMenuIt != childNodes.end();
+		if (hasMainMenu) {
+			cameraNodeHandle.getNode()->removeChild(*mainMenuIt);
+			(*mainMenuIt)->destroy();
+			return;
+		}
+
+		auto playCallback = [this] {
+			if (mSceneRootEntity != entt::null) {
+				entt::registry& registry{ mRegistry };
+				if (!registry.all_of<Core::NodeHandle>(mSceneRootEntity)) {
+					return;
+				}
+
+				auto& node = registry.get<Core::NodeHandle>(mSceneRootEntity);
+				node.getNode()->destroy();
+				createScene(mRegistry);
+
+				const auto& cameraNodeHandle{ registry.get<NodeHandle>(mCameraEntity) };
+				const auto& childNodes{ cameraNodeHandle.getNode()->getChildren() };
+				auto mainMenuIt = std::ranges::find_if(childNodes, [](const auto& childNode) {
+					return childNode->getName() == "MainMenu";
+				});
+				cameraNodeHandle.getNode()->removeChild(*mainMenuIt);
+				(*mainMenuIt)->destroy();
+			}
+		};
+
+		auto quitCallback = [this] {
+			entt::registry& registry{ mRegistry };
+			const entt::entity quitAppEntity = registry.create();
+			registry.emplace<QuitAppRequest>(quitAppEntity);
+		};
+		const entt::entity mainMenuEntity = createMainMenu(mRegistry, std::move(playCallback), std::move(quitCallback));
+		addChildNode(mRegistry, mCameraEntity, mainMenuEntity);
 	}
 
 } // namespace Game
