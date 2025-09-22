@@ -9,7 +9,10 @@
         "entt",
         "glfw3",
         "glm",
-        "imgui",
+        {
+            "name": "imgui",
+            "features": [ "docking-experimental" ]
+        },
         "kangaru",
         "lua",
         "rapidjson",
