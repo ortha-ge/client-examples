@@ -45,7 +45,7 @@ namespace Game {
 
 					static int score = 0;
 					auto& fontObject{ registry.get<FontObject>(scoreTextEntity) };
-					//fontObject.text = std::format("Score {}", score);
+					fontObject.text = std::format("Score {}", score);
 					score += 1000;
 				}
 			});

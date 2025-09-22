@@ -1,0 +1,14 @@
+{
+    "ImageAtlas": {
+        "imageFilePath": "assets/textures/tiles.png",
+        "regions": [
+            {
+                "name": "floor1",
+                "textureCoordinates": {
+                    "bottomLeft": { "x": 15, "y": 116 },
+                    "topRight": { "x": 84, "y": 186 }
+                }
+            }
+        ]
+    }
+}

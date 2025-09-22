@@ -38,9 +38,13 @@ import Gfx.MaterialDescriptor;
 import Gfx.RenderObject;
 import Gfx.SpriteDescriptor;
 import Gfx.SpriteObject;
+import Gfx.Tilemap;
+import Gfx.TilemapObject;
 import Gfx.Viewport;
 import Gfx.Reflection.MaterialDescriptor;
+import Gfx.Reflection.ShaderProgramDescriptor;
 import Gfx.Reflection.Sprite;
+import Gfx.Reflection.Tilemap;
 import Input.KeyboardState;
 import Input.MouseState;
 import Physics2d.ApplyForceRequest;
@@ -60,13 +64,8 @@ namespace Game::GameClientInternal {
 
 	entt::entity createCamera(entt::registry& registry, Core::Scheduler& scheduler, Core::Timer& timer) {
 		using namespace Core;
-		const entt::entity cameraEntity = registry.create();
+		const entt::entity cameraEntity = createEnTTNode(registry, "Camera");
 		registry.emplace<CameraController>(cameraEntity, std::nullopt, glm::vec3{ 0.0f, -100.0f, 0.0f });
-
-		const entt::handle cameraEntityHandle(registry, cameraEntity);
-		auto cameraRootNodeHandle = NodeHandle::create<EnTTNode>(std::format("CameraNode"), cameraEntityHandle);
-
-		registry.emplace<NodeHandle>(cameraEntity, cameraRootNodeHandle);
 		registry.emplace<Gfx::Camera>(cameraEntity, 60.0f);
 		registry.emplace<Spatial>(cameraEntity);
 		registry.emplace<Gfx::Viewport>(cameraEntity, cameraEntity, glm::vec2{ 0.0f, 0.0f}, glm::vec2{ 1.0f, 1.0f });
@@ -74,47 +73,46 @@ namespace Game::GameClientInternal {
 	}
 
 	entt::entity createBackground(entt::registry& registry) {
-		const auto backgroundMaterial = Core::ResourceLoadRequest::create<Core::TypeLoader>(
+		using namespace Audio;
+		using namespace Core;
+		using namespace Gfx;
+
+		const auto backgroundMaterial = ResourceLoadRequest::create<TypeLoader>(
 			registry, "assets/materials/background.json",
-			std::make_shared<Core::JsonTypeLoaderAdapter<Gfx::MaterialDescriptor>>());
+			std::make_shared<JsonTypeLoaderAdapter<MaterialDescriptor>>());
 
-		const auto backgroundSprite = Core::ResourceLoadRequest::create<Core::TypeLoader>(
+		const auto backgroundSprite = ResourceLoadRequest::create<TypeLoader>(
 			registry, "assets/sprites/background.json",
-			std::make_shared<Core::JsonTypeLoaderAdapter<Gfx::SpriteDescriptor>>());
+			std::make_shared<JsonTypeLoaderAdapter<SpriteDescriptor>>());
 
-		const auto backgroundSoundResource = Core::ResourceLoadRequest::create<Audio::SoundDescriptor>(
+		const auto backgroundSoundResource = ResourceLoadRequest::create<SoundDescriptor>(
 			registry, "assets/sounds/background_crickets.ogg");
 
-		const auto backgroundEntity = registry.create();
-		registry.emplace<Core::NodeHandle>(backgroundEntity, Core::NodeHandle::create<Core::EnTTNode>(std::format("BackgroundNode"), entt::handle(registry, backgroundEntity)));
-		registry.emplace<Core::Spatial>(backgroundEntity, glm::vec3{ 1000.0f, 750.0f, 0.0f }, glm::vec3{ 2.0f, 2.0f, 1.0f });
-		registry.emplace<Gfx::SpriteObject>(backgroundEntity, backgroundSprite);
-		registry.emplace<Gfx::RenderObject>(backgroundEntity, backgroundMaterial);
-		registry.emplace<Audio::AudioSource>(backgroundEntity, backgroundSoundResource);
+		const auto backgroundEntity = createEnTTNode(registry, "BackgroundNode");
+		registry.emplace<Spatial>(backgroundEntity, glm::vec3{ 1000.0f, 750.0f, 0.0f }, glm::vec3{ 2.0f, 2.0f, 1.0f });
+		registry.emplace<SpriteObject>(backgroundEntity, backgroundSprite);
+		registry.emplace<RenderObject>(backgroundEntity, backgroundMaterial);
+		registry.emplace<AudioSource>(backgroundEntity, backgroundSoundResource);
 
-		Audio::PlaySoundSourceRequest playSoundRequest;
+		PlaySoundSourceRequest playSoundRequest;
 		playSoundRequest.looping = true;
-		registry.emplace<Audio::PlaySoundSourceRequest>(backgroundEntity, playSoundRequest);
+		registry.emplace<PlaySoundSourceRequest>(backgroundEntity, playSoundRequest);
 		return backgroundEntity;
 	}
 
 	entt::entity createSpawner(entt::registry& registry, const entt::entity sceneRootEntity, glm::vec2 spawnerPosition) {
 		using namespace Core;
 
-		const entt::entity spawnerEntity = registry.create();
+		const entt::entity spawnerEntity = createChildEnTTNode(registry, sceneRootEntity, "CharacterSpawner");
 		registry.emplace<Spatial>(spawnerEntity, glm::vec3{ spawnerPosition.x, spawnerPosition.y, 1.0f });
 		registry.emplace<CharacterSpawner>(spawnerEntity, sceneRootEntity);
-		registry.emplace<NodeHandle>(spawnerEntity, NodeHandle::create<EnTTNode>("Spawner", entt::handle(registry, spawnerEntity)));
-
-		addChildNode(registry, sceneRootEntity, spawnerEntity);
 		return spawnerEntity;
 	}
 
 	entt::entity createSceneRoot(entt::registry& registry) {
 		using namespace Core;
 
-		const entt::entity sceneRootEntity = registry.create();
-		registry.emplace<NodeHandle>(sceneRootEntity, NodeHandle::create<EnTTNode>("Scene", entt::handle(registry, sceneRootEntity)));
+		const entt::entity sceneRootEntity = createEnTTNode(registry, "Scene");
 
 		createSpawner(registry, sceneRootEntity, glm::vec2{ 350.0f, 0.0f });
 		createSpawner(registry, sceneRootEntity, glm::vec2{ 650.0f, 0.0f });
@@ -124,41 +122,55 @@ namespace Game::GameClientInternal {
 	}
 
 	entt::entity createFloor(entt::registry& registry) {
-		const auto tilesMaterialResourceHandle = Core::ResourceLoadRequest::create<Core::TypeLoader>(
-			registry, "assets/materials/tiles.json",
-			std::make_shared<Core::JsonTypeLoaderAdapter<Gfx::MaterialDescriptor>>());
+		using namespace Core;
+		using namespace Gfx;
 
-		const auto floorSprite = Core::ResourceLoadRequest::create<Core::TypeLoader>(
-			registry, "assets/sprites/floor.json",
-			std::make_shared<Core::JsonTypeLoaderAdapter<Gfx::SpriteDescriptor>>());
+		auto tilemapTypeLoader = std::make_shared<JsonTypeLoaderAdapter<TilemapDescriptor>>();
+		auto levelTileMap = ResourceLoadRequest::create<TypeLoader>(registry, "assets/tilemaps/level1.json", tilemapTypeLoader);
 
-		const auto floorEntity = registry.create();
-		registry.emplace<Core::NodeHandle>(floorEntity, Core::NodeHandle::create<Core::EnTTNode>(std::format("Floor"), entt::handle(registry, floorEntity)));
-		registry.emplace<Core::Spatial>(floorEntity, glm::vec3{ 650.0f, 750.0f, 1.0f }, glm::vec3{ 20.0f, 1.0f, 1.0f });
+		auto shaderProgramTypeLoader = std::make_shared<JsonTypeLoaderAdapter<ShaderProgramDescriptor>>();
+		auto shaderProgram = ResourceLoadRequest::create<TypeLoader>(registry, "assets/shaders/sprite_shader_program.json", shaderProgramTypeLoader);
 
-		registry.emplace<Gfx::RenderObject>(floorEntity, tilesMaterialResourceHandle);
-		registry.emplace<Gfx::SpriteObject>(floorEntity, floorSprite);
+		// Base Plate
+		const auto floorEntity = createEnTTNode(registry, "Floor");
+		registry.emplace<Spatial>(floorEntity, glm::vec3{ 650.0f, 750.0f, 1.0f }, glm::vec3{ 20.0f, 1.0f, 1.0f });
 
 		Physics2d::BoxCollisionShape boxCollisionDescriptor{
-			69.0f,
-			70.0f,
+			100.0f,
+			100.0f,
 		};
 		registry.emplace<Physics2d::CollisionShape>(floorEntity, boxCollisionDescriptor);
 		registry.emplace<Physics2d::Rigidbody>(floorEntity);
+
+		// Left end piece
+		const auto leftWallColliderEntity = createEnTTNode(registry, "FloorLeftWall");
+		registry.emplace<Spatial>(leftWallColliderEntity, glm::vec3{ -300.0f, 650.0f, 0.0f }, glm::vec3{ 1.0f, 1.0f, 1.0f });
+		registry.emplace<Physics2d::CollisionShape>(leftWallColliderEntity, boxCollisionDescriptor);
+		registry.emplace<Physics2d::Rigidbody>(leftWallColliderEntity);
+
+		const auto rightWallColliderEntity = createEnTTNode(registry, "FloorRightWall");
+		registry.emplace<Spatial>(rightWallColliderEntity, glm::vec3{ 1600.0f, 650.0f, 0.0f }, glm::vec3{ 1.0f, 1.0f, 1.0f });
+		registry.emplace<Physics2d::CollisionShape>(rightWallColliderEntity, boxCollisionDescriptor);
+		registry.emplace<Physics2d::Rigidbody>(rightWallColliderEntity);
+
+		const auto floorTilemapObject = createChildEnTTNode(registry, floorEntity, "FloorTilemap");
+		registry.emplace<Spatial>(floorTilemapObject, glm::vec3{ -1000.0f, -125.0f, 0.0f });
+		registry.emplace<TilemapObject>(floorTilemapObject, levelTileMap, shaderProgram);
+
 		return floorEntity;
 	}
 
-	entt::entity createCat(entt::registry& registry, Core::Scheduler& scheduler, Core::Timer& timer, glm::vec2 pos) {
+	entt::entity createCat(entt::registry& registry, glm::vec2 pos) {
 		static const CharacterConfig catResourceConfig {
 			"assets/materials/cat.json",
 			"assets/sprites/cat.json",
 			"assets/collision_shapes/cat.json",
 			"assets/sounds/cat_meow.wav",
-			300.0f,
-			7.5f
+			500.0f,
+			15.0f
 		};
-		const entt::entity catEntity = createCharacter(registry, catResourceConfig, scheduler, timer,
-			{ pos.x, pos.y, 2.0f }, { 8.0f, 8.0f, 1.0f }, 3.0f);
+		const entt::entity catEntity =
+			createCharacter(registry, catResourceConfig, { pos.x, pos.y, 2.0f }, { 8.0f, 8.0f, 1.0f }, 3.0f);
 		registry.emplace<CharacterController>(catEntity);
 
 		return catEntity;
@@ -246,7 +258,7 @@ namespace Game {
 					auto quitCallback = [this] {
 						entt::registry& registry{ mRegistry };
 						const entt::entity quitAppEntity = registry.create();
-						registry.emplace<Core::QuitAppRequest>(quitAppEntity);
+						registry.emplace<QuitAppRequest>(quitAppEntity);
 					};
 					const entt::entity mainMenuEntity = createMainMenu(mRegistry, std::move(playCallback), std::move(quitCallback));
 					addChildNode(mRegistry, mCameraEntity, mainMenuEntity);
@@ -263,7 +275,7 @@ namespace Game {
 		const entt::entity floorEntity = createFloor(registry);
 		addChildNode(registry, mSceneRootEntity, floorEntity);
 
-		const entt::entity catEntity = createCat(registry, mScheduler, mTimer, glm::vec2{ 650.0f, 650.0f });
+		const entt::entity catEntity = createCat(registry, glm::vec2{ 650.0f, 650.0f });
 		addChildNode(registry, mSceneRootEntity, catEntity);
 
 		registry.get<CameraController>(mCameraEntity).followEntity = catEntity;

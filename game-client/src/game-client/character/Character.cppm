@@ -26,7 +26,6 @@ export namespace Game {
 		float moveImpulse{};
 	};
 
-	entt::entity createCharacter(entt::registry&, const CharacterConfig&,
-		Core::Scheduler&, Core::Timer&, glm::vec3, glm::vec3, float);
+	entt::entity createCharacter(entt::registry&, const CharacterConfig&, glm::vec3, glm::vec3, float);
 
 } // namespace Game

@@ -34,8 +34,9 @@ import Physics2d.Reflection.CircleCollisionShape;
 
 namespace Game {
 
-	entt::entity createCharacter(entt::registry& registry, const CharacterConfig& characterConfig,
-		Core::Scheduler& scheduler, Core::Timer& timer, glm::vec3 pos, glm::vec3 scale, float soundRequestVolume) {
+	entt::entity createCharacter(
+		entt::registry& registry, const CharacterConfig& characterConfig, glm::vec3 pos, glm::vec3 scale,
+		float soundRequestVolume) {
 		using namespace Audio;
 		using namespace Core;
 		using namespace Gfx;
@@ -54,33 +55,25 @@ namespace Game {
 		const auto soundResource =
 			ResourceLoadRequest::create<SoundDescriptor>(registry, characterConfig.spawnSoundFilePath);
 
-		const auto characterRootNodeEntity = registry.create();
-		registry.emplace<Character>(characterRootNodeEntity, characterConfig.jumpImpulse, characterConfig.moveImpulse);
-		registry.emplace<Spatial>(characterRootNodeEntity, pos, scale);
-
 		const auto collisionShapeResource = ResourceLoadRequest::create<TypeLoader>(registry,
 			characterConfig.collisionShapeFilePath,
 			std::make_shared<JsonTypeLoaderAdapter<CollisionShapeDescriptor>>()
 		);
 
-		registry.emplace<CollisionShape>(characterRootNodeEntity, collisionShapeResource);
-		registry.emplace<Rigidbody>(characterRootNodeEntity, false);
-		registry.emplace<AudioSource>(characterRootNodeEntity, soundResource);
-		registry.emplace<PlaySoundSourceRequest>(characterRootNodeEntity, soundRequestVolume);
+		const auto characterEntity = createEnTTNode(registry, std::format("Character_{}", characterCounter));
+		registry.emplace<Character>(characterEntity, characterConfig.jumpImpulse, characterConfig.moveImpulse);
+		registry.emplace<Spatial>(characterEntity, pos, scale);
+		registry.emplace<CollisionShape>(characterEntity, collisionShapeResource);
+		registry.emplace<Rigidbody>(characterEntity, false);
+		registry.emplace<AudioSource>(characterEntity, soundResource);
+		registry.emplace<PlaySoundSourceRequest>(characterEntity, soundRequestVolume);
 
-		entt::handle characterRootHandle(registry, characterRootNodeEntity);
-		NodeHandle& characterRootNode{ registry.emplace<NodeHandle>(characterRootNodeEntity, NodeHandle::create<EnTTNode>(std::format("Character_{}", characterCounter), characterRootHandle)) };
-
-		const auto renderObjectEntity = registry.create();
+		const auto renderObjectEntity = createChildEnTTNode(registry, characterEntity, "RenderObject");
 		registry.emplace<Spatial>(renderObjectEntity);
-
 		registry.emplace<RenderObject>(renderObjectEntity, materialResource);
 		registry.emplace<SpriteObject>(renderObjectEntity, spriteResource);
 
-		auto& childNodeHandle = registry.emplace<NodeHandle>(renderObjectEntity, NodeHandle::create<EnTTNode>("RenderObject", entt::handle(registry, renderObjectEntity)));
-		characterRootNode.getNode()->addChild(childNodeHandle.getNode());
-
-		return characterRootNodeEntity;
+		return characterEntity;
 	}
 
 } // namespace Game

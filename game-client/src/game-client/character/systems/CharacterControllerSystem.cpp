@@ -55,9 +55,12 @@ namespace Game {
 					applyForceRequest.type = ForceType::Impulse;
 					applyForceRequest.force.x = inputX * character.moveImpulse;
 
+					if (!rigidBody.isOnGround) {
+						applyForceRequest.force.x *= 0.1f;
+					}
+
 					if (rigidBody.isOnGround && inputY != 0.0f) {
 						applyForceRequest.force.y = inputY * character.jumpImpulse;
-						applyForceRequest.force.x *= 0.5f;
 
 						if (!registry.all_of<Audio::PlaySoundSourceRequest>(entity)) {
 							Audio::PlaySoundSourceRequest playSoundRequest;

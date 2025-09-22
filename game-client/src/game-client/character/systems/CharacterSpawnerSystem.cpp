@@ -19,19 +19,19 @@ import Input.MouseState;
 
 namespace Game::CharacterSpawnerSystemInternal {
 
-	entt::entity createFrog(entt::registry& registry, Core::Scheduler& scheduler, Core::Timer& timer, glm::vec2 pos) {
+	entt::entity createFrog(entt::registry& registry, glm::vec2 pos) {
 		static const CharacterConfig frogResourceConfig {
 			"assets/materials/frog.json",
 			"assets/sprites/frog.json",
 			"assets/collision_shapes/frog.json",
 			"assets/sounds/frog_ribbit.ogg"
 		};
-		return createCharacter(registry, frogResourceConfig, scheduler, timer,
+		return createCharacter(registry, frogResourceConfig,
 			{ pos.x, pos.y, 1.0f }, { 2.0f, 2.0f, 1.0f }, 1.0f);
 	}
 
 	void resetCharacterSpawner(CharacterSpawner& characterSpawner, std::mt19937& random) {
-		std::uniform_int_distribution<int64_t> distribution(1000, 5000);
+		std::uniform_int_distribution<int64_t> distribution(100, 500);
 		const int64_t randomMilliseconds = distribution(random);
 
 		characterSpawner.mNextSpawn = std::chrono::steady_clock::now() + std::chrono::milliseconds(randomMilliseconds);
@@ -81,7 +81,7 @@ namespace Game {
 		using namespace CharacterSpawnerSystemInternal;
 
 		const glm::vec2 spawnPosition{ spatial.position.x, spatial.position.y };
-		const auto renderObjectEntity = createFrog(registry, mScheduler, mTimer, spawnPosition);
+		const auto renderObjectEntity = createFrog(registry, spawnPosition);
 		addChildNode(registry, spawner.sceneRoot, renderObjectEntity);
 	}
 

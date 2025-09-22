@@ -19,24 +19,16 @@ namespace Game {
 
 	const entt::entity createHUD(entt::registry& registry) {
 		using namespace Core;
+		using namespace Gfx;
 
-		const entt::entity hudEntity = registry.create();
+		const entt::entity hudEntity = createEnTTNode(registry, "HUD");
 		registry.emplace<HUD>(hudEntity);
 		registry.emplace<Spatial>(hudEntity);
-		registry.emplace<NodeHandle>(hudEntity, NodeHandle::create<EnTTNode>("HUD", entt::handle(registry, hudEntity)));
 
-		auto fontResource = ResourceLoadRequest::create<Gfx::FontDescriptor>(registry, "assets/fonts/roboto_regular.ttf");
-
-		const entt::entity scoreTextEntity{ registry.create() };
+		auto fontResource = ResourceLoadRequest::create<FontDescriptor>(registry, "assets/fonts/roboto_regular.ttf");
+		const entt::entity scoreTextEntity{ createChildEnTTNode(registry, hudEntity, "ScoreText") };
 		registry.emplace<Spatial>(scoreTextEntity, glm::vec3{ 200.0f, 100.0f, 0.0f });
-		registry.emplace<Gfx::FontObject>(scoreTextEntity,
-			R"(She said, "Hey y'all!"__  __  __gap
-Some text on a new line...
-uVvWwXxYyZz1234567890!.,/\
-"'[]{}-+()*&^%$#@)", fontResource);
-		registry.emplace<NodeHandle>(scoreTextEntity, NodeHandle::create<EnTTNode>("ScoreText", entt::handle(registry, scoreTextEntity)));
-
-		addChildNode(registry, hudEntity, scoreTextEntity);
+		registry.emplace<FontObject>(scoreTextEntity, "Score ---", fontResource);
 
 		return hudEntity;
 	}
