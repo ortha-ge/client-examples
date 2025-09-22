@@ -9,6 +9,7 @@ module Game.CharacterControllerSystem;
 import Audio.PlaySoundSourceRequest;
 import Game.Character;
 import Game.CharacterController;
+import Input.KeyboardEvent;
 import Input.KeyboardState;
 import Physics2d.ApplyForceRequest;
 import Physics2d.Rigidbody2d;
@@ -29,22 +30,27 @@ namespace Game {
 	}
 
 	void CharacterControllerSystem::tickSystem(entt::registry& registry) {
+		using namespace Input;
 		using namespace Physics2d;
 
 		float inputX = 0.0f;
 		float inputY = 0.0f;
 
-		registry.view<Input::KeyboardState>()
-			.each([&inputX, &inputY](const Input::KeyboardState& keyboardState) {
-				if (Input::isKeyPressed(keyboardState, Input::Key::Left)) {
-					inputX -= 1.0f;
-				} else if (Input::isKeyPressed(keyboardState, Input::Key::Right)) {
-					inputX += 1.0f;
-				}
+		registry.view<KeyboardEvent>()
+			.each([&inputY](const KeyboardEvent& keyboardEvent) {
+				if (keyboardEvent.key == Key::Space &&
+					keyboardEvent.eventType == InputEventType::Pressed) {
 
-				if (Input::isKeyPressed(keyboardState, Input::Key::Up)) {
 					inputY -= 1.0f;
-				} else if (Input::isKeyPressed(keyboardState, Input::Key::Down)) {
+				}
+			});
+
+		registry.view<KeyboardState>()
+			.each([&inputX](const KeyboardState& keyboardState) {
+				if (isKeyPressed(keyboardState, Key::Left)) {
+					inputX -= 1.0f;
+				} else if (isKeyPressed(keyboardState, Key::Right)) {
+					inputX += 1.0f;
 				}
 			});
 
