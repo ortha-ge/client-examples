@@ -31,7 +31,7 @@ namespace Game::CharacterSpawnerSystemInternal {
 	}
 
 	void resetCharacterSpawner(CharacterSpawner& characterSpawner, std::mt19937& random) {
-		std::uniform_int_distribution<int64_t> distribution(100, 500);
+		std::uniform_int_distribution<int64_t> distribution(1000, 5000);
 		const int64_t randomMilliseconds = distribution(random);
 
 		characterSpawner.mNextSpawn = std::chrono::steady_clock::now() + std::chrono::milliseconds(randomMilliseconds);
