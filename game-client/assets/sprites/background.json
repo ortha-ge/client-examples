@@ -1,5 +1,5 @@
 {
-    "Sprite": {
+    "SpriteDescriptor": {
         "frames": [
             {
                 "bottomLeft": { "x": 0.0, "y": 0.0 },
