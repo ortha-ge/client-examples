@@ -65,11 +65,16 @@ namespace Game::GameClientInternal {
 
 	entt::entity createCamera(entt::registry& registry, Core::Scheduler& scheduler, Core::Timer& timer) {
 		using namespace Core;
+		using namespace Gfx;
+
 		const entt::entity cameraEntity = createEnTTNode(registry, "Camera");
 		registry.emplace<CameraController>(cameraEntity, std::nullopt, glm::vec3{ 0.0f, -100.0f, 0.0f });
-		registry.emplace<Gfx::Camera>(cameraEntity, 60.0f);
+		registry.emplace<Camera>(cameraEntity);
 		registry.emplace<Spatial>(cameraEntity);
-		registry.emplace<Gfx::Viewport>(cameraEntity, cameraEntity, glm::vec2{ 0.0f, 0.0f}, glm::vec2{ 1.0f, 1.0f });
+		Viewport viewport {
+			.camera = cameraEntity
+		};
+		registry.emplace<Viewport>(cameraEntity, viewport);
 		return cameraEntity;
 	}
 
@@ -134,7 +139,7 @@ namespace Game::GameClientInternal {
 
 		// Base Plate
 		const auto floorEntity = createEnTTNode(registry, "Floor");
-		registry.emplace<Spatial>(floorEntity, glm::vec3{ 650.0f, 750.0f, 1.0f }, glm::vec3{ 20.0f, 1.0f, 1.0f });
+		registry.emplace<Spatial>(floorEntity, glm::vec3{ 650.0f, 750.0f, 10.0f }, glm::vec3{ 20.0f, 1.0f, 1.0f });
 
 		Physics2d::BoxCollisionShape boxCollisionDescriptor{
 			100.0f,

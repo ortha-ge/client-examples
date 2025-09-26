@@ -41,6 +41,8 @@ set (game-client-modules
 
 set (game-client-shaders-vs
         assets/shaders/vs_font.sc
+        assets/shaders/vs_ocornut_imgui.sc
+        assets/shaders/vs_ocornut_imgui_image.sc
         assets/shaders/vs_sprite.sc
         assets/shaders/vs_ui_colour.sc
         assets/shaders/vs_ui_image.sc
@@ -48,6 +50,8 @@ set (game-client-shaders-vs
 
 set (game-client-shaders-fs
         assets/shaders/fs_font.sc
+        assets/shaders/fs_ocornut_imgui.sc
+        assets/shaders/fs_ocornut_imgui_image.sc
         assets/shaders/fs_sprite.sc
         assets/shaders/fs_ui_colour.sc
         assets/shaders/fs_ui_image.sc

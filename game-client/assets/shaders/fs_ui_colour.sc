@@ -1,7 +1,7 @@
-$input v_colour
+$input v_color
 
 #include <bgfx_shader.sh>
 
 void main() {
-	gl_FragColor = vec4(v_colour.rgb, 1.0);
+	gl_FragColor = vec4(v_color.rgb, 1.0);
 }

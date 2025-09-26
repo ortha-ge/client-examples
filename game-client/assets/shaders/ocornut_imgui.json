@@ -1,0 +1,36 @@
+{
+    "ShaderProgram": {
+        "vertexShaderFilePath": "assets/shaders/vs_ocornut_imgui.sc",
+        "fragmentShaderFilePath": "assets/shaders/fs_ocornut_imgui.sc",
+        "uniforms": [
+            {
+                "name": "s_texColor",
+                "type": "Sampler"
+            },
+            {
+                "name": "u_imageLodEnabled",
+                "type": "Float4"
+            }
+        ],
+        "vertexLayout": {
+            "attributes": [
+                {
+                    "id": "Position",
+                    "elementCount": 2,
+                    "elementType": "float"
+                },
+                {
+                    "id": "TexCoord0",
+                    "elementCount": 2,
+                    "elementType": "float"
+                },
+                {
+                    "id": "Colour0",
+                    "elementCount": 4,
+                    "elementType": "uint8",
+                    "isNormalized": true
+                }
+            ]
+        }
+    }
+}
