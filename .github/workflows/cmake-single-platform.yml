@@ -20,15 +20,12 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest]
-        build_type: [Release, ReleaseMSVC, ReleaseEmscripten]
-        c_compiler: [clang, cl, emcc]
+        build_type: [Release, ReleaseMSVC]
+        c_compiler: [clang, cl]
         include:
           - os: ubuntu-latest
             c_compiler: clang
             cpp_compiler: clang++
-          - os: ubuntu-latest
-            c_compiler: emcc
-            cpp_compiler: em++
           - os: windows-latest
             c_compiler: cl
             cpp_compiler: cl
@@ -37,20 +34,10 @@ jobs:
             build_type: ReleaseMSVC
           - os: ubuntu-latest
             c_compiler: cl
-          - os: ubuntu-latest
-            c_compiler: clang
-            build_type: ReleaseEmscripten
-          - os: ubuntu-latest
-            c_compiler: emcc
-            build_type: Release
           - os: windows-latest
             build_type: Release
           - os: windows-latest
-            build_type: ReleaseEmscripten
-          - os: windows-latest
             c_compiler: clang
-          - os: windows-latest
-            c_compiler: emcc
       
     concurrency:
       group: build_${{ github.ref }}_${{ matrix.os }}
