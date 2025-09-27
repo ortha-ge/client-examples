@@ -59,7 +59,7 @@ namespace Game::GameClientInternal {
 
 	entt::entity createWindow(entt::registry& registry) {
 		const entt::entity windowEntity = registry.create();
-		registry.emplace<Core::Window>(windowEntity, "Ortha - Client Example", 1360, 768);
+		registry.emplace<Core::Window>(windowEntity, "Ortha - Client Example", 1920, 1080);
 		return windowEntity;
 	}
 
@@ -69,12 +69,11 @@ namespace Game::GameClientInternal {
 
 		const entt::entity cameraEntity = createEnTTNode(registry, "Camera");
 		registry.emplace<CameraController>(cameraEntity, std::nullopt, glm::vec3{ 0.0f, -100.0f, 0.0f });
-		registry.emplace<Camera>(cameraEntity);
 		registry.emplace<Spatial>(cameraEntity);
-		Viewport viewport {
-			.camera = cameraEntity
-		};
-		registry.emplace<Viewport>(cameraEntity, viewport);
+		registry.emplace<Viewport>(cameraEntity);
+		registry.emplace<Camera>(cameraEntity, Camera {
+			.viewport = cameraEntity
+		});
 		return cameraEntity;
 	}
 
@@ -241,6 +240,7 @@ namespace Game {
 		const entt::entity catEntity = createCat(registry, glm::vec2{ 650.0f, 650.0f });
 		addChildNode(registry, mSceneRootEntity, catEntity);
 
+		registry.get<Gfx::Camera>(mCameraEntity).sceneRoot = mSceneRootEntity;
 		registry.get<CameraController>(mCameraEntity).followEntity = catEntity;
 	}
 
