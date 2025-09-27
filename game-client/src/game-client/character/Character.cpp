@@ -60,8 +60,12 @@ namespace Game {
 			std::make_shared<JsonTypeLoaderAdapter<CollisionShapeDescriptor>>()
 		);
 
-		const auto characterEntity = createEnTTNode(registry, std::format("Character_{}", characterCounter));
-		registry.emplace<Character>(characterEntity, characterConfig.jumpImpulse, characterConfig.moveImpulse);
+		const auto characterEntity = createEnTTNode(registry, std::format("{}_{}",  characterConfig.name, characterCounter));
+		registry.emplace<Character>(characterEntity, Character {
+			.tag = characterConfig.tag,
+			.jumpImpulse = characterConfig.jumpImpulse,
+			.moveImpulse = characterConfig.moveImpulse
+		});
 		registry.emplace<Spatial>(characterEntity, pos, scale);
 		registry.emplace<CollisionShape>(characterEntity, collisionShapeResource);
 		registry.emplace<Rigidbody>(characterEntity, false);

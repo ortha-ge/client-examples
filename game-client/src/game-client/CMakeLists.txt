@@ -10,5 +10,6 @@ target_sources(game-client PRIVATE
 
 add_subdirectory(camera)
 add_subdirectory(character)
+add_subdirectory(player)
 add_subdirectory(services)
 add_subdirectory(ui)

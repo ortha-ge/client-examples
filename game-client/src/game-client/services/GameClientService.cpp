@@ -10,8 +10,10 @@ import DevTools.SystemsService;
 import Game.CameraControllerSystemService;
 import Game.CharacterControllerSystemService;
 import Game.CharacterSpawnerSystemService;
+import Game.FrogCollectorSystemService;
 import Game.HUDControllerSystemService;
 import Game.MainMenuControllerSystemService;
+import Game.CalculatePlayerScoreSystemService;
 import Gfx.SystemsService;
 import Input.SystemsService;
 import Physics2d.SystemsService;
@@ -33,6 +35,9 @@ namespace Game {
 		container.emplace<CameraControllerSystemService>();
 		container.emplace<CharacterControllerSystemService>();
 		container.emplace<CharacterSpawnerSystemService>();
+
+		container.emplace<FrogCollectorSystemService>();
+		container.emplace<CalculatePlayerScoreSystemService>();
 
 		container.emplace<HUDControllerSystemService>();
 		container.emplace<MainMenuControllerSystemService>();

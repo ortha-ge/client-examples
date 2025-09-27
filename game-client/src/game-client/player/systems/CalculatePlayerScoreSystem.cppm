@@ -2,18 +2,18 @@ module;
 
 #include <entt/fwd.hpp>
 
-export module Game.FrogCollectorSystem;
+export module Game.CalculatePlayerScoreSystem;
 
 import Core.EnTTRegistry;
 import Core.Scheduler;
 
 export namespace Game {
 
-	class FrogCollectorSystem {
+	class CalculatePlayerScoreSystem {
 	public:
 
-		FrogCollectorSystem(Core::EnTTRegistry&, Core::Scheduler&);
-		~FrogCollectorSystem();
+		CalculatePlayerScoreSystem(Core::EnTTRegistry&, Core::Scheduler&);
+		~CalculatePlayerScoreSystem();
 
 		void tickSystem(entt::registry&);
 

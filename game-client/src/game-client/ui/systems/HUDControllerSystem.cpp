@@ -9,6 +9,7 @@ module Game.HUDControllerSystem;
 import Core.EnTTNode;
 import Core.Node;
 import Game.HUD;
+import Game.PlayerScore;
 import Gfx.FontObject;
 
 namespace Game {
@@ -31,7 +32,13 @@ namespace Game {
 		using namespace Gfx;
 
 		registry.view<HUD, NodeHandle>()
-			.each([&registry](const NodeHandle& nodeHandle) {
+			.each([&registry](const HUD& hud, const NodeHandle& nodeHandle) {
+				if (!registry.all_of<PlayerScore>(hud.player)) {
+					return;
+				}
+
+				const auto& playerScore{ registry.get<PlayerScore>(hud.player) };
+
 				for (auto&& childNode : nodeHandle.getNode()->getChildren()) {
 					if (childNode->getName() != "ScoreText") {
 						continue;
@@ -43,10 +50,8 @@ namespace Game {
 						return;
 					}
 
-					static int score = 0;
 					auto& fontObject{ registry.get<FontObject>(scoreTextEntity) };
-					fontObject.text = std::format("Score {}", score);
-					score += 1000;
+					fontObject.text = std::format("Score {}", playerScore.score);
 				}
 			});
 	}

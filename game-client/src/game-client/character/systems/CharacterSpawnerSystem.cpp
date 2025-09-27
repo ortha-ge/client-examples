@@ -11,28 +11,19 @@ module Game.CharacterSpawnerSystem;
 
 import Core.EnTTNode;
 import Core.Spatial;
-import Game.Character;
-import Game.CharacterController;
 import Game.CharacterSpawner;
+import Game.FrogCharacter;
 import Input.KeyboardState;
 import Input.MouseState;
 
 namespace Game::CharacterSpawnerSystemInternal {
 
-	entt::entity createFrog(entt::registry& registry, glm::vec2 pos) {
-		static const CharacterConfig frogResourceConfig {
-			"assets/materials/frog.json",
-			"assets/sprites/frog.json",
-			"assets/collision_shapes/frog.json",
-			"assets/sounds/frog_ribbit.ogg"
-		};
-		return createCharacter(registry, frogResourceConfig,
-			{ pos.x, pos.y, 1.0f }, { 2.0f, 2.0f, 1.0f }, 1.0f);
-	}
-
 	void resetCharacterSpawner(CharacterSpawner& characterSpawner, std::mt19937& random) {
-		std::uniform_int_distribution<int64_t> distribution(1000, 5000);
+		std::uniform_int_distribution<int64_t> distribution(characterSpawner.mSpawnDelayResetMinMS, characterSpawner.mSpawnDelayResetMaxMS);
 		const int64_t randomMilliseconds = distribution(random);
+
+		characterSpawner.mSpawnDelayResetMinMS = std::max(100u, characterSpawner.mSpawnDelayResetMinMS - 100u);
+		characterSpawner.mSpawnDelayResetMaxMS = std::max(300u, characterSpawner.mSpawnDelayResetMaxMS - 100u);
 
 		characterSpawner.mNextSpawn = std::chrono::steady_clock::now() + std::chrono::milliseconds(randomMilliseconds);
 	}
@@ -81,7 +72,7 @@ namespace Game {
 		using namespace CharacterSpawnerSystemInternal;
 
 		const glm::vec2 spawnPosition{ spatial.position.x, spatial.position.y };
-		const auto renderObjectEntity = createFrog(registry, spawnPosition);
+		const auto renderObjectEntity = createFrogCharacter(registry, spawnPosition);
 		addChildNode(registry, spawner.sceneRoot, renderObjectEntity);
 	}
 

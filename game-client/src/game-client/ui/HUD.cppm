@@ -6,8 +6,10 @@ export module Game.HUD;
 
 export namespace Game {
 
-	const entt::entity createHUD(entt::registry&);
+	const entt::entity createHUD(entt::registry&, entt::entity);
 
-	struct HUD {};
+	struct HUD {
+		entt::entity player{ entt::null };
+	};
 
 } // namespace Game

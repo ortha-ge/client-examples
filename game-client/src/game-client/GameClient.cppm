@@ -35,6 +35,7 @@ export namespace Game {
 		Core::Scheduler& mScheduler;
 		Core::Timer& mTimer;
 
+		entt::entity mPlayerEntity{ entt::null };
 		entt::entity mWindowEntity{ entt::null };
 		entt::entity mCameraEntity{ entt::null };
 		entt::entity mSceneRootEntity{ entt::null };

@@ -29,8 +29,11 @@ import Core.TypeLoader;
 import Core.Window;
 import Game.CameraController;
 import Game.CharacterController;
+import Game.CatCharacter;
 import Game.Character;
 import Game.CharacterSpawner;
+import Game.Player;
+import Game.PlayerScore;
 import Game.HUD;
 import Game.MainMenu;
 import Gfx.Camera;
@@ -165,20 +168,11 @@ namespace Game::GameClientInternal {
 		return floorEntity;
 	}
 
-	entt::entity createCat(entt::registry& registry, glm::vec2 pos) {
-		static const CharacterConfig catResourceConfig {
-			"assets/materials/cat.json",
-			"assets/sprites/cat.json",
-			"assets/collision_shapes/cat.json",
-			"assets/sounds/cat_meow.wav",
-			500.0f,
-			15.0f
-		};
-		const entt::entity catEntity =
-			createCharacter(registry, catResourceConfig, { pos.x, pos.y, 2.0f }, { 8.0f, 8.0f, 1.0f }, 3.0f);
-		registry.emplace<CharacterController>(catEntity);
-
-		return catEntity;
+	entt::entity createPlayer(entt::registry& registry) {
+		const entt::entity playerEntity{ registry.create() };
+		registry.emplace<Player>(playerEntity);
+		registry.emplace<PlayerScore>(playerEntity);
+		return playerEntity;
 	}
 
 } // namespace GameClientInternal
@@ -196,7 +190,9 @@ namespace Game {
 		const entt::entity backgroundEntity = createBackground(registry);
 		addChildNode(registry, mCameraEntity, backgroundEntity);
 
-		const entt::entity hudEntity = createHUD(registry);
+		mPlayerEntity = createPlayer(registry);
+
+		const entt::entity hudEntity = createHUD(registry, mPlayerEntity);
 		addChildNode(registry, mCameraEntity, hudEntity);
 
 		createScene(registry);
@@ -237,8 +233,10 @@ namespace Game {
 		const entt::entity floorEntity = createFloor(registry);
 		addChildNode(registry, mSceneRootEntity, floorEntity);
 
-		const entt::entity catEntity = createCat(registry, glm::vec2{ 650.0f, 650.0f });
+		const entt::entity catEntity = createCatCharacter(registry, glm::vec2{ 650.0f, 650.0f });
 		addChildNode(registry, mSceneRootEntity, catEntity);
+
+		registry.get<Player>(mPlayerEntity).character = catEntity;
 
 		registry.get<Gfx::Camera>(mCameraEntity).sceneRoot = mSceneRootEntity;
 		registry.get<CameraController>(mCameraEntity).followEntity = catEntity;
