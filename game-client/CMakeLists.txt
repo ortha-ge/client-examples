@@ -3,42 +3,6 @@ cmake_minimum_required(VERSION 3.31)
 
 find_package(bgfx CONFIG REQUIRED)
 
-set (game-client-src
-        src/game-client/GameClient.cpp
-        src/game-client/main.cpp
-        src/game-client/camera/systems/CameraControllerSystem.cpp
-        src/game-client/character/Character.cpp
-        src/game-client/character/systems/CharacterControllerSystem.cpp
-        src/game-client/character/systems/CharacterSpawnerSystem.cpp
-        src/game-client/services/GameClientService.cpp
-        src/game-client/ui/HUD.cpp
-        src/game-client/ui/MainMenu.cpp
-        src/game-client/ui/systems/HUDControllerSystem.cpp
-        src/game-client/ui/systems/MainMenuControllerSystem.cpp
-)
-
-set (game-client-modules
-        src/game-client/GameClient.cppm
-        src/game-client/camera/CameraController.cppm
-        src/game-client/camera/systems/CameraControllerSystem.cppm
-        src/game-client/character/Character.cppm
-        src/game-client/character/CharacterController.cppm
-        src/game-client/character/CharacterSpawner.cppm
-        src/game-client/character/systems/CharacterControllerSystem.cppm
-        src/game-client/character/systems/CharacterSpawnerSystem.cppm
-        src/game-client/services/CameraControllerSystemService.cppm
-        src/game-client/services/CharacterControllerSystemService.cppm
-        src/game-client/services/CharacterSpawnerSystemService.cppm
-        src/game-client/services/GameClientService.cppm
-        src/game-client/ui/HUD.cppm
-        src/game-client/ui/MainMenu.cppm
-        src/game-client/ui/MainMenuController.cppm
-        src/game-client/ui/services/HUDControllerSystemService.cppm
-        src/game-client/ui/services/MainMenuControllerSystemService.cppm
-        src/game-client/ui/systems/HUDControllerSystem.cppm
-        src/game-client/ui/systems/MainMenuControllerSystem.cppm
-)
-
 set (game-client-shaders-vs
         assets/shaders/vs_font.sc
         assets/shaders/vs_ocornut_imgui.sc
@@ -77,15 +41,13 @@ bgfx_compile_shaders(
 		# 	[AS_HEADERS]
 )
 
-set(game-client-src ${game-client-src} ${game-client-modules})
+set(game-client-shaders)
 
 if (NOT EMSCRIPTEN_BUILD)
-set(game-client-src ${game-client-src} ${game-client-shaders-vs} ${game-client-shaders-fs})
+set(game-client-shaders ${game-client-shaders-vs} ${game-client-shaders-fs})
 endif()
 
-add_executable(game-client ${game-client-src})
-
-target_sources(game-client PUBLIC FILE_SET modules TYPE CXX_MODULES FILES ${game-client-modules})
+add_executable(game-client ${game-client-shaders})
 
 set(game-client-libs
         core-lib
@@ -115,4 +77,7 @@ add_custom_target(game-client-assets
         "$<TARGET_FILE_DIR:game-client>/assets/"
     COMMENT "Copying assets"
 )
+
 add_dependencies(game-client game-client-assets)
+
+add_subdirectory(src)
