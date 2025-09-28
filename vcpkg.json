@@ -13,6 +13,7 @@
             "name": "imgui",
             "features": [ "docking-experimental" ]
         },
+        "imguizmo",
         "kangaru",
         "lua",
         "rapidjson",
