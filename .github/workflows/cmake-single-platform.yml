@@ -49,7 +49,7 @@ jobs:
         lfs: 'true'
 
     - name: Setup MSVC dev tools
-      if: matrix.os == 'Windows'
+      if: matrix.os == 'windows-latest'
       uses: ilammy/msvc-dev-cmd@v1
 
     - name: Setup Emscripten
@@ -88,7 +88,7 @@ jobs:
       run: cmake --build --preset "${{ matrix.build_type }}" --target game-client
 
     - name: Archive - Linux
-      if: runner.os != 'Windows'
+      if: matrix.os != 'windows-latest'
       uses: actions/upload-artifact@v4
       with:
         name: game-client-${{ matrix.build_type }}
@@ -97,7 +97,7 @@ jobs:
           build/release/game-client/assets/
 
     - name: Archive - Windows
-      if: runner.os == 'Windows'
+      if: matrix.os == 'windows-latest'
       uses: actions/upload-artifact@v4
       with:
         name: game-client-${{ matrix.build_type }}
