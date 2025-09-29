@@ -6,14 +6,12 @@
         },
         "box2d",
         "catch2",
-        "entt",
         "glfw3",
         {
             "name": "imgui",
             "features": [ "docking-experimental" ]
         },
         "imguizmo",
-        "kangaru",
         "lua",
         "rapidjson",
         "quickjs-ng",
