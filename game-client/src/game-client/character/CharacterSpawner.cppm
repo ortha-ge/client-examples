@@ -5,6 +5,7 @@ module;
 export module Game.CharacterSpawner;
 
 import entt;
+import glm;
 
 export namespace Game {
 
@@ -14,5 +15,7 @@ export namespace Game {
 		uint32_t mSpawnDelayResetMinMS{ 1000 };
 		uint32_t mSpawnDelayResetMaxMS{ 5000 };
 	};
+
+	entt::entity createCharacterSpawner(entt::registry&, entt::entity, glm::vec2);
 
 } // namespace Game

@@ -7,6 +7,7 @@ module Game.FrogCollectorSystem;
 
 import Audio.PlaySoundSourceRequest;
 import Core.Node;
+import Core.NodeHandle;
 import Core.Spatial;
 import Game.Character;
 import Game.FrogCollector;

@@ -10,6 +10,7 @@ module Game.HUDControllerSystem;
 
 import Core.EnTTNode;
 import Core.Node;
+import Core.NodeHandle;
 import Game.HUD;
 import Game.PlayerScore;
 import Gfx.FontObject;

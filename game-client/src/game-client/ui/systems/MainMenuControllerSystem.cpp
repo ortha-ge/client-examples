@@ -8,6 +8,7 @@ module Game.MainMenuControllerSystem;
 import Core.EnTTNode;
 import Core.Log;
 import Core.Node;
+import Core.NodeHandle;
 import Core.TypeId;
 import Game.MainMenuController;
 import UI.Button;

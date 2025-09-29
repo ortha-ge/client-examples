@@ -11,6 +11,7 @@ target_sources(game-client PUBLIC FILE_SET modules TYPE CXX_MODULES FILES
 target_sources(game-client PRIVATE
         CatCharacter.cpp
         Character.cpp
+        CharacterSpawner.cpp
         FrogCharacter.cpp
 )
 

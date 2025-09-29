@@ -14,7 +14,6 @@ import Core.Node;
 import Core.ResourceLoadRequest;
 import Core.Scheduler;
 import Core.Spatial;
-import Core.TemplateNode;
 import Core.Timer;
 import Core.TypeLoader;
 import Game.CharacterController;
