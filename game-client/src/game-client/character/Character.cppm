@@ -2,13 +2,12 @@ module;
 
 #include <string>
 
-#include <entt/fwd.hpp>
-#include <glm/vec3.hpp>
-
 export module Game.Character;
 
 import Core.Scheduler;
 import Core.Timer;
+import entt;
+import glm;
 
 export namespace Game {
 

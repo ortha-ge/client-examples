@@ -2,8 +2,6 @@ module;
 
 #include <utility>
 
-#include <entt/entt.hpp>
-
 module Game.CalculatePlayerScoreSystem;
 
 import Game.Character;
@@ -13,7 +11,7 @@ import Game.PlayerScore;
 
 namespace Game {
 
-	CalculatePlayerScoreSystem::CalculatePlayerScoreSystem(Core::EnTTRegistry& registry, Core::Scheduler& scheduler)
+	CalculatePlayerScoreSystem::CalculatePlayerScoreSystem(entt::registry& registry, Core::Scheduler& scheduler)
 		: mRegistry(registry)
 		, mScheduler(scheduler) {
 

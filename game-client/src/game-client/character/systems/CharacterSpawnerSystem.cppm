@@ -2,22 +2,20 @@ module;
 
 #include <random>
 
-#include <entt/fwd.hpp>
-
 export module Game.CharacterSpawnerSystem;
 
-import Core.EnTTRegistry;
 import Core.Scheduler;
 import Core.Spatial;
 import Core.Timer;
 import Game.CharacterSpawner;
+import entt;
 
 export namespace Game {
 
 	class CharacterSpawnerSystem {
 	public:
 
-		CharacterSpawnerSystem(Core::EnTTRegistry&, Core::Scheduler&, Core::Timer&);
+		CharacterSpawnerSystem(entt::registry&, Core::Scheduler&, Core::Timer&);
 		~CharacterSpawnerSystem();
 
 		void tickSystem(entt::registry&);
@@ -25,7 +23,7 @@ export namespace Game {
 
 	private:
 
-		Core::EnTTRegistry& mRegistry;
+		entt::registry& mRegistry;
 		Core::Scheduler& mScheduler;
 		Core::Timer& mTimer;
 		Core::TaskHandle mTickHandle;

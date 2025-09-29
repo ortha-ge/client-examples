@@ -1,7 +1,6 @@
 
 #include <filesystem>
 
-#include <entt/entt.hpp>
 #include <tracy/Tracy.hpp>
 
 #ifdef __EMSCRIPTEN__
@@ -15,6 +14,7 @@ import Core.SchedulerService;
 import Core.SystemsService;
 import Core.QuitAppRequest;
 import Game.ClientService;
+import entt;
 
 static kgr::container* sContainer = nullptr;
 

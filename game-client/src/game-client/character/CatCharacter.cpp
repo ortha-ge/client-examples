@@ -1,13 +1,10 @@
-module;
-
-#include <entt/entt.hpp>
-#include <glm/vec2.hpp>
-
 module Game.CatCharacter;
 
 import Game.Character;
 import Game.CharacterController;
 import Game.FrogCollector;
+import entt;
+import glm;
 
 namespace Game {
 

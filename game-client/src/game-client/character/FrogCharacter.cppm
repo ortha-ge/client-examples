@@ -1,9 +1,7 @@
-module;
-
-#include <entt/fwd.hpp>
-#include <glm/vec2.hpp>
-
 export module Game.FrogCharacter;
+
+import entt;
+import glm;
 
 export namespace Game {
 

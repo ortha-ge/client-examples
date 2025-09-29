@@ -1,8 +1,7 @@
 module;
 
+#include <string>
 #include <utility>
-
-#include <entt/entt.hpp>
 
 module Game.FrogCollectorSystem;
 
@@ -15,7 +14,7 @@ import Physics2d.CollisionEvent;
 
 namespace Game {
 
-	FrogCollectorSystem::FrogCollectorSystem(Core::EnTTRegistry& registry, Core::Scheduler& scheduler)
+	FrogCollectorSystem::FrogCollectorSystem(entt::registry& registry, Core::Scheduler& scheduler)
 		: mRegistry(registry)
 		, mScheduler(scheduler) {
 

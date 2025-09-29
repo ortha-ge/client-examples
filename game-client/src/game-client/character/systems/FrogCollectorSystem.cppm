@@ -1,25 +1,21 @@
-module;
-
-#include <entt/fwd.hpp>
-
 export module Game.FrogCollectorSystem;
 
-import Core.EnTTRegistry;
 import Core.Scheduler;
+import entt;
 
 export namespace Game {
 
 	class FrogCollectorSystem {
 	public:
 
-		FrogCollectorSystem(Core::EnTTRegistry&, Core::Scheduler&);
+		FrogCollectorSystem(entt::registry&, Core::Scheduler&);
 		~FrogCollectorSystem();
 
 		void tickSystem(entt::registry&);
 
 	private:
 
-		Core::EnTTRegistry& mRegistry;
+		entt::registry& mRegistry;
 		Core::Scheduler& mScheduler;
 		Core::TaskHandle mTickHandle;
 

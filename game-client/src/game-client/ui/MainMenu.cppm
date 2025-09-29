@@ -1,10 +1,10 @@
 module;
 
-#include <entt/fwd.hpp>
-
 #include <functional>
 
 export module Game.MainMenu;
+
+import entt;
 
 export namespace Game {
 

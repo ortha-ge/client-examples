@@ -2,9 +2,9 @@ module;
 
 #include <chrono>
 
-#include <entt/entt.hpp>
-
 export module Game.CharacterSpawner;
+
+import entt;
 
 export namespace Game {
 

@@ -4,9 +4,6 @@ module;
 #include <random>
 #include <utility>
 
-#include <entt/entt.hpp>
-#include <glm/vec2.hpp>
-
 module Game.CharacterSpawnerSystem;
 
 import Core.EnTTNode;
@@ -15,6 +12,8 @@ import Game.CharacterSpawner;
 import Game.FrogCharacter;
 import Input.KeyboardState;
 import Input.MouseState;
+import entt;
+import glm;
 
 namespace Game::CharacterSpawnerSystemInternal {
 
@@ -22,8 +21,8 @@ namespace Game::CharacterSpawnerSystemInternal {
 		std::uniform_int_distribution<int64_t> distribution(characterSpawner.mSpawnDelayResetMinMS, characterSpawner.mSpawnDelayResetMaxMS);
 		const int64_t randomMilliseconds = distribution(random);
 
-		characterSpawner.mSpawnDelayResetMinMS = std::max(400u, characterSpawner.mSpawnDelayResetMinMS - 100u);
-		characterSpawner.mSpawnDelayResetMaxMS = std::max(500u, characterSpawner.mSpawnDelayResetMaxMS - 100u);
+		characterSpawner.mSpawnDelayResetMinMS = std::max(800u, characterSpawner.mSpawnDelayResetMinMS - 100u);
+		characterSpawner.mSpawnDelayResetMaxMS = std::max(1000u, characterSpawner.mSpawnDelayResetMaxMS - 100u);
 
 		characterSpawner.mNextSpawn = std::chrono::steady_clock::now() + std::chrono::milliseconds(randomMilliseconds);
 	}
@@ -32,7 +31,7 @@ namespace Game::CharacterSpawnerSystemInternal {
 
 namespace Game {
 
-	CharacterSpawnerSystem::CharacterSpawnerSystem(Core::EnTTRegistry& registry, Core::Scheduler& scheduler, Core::Timer& timer)
+	CharacterSpawnerSystem::CharacterSpawnerSystem(entt::registry& registry, Core::Scheduler& scheduler, Core::Timer& timer)
 		: mRegistry(registry)
 		, mScheduler(scheduler)
 		, mTimer(timer) {

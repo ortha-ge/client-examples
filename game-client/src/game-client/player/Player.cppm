@@ -1,8 +1,6 @@
-module;
-
-#include <entt/entity/entity.hpp>
-
 export module Game.Player;
+
+import entt;
 
 export namespace Game {
 

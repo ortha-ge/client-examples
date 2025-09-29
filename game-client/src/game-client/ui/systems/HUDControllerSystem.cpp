@@ -1,8 +1,10 @@
 module;
 
+#include <format>
+#include <memory>
+#include <string>
 #include <utility>
-
-#include <entt/entt.hpp>
+#include <vector>
 
 module Game.HUDControllerSystem;
 
@@ -14,7 +16,7 @@ import Gfx.FontObject;
 
 namespace Game {
 
-	HUDControllerSystem::HUDControllerSystem(Core::EnTTRegistry& registry, Core::Scheduler& scheduler)
+	HUDControllerSystem::HUDControllerSystem(entt::registry& registry, Core::Scheduler& scheduler)
 		: mRegistry(registry)
 		, mScheduler(scheduler) {
 

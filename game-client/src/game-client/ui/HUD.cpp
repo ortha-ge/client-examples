@@ -1,11 +1,4 @@
-module;
-
-#include <entt/entt.hpp>
-
-#include <glm/vec3.hpp>
-
 module Game.HUD;
-
 
 import Core.EnTTNode;
 import Core.Node;
@@ -13,7 +6,7 @@ import Core.ResourceLoadRequest;
 import Core.Spatial;
 import Gfx.FontDescriptor;
 import Gfx.FontObject;
-
+import glm;
 
 namespace Game {
 

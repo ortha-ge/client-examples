@@ -3,8 +3,6 @@ module;
 #include <chrono>
 #include <utility>
 
-#include <entt/entt.hpp>
-
 module Game.MainMenuControllerSystem;
 
 import Core.EnTTNode;
@@ -37,7 +35,7 @@ namespace Game::MainMenuControllerSystemInternal {
 
 namespace Game {
 
-	MainMenuControllerSystem::MainMenuControllerSystem(Core::EnTTRegistry& registry, Core::Scheduler& scheduler)
+	MainMenuControllerSystem::MainMenuControllerSystem(entt::registry& registry, Core::Scheduler& scheduler)
 		: mRegistry(registry)
 		, mScheduler(scheduler) {
 

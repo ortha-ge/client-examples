@@ -8,7 +8,6 @@
         "catch2",
         "entt",
         "glfw3",
-        "glm",
         {
             "name": "imgui",
             "features": [ "docking-experimental" ]

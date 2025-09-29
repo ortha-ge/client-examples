@@ -1,9 +1,7 @@
-module;
-
-#include <entt/fwd.hpp>
-#include <glm/vec2.hpp>
-
 export module Game.CatCharacter;
+
+import entt;
+import glm;
 
 export namespace Game {
 

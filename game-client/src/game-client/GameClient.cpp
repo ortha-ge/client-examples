@@ -4,8 +4,6 @@ module;
 #include <memory>
 #include <random>
 
-#include <entt/entt.hpp>
-#include <glm/glm.hpp>
 #include <tracy/Tracy.hpp>
 
 module Game.Client;
@@ -57,6 +55,8 @@ import Physics2d.CollisionShape;
 import Physics2d.Rigidbody2d;
 import Physics2d.Reflection.BoxCollisionShape;
 import Physics2d.Reflection.CircleCollisionShape;
+import entt;
+import glm;
 
 namespace Game::GameClientInternal {
 
@@ -179,10 +179,11 @@ namespace Game::GameClientInternal {
 
 namespace Game {
 
-	Client::Client(Core::EnTTRegistry& registry, Core::Scheduler& scheduler, Core::Timer& timer)
+	Client::Client(entt::registry& registry, Core::Scheduler& scheduler, Core::Timer& timer)
 		: mRegistry(registry)
 		, mScheduler{ scheduler }
 		, mTimer{ timer } {
+		using namespace Core;
 		using namespace GameClientInternal;
 
 		mWindowEntity = createWindow(registry);

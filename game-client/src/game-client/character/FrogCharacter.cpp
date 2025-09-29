@@ -1,8 +1,3 @@
-module;
-
-#include <entt/entt.hpp>
-#include <glm/vec2.hpp>
-
 module Game.FrogCharacter;
 
 import Game.Character;

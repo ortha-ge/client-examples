@@ -1,8 +1,6 @@
-module;
-
-#include <entt/entt.hpp>
-
 export module Game.HUD;
+
+import entt;
 
 export namespace Game {
 

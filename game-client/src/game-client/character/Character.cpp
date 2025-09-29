@@ -3,9 +3,6 @@ module;
 #include <format>
 #include <memory>
 
-#include <entt/entt.hpp>
-#include <glm/vec3.hpp>
-
 module Game.Character;
 
 import Audio.AudioSource;
@@ -31,6 +28,8 @@ import Physics2d.CollisionShape;
 import Physics2d.Rigidbody2d;
 import Physics2d.Reflection.BoxCollisionShape;
 import Physics2d.Reflection.CircleCollisionShape;
+import entt;
+import glm;
 
 namespace Game {
 

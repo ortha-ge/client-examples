@@ -1,10 +1,7 @@
 module;
 
+#include <cmath>
 #include <utility>
-
-#include <entt/entt.hpp>
-#include <glm/ext/quaternion_common.hpp>
-#include <glm/glm.hpp>
 
 module Game.CameraControllerSystem;
 
@@ -13,10 +10,12 @@ import Core.Spatial;
 import Game.CameraController;
 import Gfx.Camera;
 import Gfx.Viewport;
+import entt;
+import glm;
 
 namespace Game {
 
-	CameraControllerSystem::CameraControllerSystem(Core::EnTTRegistry& registry, Core::Scheduler& scheduler, Core::Timer& timer)
+	CameraControllerSystem::CameraControllerSystem(entt::registry& registry, Core::Scheduler& scheduler, Core::Timer& timer)
 		: mRegistry(registry)
 		, mScheduler(scheduler)
 		, mTimer(timer) {

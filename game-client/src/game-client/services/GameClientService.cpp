@@ -1,7 +1,3 @@
-module;
-
-#include <entt/entt.hpp>
-
 module Game.ClientService;
 
 import Audio.SystemsService;

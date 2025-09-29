@@ -1,8 +1,7 @@
 module;
 
 #include <chrono>
-#include <entt/entt.hpp>
-#include <glm/vec3.hpp>
+#include <functional>
 
 module Game.MainMenu;
 
@@ -16,6 +15,7 @@ import Gfx.FontObject;
 import Gfx.ImageDescriptor;
 import UI.Button;
 import UI.ImageButton;
+import glm;
 
 namespace Game {
 

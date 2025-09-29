@@ -1,13 +1,7 @@
-module;
-
-#include <entt/entity/entity.hpp>
-#include <entt/fwd.hpp>
-
 export module Game.Client;
 
 import Audio.Systems;
 import Core.Systems;
-import Core.EnTTRegistry;
 import Core.Scheduler;
 import Core.Timer;
 import DevTools.Systems;
@@ -16,12 +10,13 @@ import Input.Systems;
 import Physics2d.Systems;
 //import ScriptingJS.Systems;
 import ScriptingLua.Systems;
+import entt;
 
 export namespace Game {
 
 	class Client {
 	public:
-		Client(Core::EnTTRegistry&, Core::Scheduler&, Core::Timer&);
+		Client(entt::registry&, Core::Scheduler&, Core::Timer&);
 		~Client();
 
 		void tickClient(entt::registry&);

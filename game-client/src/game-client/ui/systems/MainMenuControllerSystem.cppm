@@ -1,25 +1,21 @@
-module;
-
-#include <entt/fwd.hpp>
-
 export module Game.MainMenuControllerSystem;
 
-import Core.EnTTRegistry;
 import Core.Scheduler;
+import entt;
 
 export namespace Game {
 
 	class MainMenuControllerSystem {
 	public:
 
-		MainMenuControllerSystem(Core::EnTTRegistry&, Core::Scheduler&);
+		MainMenuControllerSystem(entt::registry&, Core::Scheduler&);
 		~MainMenuControllerSystem();
 
 		void tickSystem(entt::registry&);
 
 	private:
 
-		Core::EnTTRegistry& mRegistry;
+		entt::registry& mRegistry;
 		Core::Scheduler& mScheduler;
 		Core::TaskHandle mTickHandle;
 
