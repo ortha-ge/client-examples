@@ -4,33 +4,33 @@
 [submodule "deps/soloud"]
 	path = deps/soloud
 	url = https://github.com/jarikomppa/soloud.git
-[submodule "devtools-lib"]
+[submodule "ortha-devtools"]
 	path = ortha-devtools
-	url = git@github.com:ortha-ge/devtools-lib.git
-[submodule "input-lib"]
+	url = git@github.com:ortha-ge/ortha-devtools.git
+[submodule "ortha-input"]
 	path = ortha-input
-	url = git@github.com:ortha-ge/input-lib.git
-[submodule "gfx-lib"]
+	url = git@github.com:ortha-ge/ortha-input.git
+[submodule "ortha-gfx"]
 	path = ortha-gfx
-	url = git@github.com:ortha-ge/gfx-lib.git
-[submodule "core-lib"]
+	url = git@github.com:ortha-ge/ortha-gfx.git
+[submodule "ortha-core"]
 	path = ortha-core
-	url = git@github.com:ortha-ge/core-lib.git
-[submodule "audio-lib"]
+	url = git@github.com:ortha-ge/ortha-core.git
+[submodule "ortha-audio"]
 	path = ortha-audio
-	url = git@github.com:ortha-ge/audio-lib.git
-[submodule "scripting-js-lib"]
+	url = git@github.com:ortha-ge/ortha-audio.git
+[submodule "ortha-scripting-js"]
 	path = ortha-scripting-js
-	url = git@github.com:ortha-ge/scripting-js-lib.git
-[submodule "scripting-lua-lib"]
+	url = git@github.com:ortha-ge/ortha-scripting-js.git
+[submodule "ortha-scripting-lua"]
 	path = ortha-scripting-lua
-	url = git@github.com:ortha-ge/scripting-lua-lib.git
-[submodule "physics2d-lib"]
+	url = git@github.com:ortha-ge/ortha-scripting-lua.git
+[submodule "ortha-physics2d"]
 	path = ortha-physics2d
-	url = git@github.com:ortha-ge/physics2d-lib.git
-[submodule "ui-library"]
+	url = git@github.com:ortha-ge/ortha-physics2d.git
+[submodule "ortha-ui"]
 	path = ortha-ui
-	url = git@github.com:ortha-ge/ui-library.git
-[submodule "rtti"]
+	url = git@github.com:ortha-ge/ortha-ui.git
+[submodule "ortha-rtti"]
 	path = ortha-rtti
 	url = git@github.com:ortha-ge/ortha-rtti.git
