@@ -9,7 +9,7 @@ import Core.EnTTNode;
 import Core.Log;
 import Core.Node;
 import Core.NodeHandle;
-import Core.TypeId;
+import Ortha.RTTI.TypeId;
 import Game.MainMenuController;
 import UI.Button;
 import UI.ImageButton;
@@ -63,7 +63,7 @@ namespace Game {
 				}
 
 				for (auto&& childNodeHandle : nodeHandle.getNode()->getChildren()) {
-					if (childNodeHandle->getTypeId() != TypeId::get<EnTTNode>()) {
+					if (childNodeHandle->getTypeId() != Ortha::RTTI::TypeId::get<EnTTNode>()) {
 						continue;
 					}
 

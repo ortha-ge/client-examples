@@ -31,3 +31,6 @@
 [submodule "ui-library"]
 	path = ui-library
 	url = git@github.com:ortha-ge/ui-library.git
+[submodule "rtti"]
+	path = rtti
+	url = git@github.com:ortha-ge/ortha-rtti.git
