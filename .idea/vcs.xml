@@ -2,18 +2,18 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/audio-lib" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/core-lib" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/deps/soloud" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/deps/vcpkg" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/devtools-lib" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/devtools-lib/deps/IconFontCppHeaders" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/gfx-lib" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/input-lib" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/physics2d-lib" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ortha-audio" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ortha-core" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ortha-devtools" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ortha-devtools/deps/IconFontCppHeaders" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ortha-gfx" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ortha-input" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ortha-physics2d" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ortha-scripting-js" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ortha-scripting-lua" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/rtti" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/scripting-js-lib" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/scripting-lua-lib" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/ui-library" vcs="Git" />
   </component>
 </project>

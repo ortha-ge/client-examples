@@ -50,15 +50,15 @@ endif()
 add_executable(game-client ${game-client-shaders})
 
 set(game-client-libs
-        core-lib
-        gfx-lib
-        ui-lib
-        input-lib
-        audio-lib
-        devtools-lib
-        physics2d-lib
-        scripting-js-lib
-        scripting-lua-lib
+        ortha-core
+        ortha-gfx
+        ortha-ui
+        ortha-input
+        ortha-audio
+        ortha-devtools
+        ortha-physics2d
+        ortha-scripting-js
+        ortha-scripting-lua
 )
 
 target_compile_features(game-client PRIVATE cxx_std_23)

@@ -5,32 +5,32 @@
 	path = deps/soloud
 	url = https://github.com/jarikomppa/soloud.git
 [submodule "devtools-lib"]
-	path = devtools-lib
+	path = ortha-devtools
 	url = git@github.com:ortha-ge/devtools-lib.git
 [submodule "input-lib"]
-	path = input-lib
+	path = ortha-input
 	url = git@github.com:ortha-ge/input-lib.git
 [submodule "gfx-lib"]
-	path = gfx-lib
+	path = ortha-gfx
 	url = git@github.com:ortha-ge/gfx-lib.git
 [submodule "core-lib"]
-	path = core-lib
+	path = ortha-core
 	url = git@github.com:ortha-ge/core-lib.git
 [submodule "audio-lib"]
-	path = audio-lib
+	path = ortha-audio
 	url = git@github.com:ortha-ge/audio-lib.git
 [submodule "scripting-js-lib"]
-	path = scripting-js-lib
+	path = ortha-scripting-js
 	url = git@github.com:ortha-ge/scripting-js-lib.git
 [submodule "scripting-lua-lib"]
-	path = scripting-lua-lib
+	path = ortha-scripting-lua
 	url = git@github.com:ortha-ge/scripting-lua-lib.git
 [submodule "physics2d-lib"]
-	path = physics2d-lib
+	path = ortha-physics2d
 	url = git@github.com:ortha-ge/physics2d-lib.git
 [submodule "ui-library"]
-	path = ui-library
+	path = ortha-ui
 	url = git@github.com:ortha-ge/ui-library.git
 [submodule "rtti"]
-	path = rtti
+	path = ortha-rtti
 	url = git@github.com:ortha-ge/ortha-rtti.git
