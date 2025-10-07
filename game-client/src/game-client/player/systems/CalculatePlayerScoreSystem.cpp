@@ -11,7 +11,7 @@ import Game.PlayerScore;
 
 namespace Game {
 
-	CalculatePlayerScoreSystem::CalculatePlayerScoreSystem(entt::registry& registry, Core::Scheduler& scheduler)
+	CalculatePlayerScoreSystem::CalculatePlayerScoreSystem(entt::registry& registry, Ortha::Core::Scheduler& scheduler)
 		: mRegistry(registry)
 		, mScheduler(scheduler) {
 

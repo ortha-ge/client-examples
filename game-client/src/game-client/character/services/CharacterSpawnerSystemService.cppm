@@ -13,6 +13,6 @@ export namespace Game {
 	struct CharacterSpawnerSystemService
 		: kgr::single_service<
 			  CharacterSpawnerSystem,
-			  kgr::dependency<Core::EnTTRegistryService, Core::SchedulerService, Core::TimerService>> {};
+			  kgr::dependency<Ortha::Core::EnTTRegistryService, Ortha::Core::SchedulerService, Ortha::Core::TimerService>> {};
 
 } // namespace Game

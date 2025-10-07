@@ -14,7 +14,7 @@ import Ortha.Physics2d.Rigidbody2d;
 
 namespace Game {
 
-	CharacterControllerSystem::CharacterControllerSystem(entt::registry& registry, Core::Scheduler& scheduler)
+	CharacterControllerSystem::CharacterControllerSystem(entt::registry& registry, Ortha::Core::Scheduler& scheduler)
 		: mRegistry(registry)
 		, mScheduler(scheduler) {
 

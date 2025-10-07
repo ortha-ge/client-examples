@@ -15,7 +15,7 @@ import glm;
 
 namespace Game {
 
-	CameraControllerSystem::CameraControllerSystem(entt::registry& registry, Core::Scheduler& scheduler, Core::Timer& timer)
+	CameraControllerSystem::CameraControllerSystem(entt::registry& registry, Ortha::Core::Scheduler& scheduler, Ortha::Core::Timer& timer)
 		: mRegistry(registry)
 		, mScheduler(scheduler)
 		, mTimer(timer) {
@@ -30,7 +30,7 @@ namespace Game {
 	}
 
 	void CameraControllerSystem::tickSystem(entt::registry& registry) {
-		using namespace Core;
+		using namespace Ortha::Core;
 
 		registry.view<CameraController, Spatial>()
 			.each([this, &registry](CameraController& controller, Spatial& spatial) {

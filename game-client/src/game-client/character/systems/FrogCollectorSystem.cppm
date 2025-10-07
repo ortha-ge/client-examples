@@ -8,7 +8,7 @@ export namespace Game {
 	class FrogCollectorSystem {
 	public:
 
-		FrogCollectorSystem(entt::registry&, Core::Scheduler&);
+		FrogCollectorSystem(entt::registry&, Ortha::Core::Scheduler&);
 		~FrogCollectorSystem();
 
 		void tickSystem(entt::registry&);
@@ -16,8 +16,8 @@ export namespace Game {
 	private:
 
 		entt::registry& mRegistry;
-		Core::Scheduler& mScheduler;
-		Core::TaskHandle mTickHandle;
+		Ortha::Core::Scheduler& mScheduler;
+		Ortha::Core::TaskHandle mTickHandle;
 
 	};
 

@@ -15,7 +15,7 @@ import Ortha.Physics2d.CollisionEvent;
 
 namespace Game {
 
-	FrogCollectorSystem::FrogCollectorSystem(entt::registry& registry, Core::Scheduler& scheduler)
+	FrogCollectorSystem::FrogCollectorSystem(entt::registry& registry, Ortha::Core::Scheduler& scheduler)
 		: mRegistry(registry)
 		, mScheduler(scheduler) {
 
@@ -30,7 +30,7 @@ namespace Game {
 
 	void FrogCollectorSystem::tickSystem(entt::registry& registry) {
 		using namespace Ortha::Audio;
-		using namespace Core;
+		using namespace Ortha::Core;
 		using namespace Ortha::Physics2d;
 
 		registry.view<CollisionEvent>()

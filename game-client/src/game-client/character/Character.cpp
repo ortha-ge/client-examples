@@ -36,7 +36,7 @@ namespace Game {
 		entt::registry& registry, const CharacterConfig& characterConfig, glm::vec3 pos, glm::vec3 scale,
 		float soundRequestVolume) {
 		using namespace Ortha::Audio;
-		using namespace Core;
+		using namespace Ortha::Core;
 		using namespace Ortha::Gfx;
 		using namespace Ortha::Physics2d;
 

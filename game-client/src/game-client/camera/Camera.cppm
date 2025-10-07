@@ -6,6 +6,6 @@ import entt;
 
 export namespace Game {
 
-	entt::entity createCamera(entt::registry&, Core::Scheduler&, Core::Timer&);
+	entt::entity createCamera(entt::registry&, Ortha::Core::Scheduler&, Ortha::Core::Timer&);
 
 } // namespace Game

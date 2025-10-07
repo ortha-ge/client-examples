@@ -9,7 +9,7 @@ export namespace Game {
 	class CameraControllerSystem {
 	public:
 
-		CameraControllerSystem(entt::registry&, Core::Scheduler&, Core::Timer&);
+		CameraControllerSystem(entt::registry&, Ortha::Core::Scheduler&, Ortha::Core::Timer&);
 		~CameraControllerSystem();
 
 		void tickSystem(entt::registry&);
@@ -17,9 +17,9 @@ export namespace Game {
 	private:
 
 		entt::registry& mRegistry;
-		Core::Scheduler& mScheduler;
-		Core::Timer& mTimer;
-		Core::TaskHandle mTickHandle;
+		Ortha::Core::Scheduler& mScheduler;
+		Ortha::Core::Timer& mTimer;
+		Ortha::Core::TaskHandle mTickHandle;
 
 	};
 

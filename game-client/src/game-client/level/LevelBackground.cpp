@@ -23,7 +23,7 @@ namespace Game {
 
 	entt::entity createBackground(entt::registry& registry) {
 		using namespace Ortha::Audio;
-		using namespace Core;
+		using namespace Ortha::Core;
 		using namespace Ortha::Gfx;
 
 		const auto backgroundMaterial = ResourceLoadRequest::create<TypeLoader>(

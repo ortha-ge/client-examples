@@ -16,7 +16,7 @@ export namespace Game {
 
 	class Client {
 	public:
-		Client(entt::registry&, Core::Scheduler&, Core::Timer&);
+		Client(entt::registry&, Ortha::Core::Scheduler&, Ortha::Core::Timer&);
 		~Client();
 
 		void tickClient(entt::registry&);
@@ -27,15 +27,15 @@ export namespace Game {
 		void toggleMainMenu(entt::registry&);
 
 		entt::registry& mRegistry;
-		Core::Scheduler& mScheduler;
-		Core::Timer& mTimer;
+		Ortha::Core::Scheduler& mScheduler;
+		Ortha::Core::Timer& mTimer;
 
 		entt::entity mPlayerEntity{ entt::null };
 		entt::entity mWindowEntity{ entt::null };
 		entt::entity mCameraEntity{ entt::null };
 		entt::entity mSceneRootEntity{ entt::null };
 
-		Core::TaskHandle mTickHandle{};
+		Ortha::Core::TaskHandle mTickHandle{};
 
 
 	};

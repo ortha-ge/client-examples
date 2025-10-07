@@ -13,8 +13,8 @@ import glm;
 
 namespace Game {
 
-	entt::entity createCamera(entt::registry& registry, Core::Scheduler& scheduler, Core::Timer& timer) {
-		using namespace Core;
+	entt::entity createCamera(entt::registry& registry, Ortha::Core::Scheduler& scheduler, Ortha::Core::Timer& timer) {
+		using namespace Ortha::Core;
 		using namespace Ortha::Gfx;
 
 		const entt::entity cameraEntity = createEnTTNode(registry, "Camera");

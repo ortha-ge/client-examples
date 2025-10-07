@@ -21,7 +21,7 @@ import glm;
 namespace Game {
 
 	entt::entity createLevel1Floor(entt::registry& registry) {
-		using namespace Core;
+		using namespace Ortha::Core;
 		using namespace Ortha::Physics2d;
 		using namespace Ortha::Gfx;
 

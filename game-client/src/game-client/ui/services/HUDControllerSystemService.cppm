@@ -12,6 +12,6 @@ export namespace Game {
 	struct HUDControllerSystemService
 		: kgr::single_service<
 			  HUDControllerSystem,
-			  kgr::dependency<Core::EnTTRegistryService, Core::SchedulerService>> {};
+			  kgr::dependency<Ortha::Core::EnTTRegistryService, Ortha::Core::SchedulerService>> {};
 
 } // namespace Game

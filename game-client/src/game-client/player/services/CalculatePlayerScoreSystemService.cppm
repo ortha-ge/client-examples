@@ -10,6 +10,6 @@ export namespace Game {
 
 	struct CalculatePlayerScoreSystemService
 		: kgr::single_service<
-			  CalculatePlayerScoreSystem, kgr::dependency<Core::EnTTRegistryService, Core::SchedulerService>> {};
+			  CalculatePlayerScoreSystem, kgr::dependency<Ortha::Core::EnTTRegistryService, Ortha::Core::SchedulerService>> {};
 
 } // namespace Game

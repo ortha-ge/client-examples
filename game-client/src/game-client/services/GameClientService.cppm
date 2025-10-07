@@ -13,7 +13,7 @@ export namespace Game {
 	void initClientSubSystems(Client&, kgr::container&);
 
 	struct ClientService
-		: kgr::single_service<Client, kgr::dependency<Core::EnTTRegistryService, Core::SchedulerService, Core::TimerService>>
+		: kgr::single_service<Client, kgr::dependency<Ortha::Core::EnTTRegistryService, Ortha::Core::SchedulerService, Ortha::Core::TimerService>>
 		, kgr::autocall<kgr::invoke_method<initClientSubSystems>>{};
 
 } // namespace Game

@@ -36,7 +36,7 @@ namespace Game::MainMenuControllerSystemInternal {
 
 namespace Game {
 
-	MainMenuControllerSystem::MainMenuControllerSystem(entt::registry& registry, Core::Scheduler& scheduler)
+	MainMenuControllerSystem::MainMenuControllerSystem(entt::registry& registry, Ortha::Core::Scheduler& scheduler)
 		: mRegistry(registry)
 		, mScheduler(scheduler) {
 
@@ -50,7 +50,7 @@ namespace Game {
 	}
 
 	void MainMenuControllerSystem::tickSystem(entt::registry& registry) {
-		using namespace Core;
+		using namespace Ortha::Core;
 		using namespace Ortha::UI;
 		using namespace MainMenuControllerSystemInternal;
 

@@ -31,7 +31,7 @@ namespace Game::CharacterSpawnerSystemInternal {
 
 namespace Game {
 
-	CharacterSpawnerSystem::CharacterSpawnerSystem(entt::registry& registry, Core::Scheduler& scheduler, Core::Timer& timer)
+	CharacterSpawnerSystem::CharacterSpawnerSystem(entt::registry& registry, Ortha::Core::Scheduler& scheduler, Ortha::Core::Timer& timer)
 		: mRegistry(registry)
 		, mScheduler(scheduler)
 		, mTimer(timer) {
@@ -47,7 +47,7 @@ namespace Game {
 	}
 
 	void CharacterSpawnerSystem::tickSystem(entt::registry& registry) {
-		using namespace Core;
+		using namespace Ortha::Core;
 		using namespace CharacterSpawnerSystemInternal;
 
 		registry.view<CharacterSpawner, Spatial>()
@@ -66,8 +66,8 @@ namespace Game {
 	}
 
 	void CharacterSpawnerSystem::trySpawnCharacter(
-		entt::registry& registry, const CharacterSpawner& spawner, const Core::Spatial& spatial) {
-		using namespace Core;
+		entt::registry& registry, const CharacterSpawner& spawner, const Ortha::Core::Spatial& spatial) {
+		using namespace Ortha::Core;
 		using namespace CharacterSpawnerSystemInternal;
 
 		const glm::vec2 spawnPosition{ spatial.position.x, spatial.position.y };

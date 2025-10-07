@@ -20,7 +20,7 @@ import glm;
 namespace Game {
 
 	entt::entity createMainMenu(entt::registry& registry, std::function<void()> playCallback, std::function<void()> quitCallback) {
-		using namespace Core;
+		using namespace Ortha::Core;
 		using namespace Ortha::Gfx;
 		using namespace Ortha::UI;
 

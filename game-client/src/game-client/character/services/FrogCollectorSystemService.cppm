@@ -13,6 +13,6 @@ export namespace Game {
 	struct FrogCollectorSystemService
 		: kgr::single_service<
 			  FrogCollectorSystem,
-			  kgr::dependency<Core::EnTTRegistryService, Core::SchedulerService>> {};
+			  kgr::dependency<Ortha::Core::EnTTRegistryService, Ortha::Core::SchedulerService>> {};
 
 } // namespace Game

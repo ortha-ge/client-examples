@@ -9,7 +9,7 @@ import glm;
 namespace Game {
 
 	entt::entity createLevel1Scene(entt::registry& registry) {
-		using namespace Core;
+		using namespace Ortha::Core;
 
 		const entt::entity sceneRootEntity = createEnTTNode(registry, "Scene");
 

@@ -30,7 +30,7 @@ namespace Game::GameClientInternal {
 
 	entt::entity createWindow(entt::registry& registry) {
 		const entt::entity windowEntity = registry.create();
-		registry.emplace<Core::Window>(windowEntity, "Ortha - Client Example", 1920, 1080);
+		registry.emplace<Ortha::Core::Window>(windowEntity, "Ortha - Client Example", 1920, 1080);
 		return windowEntity;
 	}
 
@@ -45,11 +45,11 @@ namespace Game::GameClientInternal {
 
 namespace Game {
 
-	Client::Client(entt::registry& registry, Core::Scheduler& scheduler, Core::Timer& timer)
+	Client::Client(entt::registry& registry, Ortha::Core::Scheduler& scheduler, Ortha::Core::Timer& timer)
 		: mRegistry(registry)
 		, mScheduler{ scheduler }
 		, mTimer{ timer } {
-		using namespace Core;
+		using namespace Ortha::Core;
 		using namespace GameClientInternal;
 
 		mWindowEntity = createWindow(registry);
@@ -78,7 +78,7 @@ namespace Game {
 
 	void Client::tickClient(entt::registry& registry) {
 		ZoneScopedN("GameClient::tick");
-		using namespace Core;
+		using namespace Ortha::Core;
 		using namespace Ortha::Input;
 		using namespace GameClientInternal;
 
@@ -94,7 +94,7 @@ namespace Game {
 	}
 
 	void Client::createScene(entt::registry& registry) {
-		using namespace Core;
+		using namespace Ortha::Core;
 		using namespace GameClientInternal;
 
 		mSceneRootEntity = createLevel1Scene(registry);
@@ -109,7 +109,7 @@ namespace Game {
 	}
 
 	void Client::toggleMainMenu(entt::registry& registry) {
-		using namespace Core;
+		using namespace Ortha::Core;
 		if (!registry.all_of<NodeHandle>(mCameraEntity)) {
 			return;
 		}
@@ -130,11 +130,11 @@ namespace Game {
 		auto playCallback = [this] {
 			if (mSceneRootEntity != entt::null) {
 				entt::registry& registry{ mRegistry };
-				if (!registry.all_of<Core::NodeHandle>(mSceneRootEntity)) {
+				if (!registry.all_of<NodeHandle>(mSceneRootEntity)) {
 					return;
 				}
 
-				auto& node = registry.get<Core::NodeHandle>(mSceneRootEntity);
+				auto& node = registry.get<NodeHandle>(mSceneRootEntity);
 				node.getNode()->destroy();
 				createScene(mRegistry);
 

@@ -10,6 +10,6 @@ import Ortha.Core.SchedulerService;
 export namespace Game {
 
 	struct CharacterControllerSystemService
-		: kgr::single_service<CharacterControllerSystem, kgr::dependency<Core::EnTTRegistryService, Core::SchedulerService>>{};
+		: kgr::single_service<CharacterControllerSystem, kgr::dependency<Ortha::Core::EnTTRegistryService, Ortha::Core::SchedulerService>>{};
 
 } // namespace Game

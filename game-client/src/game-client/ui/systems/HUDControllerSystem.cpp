@@ -17,7 +17,7 @@ import Ortha.Gfx.FontObject;
 
 namespace Game {
 
-	HUDControllerSystem::HUDControllerSystem(entt::registry& registry, Core::Scheduler& scheduler)
+	HUDControllerSystem::HUDControllerSystem(entt::registry& registry, Ortha::Core::Scheduler& scheduler)
 		: mRegistry(registry)
 		, mScheduler(scheduler) {
 
@@ -31,7 +31,7 @@ namespace Game {
 	}
 
 	void HUDControllerSystem::tickSystem(entt::registry& registry) {
-		using namespace Core;
+		using namespace Ortha::Core;
 		using namespace Ortha::Gfx;
 
 		registry.view<HUD, NodeHandle>()

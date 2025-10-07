@@ -8,7 +8,7 @@ export namespace Game {
 	class CalculatePlayerScoreSystem {
 	public:
 
-		CalculatePlayerScoreSystem(entt::registry&, Core::Scheduler&);
+		CalculatePlayerScoreSystem(entt::registry&, Ortha::Core::Scheduler&);
 		~CalculatePlayerScoreSystem();
 
 		void tickSystem(entt::registry&);
@@ -16,8 +16,8 @@ export namespace Game {
 	private:
 
 		entt::registry& mRegistry;
-		Core::Scheduler& mScheduler;
-		Core::TaskHandle mTickHandle;
+		Ortha::Core::Scheduler& mScheduler;
+		Ortha::Core::TaskHandle mTickHandle;
 
 	};
 

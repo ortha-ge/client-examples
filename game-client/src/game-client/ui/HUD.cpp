@@ -11,7 +11,7 @@ import glm;
 namespace Game {
 
 	const entt::entity createHUD(entt::registry& registry, const entt::entity playerEntity) {
-		using namespace Core;
+		using namespace Ortha::Core;
 		using namespace Ortha::Gfx;
 
 		const entt::entity hudEntity = createEnTTNode(registry, "HUD");

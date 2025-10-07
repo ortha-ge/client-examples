@@ -28,9 +28,9 @@ void stopMainLoop() {
 #else
 	emscripten_cancel_main_loop();
 #endif
-	entt::registry& registry = sContainer->service<Core::EnTTRegistryService>();
-	auto quitAppRequests = registry.view<const Core::QuitAppRequest>();
-	quitAppRequests.each([&registry](entt::entity entity, const Core::QuitAppRequest&) { registry.destroy(entity); });
+	entt::registry& registry = sContainer->service<Ortha::Core::EnTTRegistryService>();
+	auto quitAppRequests = registry.view<const Ortha::Core::QuitAppRequest>();
+	quitAppRequests.each([&registry](entt::entity entity, const Ortha::Core::QuitAppRequest&) { registry.destroy(entity); });
 
 	delete sContainer;
 	sContainer = nullptr;
@@ -44,10 +44,10 @@ void mainLoop() {
 
 	kgr::container& container{ *sContainer };
 
-	Core::Scheduler& scheduler = container.service<Core::SchedulerService>();
-	entt::registry& registry = container.service<Core::EnTTRegistryService>();
+	Ortha::Core::Scheduler& scheduler = container.service<Ortha::Core::SchedulerService>();
+	entt::registry& registry = container.service<Ortha::Core::EnTTRegistryService>();
 
-	auto quitAppRequests = registry.view<const Core::QuitAppRequest>();
+	auto quitAppRequests = registry.view<const Ortha::Core::QuitAppRequest>();
 	if (!quitAppRequests.empty()) {
 		stopMainLoop();
 		return;

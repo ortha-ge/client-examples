@@ -15,18 +15,18 @@ export namespace Game {
 	class CharacterSpawnerSystem {
 	public:
 
-		CharacterSpawnerSystem(entt::registry&, Core::Scheduler&, Core::Timer&);
+		CharacterSpawnerSystem(entt::registry&, Ortha::Core::Scheduler&, Ortha::Core::Timer&);
 		~CharacterSpawnerSystem();
 
 		void tickSystem(entt::registry&);
-		void trySpawnCharacter(entt::registry&, const CharacterSpawner&, const Core::Spatial&);
+		void trySpawnCharacter(entt::registry&, const CharacterSpawner&, const Ortha::Core::Spatial&);
 
 	private:
 
 		entt::registry& mRegistry;
-		Core::Scheduler& mScheduler;
-		Core::Timer& mTimer;
-		Core::TaskHandle mTickHandle;
+		Ortha::Core::Scheduler& mScheduler;
+		Ortha::Core::Timer& mTimer;
+		Ortha::Core::TaskHandle mTickHandle;
 
 		std::mt19937 mRandom;
 
