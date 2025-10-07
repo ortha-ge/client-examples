@@ -4,9 +4,9 @@ export module Game.CameraControllerSystemService;
 export import Game.CameraControllerSystem;
 
 import kangaru;
-import Core.EnTTRegistryService;
-import Core.SchedulerService;
-import Core.TimerService;
+import Ortha.Core.EnTTRegistryService;
+import Ortha.Core.SchedulerService;
+import Ortha.Core.TimerService;
 
 export namespace Game {
 

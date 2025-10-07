@@ -1,7 +1,7 @@
 module Game.CharacterSpawner;
 
-import Core.EnTTNode;
-import Core.Spatial;
+import Ortha.Core.EnTTNode;
+import Ortha.Core.Spatial;
 
 namespace Game {
 

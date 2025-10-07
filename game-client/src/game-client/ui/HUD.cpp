@@ -1,18 +1,18 @@
 module Game.HUD;
 
-import Core.EnTTNode;
-import Core.Node;
-import Core.ResourceLoadRequest;
-import Core.Spatial;
-import Gfx.FontDescriptor;
-import Gfx.FontObject;
+import Ortha.Core.EnTTNode;
+import Ortha.Core.Node;
+import Ortha.Core.ResourceLoadRequest;
+import Ortha.Core.Spatial;
+import Ortha.Gfx.FontDescriptor;
+import Ortha.Gfx.FontObject;
 import glm;
 
 namespace Game {
 
 	const entt::entity createHUD(entt::registry& registry, const entt::entity playerEntity) {
 		using namespace Core;
-		using namespace Gfx;
+		using namespace Ortha::Gfx;
 
 		const entt::entity hudEntity = createEnTTNode(registry, "HUD");
 		registry.emplace<HUD>(hudEntity, playerEntity);

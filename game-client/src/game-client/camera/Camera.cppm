@@ -1,7 +1,7 @@
 export module Game.Camera;
 
-import Core.Scheduler;
-import Core.Timer;
+import Ortha.Core.Scheduler;
+import Ortha.Core.Timer;
 import entt;
 
 export namespace Game {

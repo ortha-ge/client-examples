@@ -8,10 +8,10 @@ module;
 
 module Game.Client;
 
-import Core.EnTTNode;
-import Core.NodeHandle;
-import Core.QuitAppRequest;
-import Core.Window;
+import Ortha.Core.EnTTNode;
+import Ortha.Core.NodeHandle;
+import Ortha.Core.QuitAppRequest;
+import Ortha.Core.Window;
 import Game.Camera;
 import Game.CameraController;
 import Game.CatCharacter;
@@ -21,9 +21,9 @@ import Game.Player;
 import Game.PlayerScore;
 import Game.HUD;
 import Game.MainMenu;
-import Gfx.Camera;
-import Input.KeyboardEvent;
-import Input.KeyboardState;
+import Ortha.Gfx.Camera;
+import Ortha.Input.KeyboardEvent;
+import Ortha.Input.KeyboardState;
 import glm;
 
 namespace Game::GameClientInternal {
@@ -79,13 +79,14 @@ namespace Game {
 	void Client::tickClient(entt::registry& registry) {
 		ZoneScopedN("GameClient::tick");
 		using namespace Core;
+		using namespace Ortha::Input;
 		using namespace GameClientInternal;
 
-		registry.view<Input::KeyboardEvent>()
-			.each([this](const Input::KeyboardEvent& keyboardEvent) {
+		registry.view<KeyboardEvent>()
+			.each([this](const KeyboardEvent& keyboardEvent) {
 				entt::registry& registry{ mRegistry };
-				if (keyboardEvent.key == Input::Key::Escape &&
-					keyboardEvent.eventType == Input::InputEventType::Pressed) {
+				if (keyboardEvent.key == Key::Escape &&
+					keyboardEvent.eventType == InputEventType::Pressed) {
 					toggleMainMenu(registry);
 				}
 			});
@@ -103,7 +104,7 @@ namespace Game {
 
 		registry.get<Player>(mPlayerEntity).character = catEntity;
 
-		registry.get<Gfx::Camera>(mCameraEntity).sceneRoot = mSceneRootEntity;
+		registry.get<Ortha::Gfx::Camera>(mCameraEntity).sceneRoot = mSceneRootEntity;
 		registry.get<CameraController>(mCameraEntity).followEntity = catEntity;
 	}
 

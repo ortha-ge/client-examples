@@ -4,9 +4,9 @@ module;
 
 export module Game.CharacterSpawnerSystem;
 
-import Core.Scheduler;
-import Core.Spatial;
-import Core.Timer;
+import Ortha.Core.Scheduler;
+import Ortha.Core.Spatial;
+import Ortha.Core.Timer;
 import Game.CharacterSpawner;
 import entt;
 

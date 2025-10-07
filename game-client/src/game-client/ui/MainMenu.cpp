@@ -5,24 +5,24 @@ module;
 
 module Game.MainMenu;
 
-import Core.EnTTNode;
-import Core.Node;
-import Core.ResourceLoadRequest;
-import Core.Spatial;
+import Ortha.Core.EnTTNode;
+import Ortha.Core.Node;
+import Ortha.Core.ResourceLoadRequest;
+import Ortha.Core.Spatial;
 import Game.MainMenuController;
-import Gfx.FontDescriptor;
-import Gfx.FontObject;
-import Gfx.ImageDescriptor;
-import UI.Button;
-import UI.ImageButton;
+import Ortha.Gfx.FontDescriptor;
+import Ortha.Gfx.FontObject;
+import Ortha.Gfx.ImageDescriptor;
+import Ortha.UI.Button;
+import Ortha.UI.ImageButton;
 import glm;
 
 namespace Game {
 
 	entt::entity createMainMenu(entt::registry& registry, std::function<void()> playCallback, std::function<void()> quitCallback) {
 		using namespace Core;
-		using namespace Gfx;
-		using namespace UI;
+		using namespace Ortha::Gfx;
+		using namespace Ortha::UI;
 
 		const entt::entity mainMenuEntity{ createEnTTNode(registry, "MainMenu") };
 		registry.emplace<Spatial>(mainMenuEntity, glm::vec3(500.0f, 200.0f, 0.0f));

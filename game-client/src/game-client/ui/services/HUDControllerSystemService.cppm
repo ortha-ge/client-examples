@@ -4,8 +4,8 @@ export module Game.HUDControllerSystemService;
 export import Game.HUDControllerSystem;
 
 import kangaru;
-import Core.EnTTRegistryService;
-import Core.SchedulerService;
+import Ortha.Core.EnTTRegistryService;
+import Ortha.Core.SchedulerService;
 
 export namespace Game {
 

@@ -1,7 +1,7 @@
 export module Game.CharacterController;
 
-import Core.Scheduler;
-import Core.Timer;
+import Ortha.Core.Scheduler;
+import Ortha.Core.Timer;
 
 export namespace Game {
 

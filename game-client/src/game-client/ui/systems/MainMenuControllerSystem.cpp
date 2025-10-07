@@ -5,19 +5,19 @@ module;
 
 module Game.MainMenuControllerSystem;
 
-import Core.EnTTNode;
-import Core.Log;
-import Core.Node;
-import Core.NodeHandle;
+import Ortha.Core.EnTTNode;
+import Ortha.Core.Log;
+import Ortha.Core.Node;
+import Ortha.Core.NodeHandle;
 import Ortha.RTTI.TypeId;
 import Game.MainMenuController;
-import UI.Button;
-import UI.ImageButton;
+import Ortha.UI.Button;
+import Ortha.UI.ImageButton;
 
 namespace Game::MainMenuControllerSystemInternal {
 
-	void processMenuButtonState(MainMenuController& mainMenuController, const UI::Button& button) {
-		using namespace UI;
+	void processMenuButtonState(MainMenuController& mainMenuController, const Ortha::UI::Button& button) {
+		using namespace Ortha::UI;
 		if (button.state != ButtonState::Pressed) {
 			return;
 		}
@@ -51,7 +51,7 @@ namespace Game {
 
 	void MainMenuControllerSystem::tickSystem(entt::registry& registry) {
 		using namespace Core;
-		using namespace UI;
+		using namespace Ortha::UI;
 		using namespace MainMenuControllerSystemInternal;
 
 		registry.view<MainMenuController, NodeHandle>()

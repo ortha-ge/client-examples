@@ -6,12 +6,12 @@ module;
 
 module Game.CharacterSpawnerSystem;
 
-import Core.EnTTNode;
-import Core.Spatial;
+import Ortha.Core.EnTTNode;
+import Ortha.Core.Spatial;
 import Game.CharacterSpawner;
 import Game.FrogCharacter;
-import Input.KeyboardState;
-import Input.MouseState;
+import Ortha.Input.KeyboardState;
+import Ortha.Input.MouseState;
 import entt;
 import glm;
 

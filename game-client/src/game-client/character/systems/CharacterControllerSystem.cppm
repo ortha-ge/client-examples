@@ -1,6 +1,6 @@
 export module Game.CharacterControllerSystem;
 
-import Core.Scheduler;
+import Ortha.Core.Scheduler;
 import entt;
 
 export namespace Game {

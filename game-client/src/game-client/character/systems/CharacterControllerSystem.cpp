@@ -4,13 +4,13 @@ module;
 
 module Game.CharacterControllerSystem;
 
-import Audio.PlaySoundSourceRequest;
+import Ortha.Audio.PlaySoundSourceRequest;
 import Game.Character;
 import Game.CharacterController;
-import Input.KeyboardEvent;
-import Input.KeyboardState;
-import Physics2d.ApplyForceRequest;
-import Physics2d.Rigidbody2d;
+import Ortha.Input.KeyboardEvent;
+import Ortha.Input.KeyboardState;
+import Ortha.Physics2d.ApplyForceRequest;
+import Ortha.Physics2d.Rigidbody2d;
 
 namespace Game {
 
@@ -28,8 +28,9 @@ namespace Game {
 	}
 
 	void CharacterControllerSystem::tickSystem(entt::registry& registry) {
-		using namespace Input;
-		using namespace Physics2d;
+		using namespace Ortha::Audio;
+		using namespace Ortha::Input;
+		using namespace Ortha::Physics2d;
 
 		float inputX = 0.0f;
 		float inputY = 0.0f;
@@ -66,10 +67,10 @@ namespace Game {
 					if (rigidBody.isOnGround && inputY != 0.0f) {
 						applyForceRequest.force.y = inputY * character.jumpImpulse;
 
-						if (!registry.all_of<Audio::PlaySoundSourceRequest>(entity)) {
-							Audio::PlaySoundSourceRequest playSoundRequest;
+						if (!registry.all_of<PlaySoundSourceRequest>(entity)) {
+							PlaySoundSourceRequest playSoundRequest;
 							playSoundRequest.volumeScale = 3.0f;
-							registry.emplace<Audio::PlaySoundSourceRequest>(entity, playSoundRequest);
+							registry.emplace<PlaySoundSourceRequest>(entity, playSoundRequest);
 						}
 					}
 

@@ -4,8 +4,8 @@ module;
 
 export module Game.CameraController;
 
-import Core.Scheduler;
-import Core.Timer;
+import Ortha.Core.Scheduler;
+import Ortha.Core.Timer;
 import entt;
 import glm;
 

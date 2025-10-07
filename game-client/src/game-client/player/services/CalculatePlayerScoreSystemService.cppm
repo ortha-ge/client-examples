@@ -2,8 +2,8 @@ export module Game.CalculatePlayerScoreSystemService;
 
 export import Game.CalculatePlayerScoreSystem;
 
-import Core.EnTTRegistryService;
-import Core.SchedulerService;
+import Ortha.Core.EnTTRegistryService;
+import Ortha.Core.SchedulerService;
 import kangaru;
 
 export namespace Game {

@@ -8,11 +8,11 @@
 #endif
 
 import kangaru;
-import Audio.SystemsService;
-import Core.EnTTRegistryService;
-import Core.SchedulerService;
-import Core.SystemsService;
-import Core.QuitAppRequest;
+import Ortha.Audio.SystemsService;
+import Ortha.Core.EnTTRegistryService;
+import Ortha.Core.SchedulerService;
+import Ortha.Core.SystemsService;
+import Ortha.Core.QuitAppRequest;
 import Game.ClientService;
 import entt;
 

@@ -4,18 +4,18 @@ module;
 
 module Game.Camera;
 
-import Core.EnTTNode;
-import Core.Spatial;
+import Ortha.Core.EnTTNode;
+import Ortha.Core.Spatial;
 import Game.CameraController;
-import Gfx.Camera;
-import Gfx.Viewport;
+import Ortha.Gfx.Camera;
+import Ortha.Gfx.Viewport;
 import glm;
 
 namespace Game {
 
 	entt::entity createCamera(entt::registry& registry, Core::Scheduler& scheduler, Core::Timer& timer) {
 		using namespace Core;
-		using namespace Gfx;
+		using namespace Ortha::Gfx;
 
 		const entt::entity cameraEntity = createEnTTNode(registry, "Camera");
 		registry.emplace<CameraController>(cameraEntity, std::nullopt, glm::vec3{ 0.0f, -100.0f, 0.0f });

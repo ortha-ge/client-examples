@@ -5,28 +5,28 @@ module;
 
 module Game.Character;
 
-import Audio.AudioSource;
-import Audio.PlaySoundSourceRequest;
-import Audio.SoundDescriptor;
-import Core.EnTTNode;
-import Core.JsonTypeLoaderAdapter;
-import Core.Node;
-import Core.ResourceLoadRequest;
-import Core.Scheduler;
-import Core.Spatial;
-import Core.Timer;
-import Core.TypeLoader;
+import Ortha.Audio.AudioSource;
+import Ortha.Audio.PlaySoundSourceRequest;
+import Ortha.Audio.SoundDescriptor;
+import Ortha.Core.EnTTNode;
+import Ortha.Core.JsonTypeLoaderAdapter;
+import Ortha.Core.Node;
+import Ortha.Core.ResourceLoadRequest;
+import Ortha.Core.Scheduler;
+import Ortha.Core.Spatial;
+import Ortha.Core.Timer;
+import Ortha.Core.TypeLoader;
 import Game.CharacterController;
-import Gfx.MaterialDescriptor;
-import Gfx.Reflection.MaterialDescriptor;
-import Gfx.Reflection.Sprite;
-import Gfx.RenderObject;
-import Gfx.SpriteDescriptor;
-import Gfx.SpriteObject;
-import Physics2d.CollisionShape;
-import Physics2d.Rigidbody2d;
-import Physics2d.Reflection.BoxCollisionShape;
-import Physics2d.Reflection.CircleCollisionShape;
+import Ortha.Gfx.MaterialDescriptor;
+import Ortha.Gfx.Reflection.MaterialDescriptor;
+import Ortha.Gfx.Reflection.Sprite;
+import Ortha.Gfx.RenderObject;
+import Ortha.Gfx.SpriteDescriptor;
+import Ortha.Gfx.SpriteObject;
+import Ortha.Physics2d.CollisionShape;
+import Ortha.Physics2d.Rigidbody2d;
+import Ortha.Physics2d.Reflection.BoxCollisionShape;
+import Ortha.Physics2d.Reflection.CircleCollisionShape;
 import entt;
 import glm;
 
@@ -35,10 +35,10 @@ namespace Game {
 	entt::entity createCharacter(
 		entt::registry& registry, const CharacterConfig& characterConfig, glm::vec3 pos, glm::vec3 scale,
 		float soundRequestVolume) {
-		using namespace Audio;
+		using namespace Ortha::Audio;
 		using namespace Core;
-		using namespace Gfx;
-		using namespace Physics2d;
+		using namespace Ortha::Gfx;
+		using namespace Ortha::Physics2d;
 
 		static size_t characterCounter{ 0zu };
 		++characterCounter;

@@ -1,15 +1,15 @@
 export module Game.Client;
 
-import Audio.Systems;
-import Core.Systems;
-import Core.Scheduler;
-import Core.Timer;
-import DevTools.Systems;
-import Gfx.Systems;
-import Input.Systems;
-import Physics2d.Systems;
-//import ScriptingJS.Systems;
-import ScriptingLua.Systems;
+import Ortha.Audio.Systems;
+import Ortha.Core.Systems;
+import Ortha.Core.Scheduler;
+import Ortha.Core.Timer;
+import Ortha.DevTools.Systems;
+import Ortha.Gfx.Systems;
+import Ortha.Input.Systems;
+import Ortha.Physics2d.Systems;
+//import Ortha.ScriptingJS.Systems;
+import Ortha.ScriptingLua.Systems;
 import entt;
 
 export namespace Game {

@@ -1,8 +1,8 @@
 module Game.ClientService;
 
-import Audio.SystemsService;
-import Core.SystemsService;
-import DevTools.SystemsService;
+import Ortha.Audio.SystemsService;
+import Ortha.Core.SystemsService;
+import Ortha.DevTools.SystemsService;
 import Game.CameraControllerSystemService;
 import Game.CharacterControllerSystemService;
 import Game.CharacterSpawnerSystemService;
@@ -10,16 +10,17 @@ import Game.FrogCollectorSystemService;
 import Game.HUDControllerSystemService;
 import Game.MainMenuControllerSystemService;
 import Game.CalculatePlayerScoreSystemService;
-import Gfx.SystemsService;
-import Input.SystemsService;
-import Physics2d.SystemsService;
-import UI.SystemsService;
-//import ScriptingJS.SystemsService;
-//import ScriptingLua.SystemsService;
+import Ortha.Gfx.SystemsService;
+import Ortha.Input.SystemsService;
+import Ortha.Physics2d.SystemsService;
+import Ortha.UI.SystemsService;
+//import Ortha.ScriptingJS.SystemsService;
+//import Ortha.ScriptingLua.SystemsService;
 
 namespace Game {
 
 	void initClientSubSystems(Client&, kgr::container& container) {
+		using namespace Ortha;
 		container.emplace<Core::CoreSystemsService>();
 		container.emplace<Audio::AudioSystemsService>();
 		container.emplace<Gfx::GfxSystemsService>();

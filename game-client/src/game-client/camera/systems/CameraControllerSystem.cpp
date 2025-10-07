@@ -5,11 +5,11 @@ module;
 
 module Game.CameraControllerSystem;
 
-import Core.GlobalSpatial;
-import Core.Spatial;
+import Ortha.Core.GlobalSpatial;
+import Ortha.Core.Spatial;
 import Game.CameraController;
-import Gfx.Camera;
-import Gfx.Viewport;
+import Ortha.Gfx.Camera;
+import Ortha.Gfx.Viewport;
 import entt;
 import glm;
 

@@ -1,7 +1,7 @@
 module Game.Level1Scene;
 
-import Core.EnTTNode;
-import Core.Spatial;
+import Ortha.Core.EnTTNode;
+import Ortha.Core.Spatial;
 import Game.CharacterSpawner;
 import Game.Level1Floor;
 import glm;

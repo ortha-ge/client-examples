@@ -8,12 +8,12 @@ module;
 
 module Game.HUDControllerSystem;
 
-import Core.EnTTNode;
-import Core.Node;
-import Core.NodeHandle;
+import Ortha.Core.EnTTNode;
+import Ortha.Core.Node;
+import Ortha.Core.NodeHandle;
 import Game.HUD;
 import Game.PlayerScore;
-import Gfx.FontObject;
+import Ortha.Gfx.FontObject;
 
 namespace Game {
 
@@ -32,7 +32,7 @@ namespace Game {
 
 	void HUDControllerSystem::tickSystem(entt::registry& registry) {
 		using namespace Core;
-		using namespace Gfx;
+		using namespace Ortha::Gfx;
 
 		registry.view<HUD, NodeHandle>()
 			.each([&registry](const HUD& hud, const NodeHandle& nodeHandle) {

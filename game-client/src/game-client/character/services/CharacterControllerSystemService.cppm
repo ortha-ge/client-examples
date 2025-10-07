@@ -4,8 +4,8 @@ export module Game.CharacterControllerSystemService;
 export import Game.CharacterControllerSystem;
 
 import kangaru;
-import Core.EnTTRegistryService;
-import Core.SchedulerService;
+import Ortha.Core.EnTTRegistryService;
+import Ortha.Core.SchedulerService;
 
 export namespace Game {
 

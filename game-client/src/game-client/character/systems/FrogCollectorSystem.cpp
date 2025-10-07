@@ -5,13 +5,13 @@ module;
 
 module Game.FrogCollectorSystem;
 
-import Audio.PlaySoundSourceRequest;
-import Core.Node;
-import Core.NodeHandle;
-import Core.Spatial;
+import Ortha.Audio.PlaySoundSourceRequest;
+import Ortha.Core.Node;
+import Ortha.Core.NodeHandle;
+import Ortha.Core.Spatial;
 import Game.Character;
 import Game.FrogCollector;
-import Physics2d.CollisionEvent;
+import Ortha.Physics2d.CollisionEvent;
 
 namespace Game {
 
@@ -29,9 +29,9 @@ namespace Game {
 	}
 
 	void FrogCollectorSystem::tickSystem(entt::registry& registry) {
-		using namespace Audio;
+		using namespace Ortha::Audio;
 		using namespace Core;
-		using namespace Physics2d;
+		using namespace Ortha::Physics2d;
 
 		registry.view<CollisionEvent>()
 			.each([&registry](const CollisionEvent& collisionEvent) {
