@@ -16,20 +16,24 @@ import Ortha.UI.ImageButton;
 
 namespace Game::MainMenuControllerSystemInternal {
 
-	void processMenuButtonState(MainMenuController& mainMenuController, const Ortha::UI::Button& button) {
+	bool processMenuButtonState(MainMenuController& mainMenuController, const Ortha::UI::Button& button) {
 		using namespace Ortha::UI;
 		if (button.state != ButtonState::Pressed) {
-			return;
+			return false;
 		}
 
 		auto clockNow = std::chrono::steady_clock::now();
 		if (button.text == "Play") {
 			mainMenuController.playCallback();
 			mainMenuController.lastSelectedTime = clockNow;
+			return true;
 		} else if (button.text == "Exit") {
 			mainMenuController.quitCallback();
 			mainMenuController.lastSelectedTime = clockNow;
+			return true;
 		}
+
+		return false;
 	}
 
 } // namespace Game::MainMenuControllerSystemInternal
@@ -71,10 +75,14 @@ namespace Game {
 					const entt::entity childEntity = childEnTTNode->getEntity();
 					if (registry.all_of<Button>(childEntity)) {
 						const auto& button{ registry.get<Button>(childEntity) };
-						processMenuButtonState(mainMenuController, button);
+						if (processMenuButtonState(mainMenuController, button)) {
+							break;
+						}
 					} else if (registry.all_of<ImageButton>(childEntity)) {
 						const auto& button{ registry.get<ImageButton>(childEntity) };
-						processMenuButtonState(mainMenuController, button);
+						if (processMenuButtonState(mainMenuController, button)) {
+							break;
+						}
 					}
 				}
 			});
