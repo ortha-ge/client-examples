@@ -32,4 +32,4 @@ add_subdirectory(ortha-devtools)
 add_subdirectory(game-client)
 
 add_custom_target(all_tests)
-add_dependencies(all_tests ortha-core-tests ortha-gfx-tests)
+add_dependencies(all_tests ortha-rtti-tests ortha-core-tests ortha-gfx-tests)
